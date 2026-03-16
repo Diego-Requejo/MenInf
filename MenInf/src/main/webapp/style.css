@@ -1,0 +1,176 @@
+
+/*Configuracion general*/
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+    font-family:Arial, Helvetica, sans-serif;
+}
+
+body{
+    background: linear-gradient(90deg,#000000,#3533cd);
+    color:white;
+    display:flex;
+    flex-direction:column;
+}
+
+/*Cabecera y pie*/
+header{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    padding:15px 30px;
+    background:#111;
+    border-bottom:2px solid #222222;
+    color: #ffebcd;
+}
+
+.icono{
+    display:flex;
+    align-items:center;
+    gap:10px;
+    font-weight:bold;
+    font-size:18px;
+}
+
+.icono img{
+    border-radius:8px;
+    width:40px;
+}
+
+footer{
+    position:fixed;
+    margin-top:auto;
+    bottom:0;
+    width:100%;
+    background:#111111;
+    display:flex;
+    justify-content:center;
+    gap:40px;
+    padding:10px;
+    color:#aaa;
+    border-top:2px solid #222222;
+}
+
+
+/*Elementos de la pagina principal*/
+.banner-caja{
+    padding:2%;
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+}
+
+.banner{
+    background:#1b1b1b;
+    padding:40px;
+    border-radius:25px;
+    border:2px solid #6b6b6b;
+    text-align:center;
+    width:90%;
+    margin-bottom:60px;
+}
+
+.banner h1{
+    font-size:45px;
+    margin-bottom:10px;
+}
+
+.banner p{
+    color:#d0d0d0;
+    margin-bottom:30px;
+    font-size:25px;
+}
+
+.boton-formulario{
+    background:#3533cd;
+    border:4px solid #000000;
+    padding:15px 40px;
+    font-size:25px;
+    border-radius:40px;
+    color:#feebba;
+    cursor:pointer;
+}
+
+.opciones{
+    display:grid;
+    grid-template-columns: 1fr auto 1fr;
+    width: 100%;
+    height: 50%;
+    align-items:center;
+}
+
+.horario{
+    text-align:center;
+    color:#feebba;
+    font-size: 20px;
+}
+
+.horario-img img{
+    width:30%;
+    padding: 1%;
+}
+
+.icon{
+    font-size:60px;
+    margin-bottom:10px;
+}
+
+.divisor{
+    width:4px;
+    border-radius: 2px;
+    height:100%;
+    background:#e9d5a1;
+}
+
+.progreso{
+    text-align:center;
+    color:#feebba;
+    font-size: 20px;
+}
+
+.progreso-img img{
+    width:90%;
+    padding: 11%;
+}
+
+.progress-fill{
+    width:60%;
+    height:100%;
+    background:#e9d5a1;
+    border-radius:20px;
+}
+
+
+/*Tipos de letra*/
+.titulo1{
+    color: #ffebcd;
+    font-size: 25px;
+    font: serif;
+}
+
+.comun1{
+    color: #ffebcd;
+    font-size: 15px;
+    font: serif;
+}
+
+.titulo2{
+    color: #f9c16d;
+    font-size: 25px;
+    font: serif;
+}
+
+.comun2{
+    color: #f9c16d;
+    font-size: 15px;
+    font: serif;
+}
+
+.elemento-lista{
+    color: #b4b4b4;
+    font-size: 12px;
+    font: serif;
+}
+
+
