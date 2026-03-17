@@ -169,8 +169,13 @@ footer{
 
 .elemento-lista{
     color: #b4b4b4;
-    font-size: 12px;
+    font-size: 15px;
     font: serif;
 }
 
 
+/* Scroll personalizado */
+* {
+    scrollbar-width: thin;
+    scrollbar-color: #f9c16d transparent;
+}
