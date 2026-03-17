@@ -42,6 +42,10 @@ header{
     width:40px;
 }
 
+.icono img:hover {
+  filter: saturate(200%);
+}
+
 footer{
     position:fixed;
     margin-top:auto;
