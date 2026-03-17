@@ -25,7 +25,6 @@ header{
     color: #ffebcd;
     position:fixed;
     top: 0;
-    padding:10px;
     width:100%;
 }
 
@@ -167,7 +166,7 @@ footer{
 /*Tipos de letra*/
 .titulo0{
     color: #ffebcd;
-    font-size:45px; 
+    font-size:45px;
     margin-bottom:60px;
     font: serif;
 }
@@ -246,7 +245,7 @@ main {
 }
 
 .flecha-regreso{
-    cursor:pointer; 
+    cursor:pointer;
     position: sticky;
     margin-top:auto;
     display:flex;
@@ -267,4 +266,154 @@ main {
 
 .caja-derecha-asignaturas{
     display:flex; flex-direction:column; height:100%; gap:30px;
+}
+
+/* ── Formulario ── */
+form {
+    margin-top: 50px;
+    padding: 28px 40px 85px 40px;
+    display: flex;
+    flex-direction: column;
+    gap: 30px;
+}
+
+form h1 {
+    font-size: 40px;
+    font-weight: bold;
+    color: #feebba;
+    font-family: serif;
+}
+
+
+
+/* Grid 4 columnas de asignaturas */
+.grid-asignaturas {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 16px;
+}
+
+.columna-asignaturas {
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+}
+
+.columna-asignaturas label {
+    font-size: 20px;
+    font-weight: bold;
+    color: #feebba;
+    margin-bottom: 3px;
+}
+
+/* <select multiple> */
+select[multiple] {
+    background: #15154d;
+    border: 2px solid #5050bb;
+    border-radius: 3px;
+    height: 200px;
+    color: #feebba;
+    font-size: 14px;
+    width: 100%;
+    cursor: pointer;
+}
+
+select[multiple] option {
+    padding: 4px 8px;
+    background: #15154d;
+    color: #feebba;
+}
+
+select[multiple] option:hover {
+    background: #feebba;
+    color: #15154d;
+    font-weight: bold;
+}
+
+select[multiple] option:checked {
+    background: #feebba;
+    color: #15154d;
+    font-weight: bold;
+}
+
+/* Grid 2 columnas de valoraciones */
+.grid-lenguajes {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 28px 60px;
+}
+
+.valoracion {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.valoracion label {
+    font-size: 20px;
+    font-weight: bold;
+    color: #feebba;
+}
+
+/*
+  Para hacer la valoración de estrellas CSS o con radio inputs:
+  - Los inputs están ordenados de 5 a 1 en el HTML
+  - El contenedor usa flex row-reverse para mostrarlos de 1 a 5
+  - :checked ~ label colorea la estrella marcada y todas las de menor valor
+  - :hover sobre una label colorea esa y las menores (gracias a row-reverse + ~)
+*/
+.estrellas {
+    display: flex;
+    flex-direction: row-reverse;
+    justify-content: flex-end;
+    gap: 5px;
+}
+
+.estrellas input[type="radio"] {
+    display: none;
+}
+
+.estrellas label.estrella {
+    font-size: 40px;
+    line-height: 1;
+    cursor: pointer;
+    color: #44446a;
+    transition: color 0.1s, transform 0.1s;
+    user-select: none;
+    font-weight: normal;
+}
+
+/* Estrella activa: la marcada y todas las de su izquierda (menor valor, que en row-reverse son los ~ siguientes) */
+.estrellas input[type="radio"]:checked ~ label.estrella {
+    color: #feebba;
+}
+
+/* Hover: ilumina la estrella apuntada y todas las menores */
+.estrellas label.estrella:hover,
+.estrellas label.estrella:hover ~ label.estrella {
+    color: #f9c16d;
+    transform: scale(1.2);
+}
+
+/* Botón submit */
+button[type="submit"] {
+    position:fixed;
+    margin-top:auto;
+    bottom:45px;
+    right: 10px;
+    justify-content:center;
+    gap:40px;
+    padding:10px;
+    background: #e9d5a1;
+    font-size: 22px;
+    font-weight: bold;
+    border-radius: 50px;
+    color: #111;
+    cursor: pointer;
+    width: 99%;
+}
+
+button[type="submit"]:hover {
+    background: #f9c16d;
+    transform: scale(1.01);
 }

@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+<html lang="es" xmlns="http://www.w3.org/1999/html">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>MenInf - Descubre tu camino</title>
+<link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+
+<header>
+    <div class="icono">
+        <img src="Logotipo.png" alt="logo">
+        <span>MenInf - Descubre tu camino</span>
+    </div>
+
+    <div class="icono">
+        <img src="Usuario.png" alt="usuario">
+    </div>
+</header>
+
+<form action="#" method="post">
+
+    <h1>Formulario de afinidad académica</h1>
+
+    <!-- Listas de asignaturas (select multiple) -->
+    <div class="grid-asignaturas">
+
+        <div class="columna-asignaturas">
+            <label for="favoritas">Asignaturas favoritas<span style="color: red;">*</span> </label>
+            <select id="favoritas" name="favoritas" multiple required>
+                <option>Ampliación de Matemáticas</option>
+                <option>Arquitectura y Organización de Computadoras</option>
+                <option>Estadística</option>
+                <option>Estructura de Sistemas Operativos</option>
+                <option>Estructuras de Datos y Algoritmos</option>
+                <option>Física</option>
+                <option>Iteración Persona-Computadora</option>
+                <option>Fundamentos de Computadoras</option>
+                <option>Fundamentos de Matemáticas</option>
+                <option>Fundamentos de Programación</option>
+                <option>Paradigmas de Programación</option>
+            </select>
+        </div>
+
+        <div class="columna-asignaturas">
+            <label for="odiadas">Asignaturas más odiadas<span style="color: red;">*</span></label>
+            <select id="odiadas" name="odiadas" multiple required>
+                <option>Ampliación de Matemáticas</option>
+                <option>Arquitectura y Organización de Computadoras</option>
+                <option>Estadística</option>
+                <option>Estructura de Sistemas Operativos</option>
+                <option>Estructuras de Datos y Algoritmos</option>
+                <option>Física</option>
+                <option>Iteración Persona-Computadora</option>
+                <option>Fundamentos de Computadoras</option>
+                <option>Fundamentos de Matemáticas</option>
+                <option>Fundamentos de Programación</option>
+                <option>Paradigmas de Programación</option>
+            </select>
+        </div>
+
+        <div class="columna-asignaturas">
+            <label for="superadas">Asignaturas superadas<span style="color: red;">*</span></label>
+            <select id="superadas" name="superadas" multiple required>
+                <option>Ampliación de Matemáticas</option>
+                <option>Arquitectura y Organización de Computadoras</option>
+                <option>Estadística</option>
+                <option>Estructura de Sistemas Operativos</option>
+                <option>Estructuras de Datos y Algoritmos</option>
+                <option>Física</option>
+                <option>Iteración Persona-Computadora</option>
+                <option>Fundamentos de Computadoras</option>
+                <option>Fundamentos de Matemáticas</option>
+                <option>Fundamentos de Programación</option>
+                <option>Paradigmas de Programación</option>
+            </select>
+        </div>
+
+        <div class="columna-asignaturas">
+            <label for="suspensas">Asignaturas suspensas<span style="color: red;">*</span></label>
+            <select id="suspensas" name="suspensas" multiple required>
+                <option>Ampliación de Matemáticas</option>
+                <option>Arquitectura y Organización de Computadoras</option>
+                <option>Estadística</option>
+                <option>Estructura de Sistemas Operativos</option>
+                <option>Estructuras de Datos y Algoritmos</option>
+                <option>Física</option>
+                <option>Iteración Persona-Computadora</option>
+                <option>Fundamentos de Computadoras</option>
+                <option>Fundamentos de Matemáticas</option>
+                <option>Fundamentos de Programación</option>
+                <option>Paradigmas de Programación</option>
+            </select>
+        </div>
+
+    </div>
+
+    <!-- Valoraciones de lenguajes (radio inputs como estrellas) -->
+    <div class="grid-lenguajes">
+
+        <!-- Python — inputs de 5 a 1 para que CSS ~ funcione con row-reverse -->
+        <div class="valoracion">
+            <label>Nivel de manejo y gusto por el lenguaje Python</label>
+            <div class="estrellas">
+                <input type="radio" id="python5" name="python" value="5">
+                <label class="estrella" for="python5">★</label>
+                <input type="radio" id="python4" name="python" value="4">
+                <label class="estrella" for="python4">★</label>
+                <input type="radio" id="python3" name="python" value="3">
+                <label class="estrella" for="python3">★</label>
+                <input type="radio" id="python2" name="python" value="2">
+                <label class="estrella" for="python2">★</label>
+                <input type="radio" id="python1" name="python" value="1">
+                <label class="estrella" for="python1">★</label>
+            </div>
+        </div>
+
+        <!-- Ensamblador MIPS -->
+        <div class="valoracion">
+            <label>Nivel de manejo y gusto por el lenguaje Ensamblador (MIPS)</label>
+            <div class="estrellas">
+                <input type="radio" id="mips5" name="mips" value="5">
+                <label class="estrella" for="mips5">★</label>
+                <input type="radio" id="mips4" name="mips" value="4">
+                <label class="estrella" for="mips4">★</label>
+                <input type="radio" id="mips3" name="mips" value="3">
+                <label class="estrella" for="mips3">★</label>
+                <input type="radio" id="mips2" name="mips" value="2">
+                <label class="estrella" for="mips2">★</label>
+                <input type="radio" id="mips1" name="mips" value="1">
+                <label class="estrella" for="mips1">★</label>
+            </div>
+        </div>
+
+        <!-- Java -->
+        <div class="valoracion">
+            <label>Nivel de manejo y gusto por el lenguaje Java</label>
+            <div class="estrellas">
+                <input type="radio" id="java5" name="java" value="5">
+                <label class="estrella" for="java5">★</label>
+                <input type="radio" id="java4" name="java" value="4">
+                <label class="estrella" for="java4">★</label>
+                <input type="radio" id="java3" name="java" value="3">
+                <label class="estrella" for="java3">★</label>
+                <input type="radio" id="java2" name="java" value="2">
+                <label class="estrella" for="java2">★</label>
+                <input type="radio" id="java1" name="java" value="1">
+                <label class="estrella" for="java1">★</label>
+            </div>
+        </div>
+
+        <!-- C -->
+        <div class="valoracion">
+            <label>Nivel de manejo y gusto por el lenguaje C</label>
+            <div class="estrellas">
+                <input type="radio" id="c5" name="c" value="5">
+                <label class="estrella" for="c5">★</label>
+                <input type="radio" id="c4" name="c" value="4">
+                <label class="estrella" for="c4">★</label>
+                <input type="radio" id="c3" name="c" value="3">
+                <label class="estrella" for="c3">★</label>
+                <input type="radio" id="c2" name="c" value="2">
+                <label class="estrella" for="c2">★</label>
+                <input type="radio" id="c1" name="c" value="1">
+                <label class="estrella" for="c1">★</label>
+            </div>
+        </div>
+
+    </div>
+
+    <button type="submit">Descubre tu camino</button>
+
+</form>
+
+
+
+
+<footer>
+    <span>Proyecto de SSW</span>
+    <span>-</span>
+    <span>Desarrollado por: Carlos, Diego, Elisa, Orestes</span>
+</footer>
+
+</body>
+</html>
