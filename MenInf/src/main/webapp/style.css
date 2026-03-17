@@ -162,6 +162,13 @@ footer{
 
 
 /*Tipos de letra*/
+.titulo0{
+    color: #ffebcd;
+    font-size:45px; 
+    margin-bottom:60px;
+    font: serif;
+}
+
 .titulo1{
     color: #ffebcd;
     font-size: 25px;
@@ -195,8 +202,8 @@ footer{
 
 /* Scroll personalizado */
 * {
-    scrollbar-width: thin;
-    scrollbar-color: #f9c16d transparent;
+    scrollbar-width: 5px;
+    scrollbar-color: #f9c16d #000000 ;
 }
 
 main {
@@ -210,10 +217,30 @@ main {
     display:grid;
     grid-template-columns: 1fr 4px 1fr;
     flex:1;
-
+    gap: 60px;
 }
 
+.lista-asignaturas{
+    border:2px solid #f9c16d;
+    border-radius:10px;
+    padding:15px;
+    flex:1;
+    height: 22vh;
+    overflow-y:auto;
+    scrollbar-width: 5px;
+    scrollbar-color: #f9c16d transparent;
+}
 
+.lista-profesores{
+    border:2px solid #f9c16d;
+    border-radius:10px;
+    padding:15px;
+    flex:1;
+    height: 20vh;
+    overflow-y:auto;
+    scrollbar-width: 5px;
+    scrollbar-color: #f9c16d transparent;
+}
 
 .flecha-regreso{
     cursor:pointer; 
@@ -228,4 +255,13 @@ main {
 .flecha-regreso:hover {
   filter: sepia(100%) saturate(200%);
   color: white;
+}
+
+/* Exclusivas para la pagina de asignaturas*/
+.caja-izquierda-asignaturas{
+    display:flex; flex-direction:column; height:100%; gap:30px;
+}
+
+.caja-derecha-asignaturas{
+    display:flex; flex-direction:column; height:100%; gap:30px;
 }
