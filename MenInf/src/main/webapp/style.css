@@ -268,7 +268,7 @@ main {
     display:flex; flex-direction:column; height:100%; gap:30px;
 }
 
-/* ── Formulario ── */
+/********** FORMULARIO *************/
 form {
     margin-top: 50px;
     padding: 28px 40px 85px 40px;
@@ -417,6 +417,223 @@ button[type="submit"]:hover {
     background: #f9c16d;
     transform: scale(1.01);
 }
+
+
+/************ PROGRESO *************/
+
+/* Círculo de progreso */
+.circulo-contenedor {
+    display: flex;
+    justify-content: center;
+    align-items: stretch;
+    padding: 10px 0;
+}
+
+.circulo {
+    position: relative;
+    width: 150px;
+    height: 150px;
+}
+
+.circulo svg {
+    width: 150px;
+    height: 150px;
+    transform: rotate(-90deg);
+}
+
+.circulo-fondo {
+    fill: none;
+    stroke: #2a2a6a;
+    stroke-width: 10;
+}
+
+.circulo-progreso {
+    fill: none;
+    stroke: url(#gradCirculo);
+    stroke-width: 10;
+    stroke-linecap: round;
+    stroke-dasharray: 339.3;
+    stroke-dashoffset: 339.3; /* empieza vacío */
+    animation: llenar-circulo 1s ease forwards;
+}
+
+@keyframes llenar-circulo {
+    to {
+        stroke-dashoffset: 125.5; /* 339.3 * (1 - 0.63) */
+    }
+}
+/*
+El valor de `stroke-dashoffset` final se calcula así:
+circunferencia = 2 × π × radio = 2 × 3.1416 × 54 ≈ 339.3
+offset final   = circunferencia × (1 - porcentaje) = 339.3 × 0.37 ≈ 125.5
+ */
+
+.circulo-texto {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    font-size: 30px;
+    font-weight: bold;
+    color: #feebba;
+}
+
+/* Layout principal */
+.contenido-perfil {
+    margin-top: 100px;
+    display: grid;
+    grid-template-columns: 1fr 3fr;
+    gap: 24px;
+    margin-top: 7.5%;
+    padding: 24px 40px 24px 40px;
+    height: 100%;
+}
+
+/* Columna izquierda */
+.columna-izq {
+    display: flex;
+    flex-direction: column;
+    gap: 7% 15px;
+    justify-content: center;
+}
+
+/* Campos de texto del perfil */
+.campo {
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+}
+
+.campo label {
+    font-size: 20px;
+    font-weight: bold;
+    color: #feebba;
+    margin: 0;
+}
+
+.campo input[type="text"],
+.campo select,
+.campo textarea {
+    background: #15154d;
+    border: 2px solid #5050bb;
+    border-radius: 4px;
+    color: #feebba;
+    padding: 8px 10px;
+    font-size: 14px;
+    outline: none;
+    width: 100%;
+}
+
+.campo input[type="text"]:focus,
+.campo select:focus,
+.campo textarea:focus {
+    border-color: #feebba;
+}
+
+.campo input[type="text"]::placeholder,
+.campo textarea::placeholder {
+    color: #7070aa;
+}
+
+.campo select {
+    cursor: pointer;
+}
+
+
+.campo textarea {
+    resize: vertical;
+    min-height: 120px;
+    line-height: 1.4;
+}
+
+
+.botonesProgreso-div {
+    display: flex;
+    justify-content: center;
+    padding: 10px 0;
+    width: 100%;
+}
+
+.botonesProgreso-div button {
+    background: #e9d5a1;
+    border: none;
+    padding: 14px 0;
+    font-size: 20px;
+    font-weight: bold;
+    border-radius: 40px;
+    color: #111;
+    cursor: pointer;
+    width: 80%;
+    transition: background 0.2s, transform 0.1s;
+}
+
+.botonesProgreso-div button:hover {
+    background: #f9c16d;
+    transform: scale(1.02);
+}
+
+#botonRehacerFormulario {
+    grid-column: 1 / -1;
+}
+
+/* Columna derecha: grid 2x3 */
+.columna-der {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    grid-template-rows: 1fr 1fr;
+    gap: 15px;
+    height: 100%;
+    flex: 1;
+}
+
+.bloque-lista {
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+    min-height: 0;
+}
+
+.bloque-lista  label {
+    font-size: 20px;
+    font-weight: bold;
+    color: #feebba;
+    margin: 0;
+}
+
+/* Select como lista visible (sin múltiple) */
+.bloque-lista select {
+    background: #15154d;
+    border: 2px solid #5050bb;
+    border-radius: 3px;
+    color: #feebba;
+    font-size: 14px;
+    width: 100%;
+    cursor: pointer;
+    padding: 0;
+    flex: 1;
+    min-height: 0;
+    height: 100%;
+}
+
+.bloque-lista select option {
+    padding: 4px 8px;
+    background: #15154d;
+    color: #feebba;
+}
+
+.bloque-lista select option:checked {
+    background: #15154d;
+    color: #f9c16d;
+    font-weight: bold;
+}
+
+.bloque-lista select option:hover {
+    background: #feebba;
+    color: #15154d;
+    font-weight: bold;
+}
+
+
 
 /* Pop-up de inicio de sesion */
 .popup {

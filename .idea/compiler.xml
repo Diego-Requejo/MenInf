@@ -9,5 +9,8 @@
         <module name="MenInf" />
       </profile>
     </annotationProcessing>
+    <bytecodeTargetLevel>
+      <module name="MenInf" target="17" />
+    </bytecodeTargetLevel>
   </component>
 </project>
