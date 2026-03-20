@@ -1,5 +1,8 @@
 
-/*Configuracion general*/
+/**********************************************
+*********** CONFIGURACIÓN GENERAL *************
+***********************************************/
+
 *{
     margin:0;
     padding:0;
@@ -47,6 +50,12 @@ header{
   filter: saturate(200%);
 }
 
+
+
+/*********************************
+******** PÁGINA PRINCIPAL ********
+*********************************/
+
 footer{
     position:fixed;
     margin-top:auto;
@@ -61,8 +70,6 @@ footer{
     border-top:2px solid #222222;
 }
 
-
-/*Elementos de la pagina principal*/
 .banner-caja{
     padding:2%;
     display:flex;
@@ -164,7 +171,9 @@ footer{
 }
 
 
-/*Tipos de letra*/
+/********************************
+******* TIPOS DE LETRA **********
+*********************************/
 .titulo0{
     color: #ffebcd;
     font-size:45px;
@@ -203,7 +212,9 @@ footer{
 }
 
 
-/* Scroll personalizado */
+/********************************
+***** SCROLL PERSONALIZADO ******
+*********************************/
 * {
     scrollbar-width: 5px;
     scrollbar-color: #f9c16d #000000 ;
@@ -269,7 +280,9 @@ main {
     display:flex; flex-direction:column; height:100%; gap:30px;
 }
 
-/********** FORMULARIO *************/
+/********************************
+*********** FORMULARIO **********
+*********************************/
 form {
     margin-top: 50px;
     padding: 28px 40px 85px 40px;
@@ -342,6 +355,7 @@ select[multiple] option:checked {
     display: grid;
     grid-template-columns: 1fr 1fr;
     gap: 28px 60px;
+    margin-bottom: 10px;
 }
 
 .valoracion {
@@ -396,11 +410,11 @@ select[multiple] option:checked {
     transform: scale(1.2);
 }
 
-/* Botón submit */
-button[type="submit"] {
+
+#botonFormulario {
     position:fixed;
-    margin-top:auto;
-    bottom:45px;
+    margin-top: 30px;
+    bottom:10px;
     right: 10px;
     justify-content:center;
     gap:40px;
@@ -414,13 +428,15 @@ button[type="submit"] {
     width: 99%;
 }
 
-button[type="submit"]:hover {
+#botonFormulario:hover {
     background: #f9c16d;
     transform: scale(1.01);
 }
 
 
-/************ PROGRESO *************/
+/*********************************
+*********** PROGRESO *************
+*********************************/
 
 /* Círculo de progreso */
 .circulo-contenedor {
@@ -582,7 +598,7 @@ offset final   = circunferencia × (1 - porcentaje) = 339.3 × 0.37 ≈ 125.5
     grid-column: 1 / -1;
 }
 
-/* Columna derecha: grid 2x3 */
+/* Columna derecha: grid 2x2 */
 .columna-der {
     display: grid;
     grid-template-columns: 1fr 1fr;
@@ -640,8 +656,9 @@ offset final   = circunferencia × (1 - porcentaje) = 339.3 × 0.37 ≈ 125.5
 }
 
 
-
-/* Pop-up de inicio de sesion */
+/**********************************
+***** POP-UP INICIO DE SESIÓN *****
+***********************************/
 .popup {
     position: fixed;
     top: 50%;
@@ -735,9 +752,9 @@ input {
     cursor:pointer;
 }
 
-/**********************/
-/* Estilo del horario */
-/**********************/
+/******************************/
+/***** Estilo del horario *****/
+/******************************/
 .contenedor-principal-horario {
     display: flex;
     gap: 40px;
