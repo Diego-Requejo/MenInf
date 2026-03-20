@@ -733,3 +733,166 @@ input {
     font-size: 16px;
     cursor:pointer;
 }
+
+/**********************/
+/* Estilo del horario */
+/**********************/
+.contenedor-principal-horario {
+    display: flex;
+    gap: 40px;
+    margin-top: 50px;
+    padding: 40px;
+}
+
+/* CONTENEDOR */
+.horario {
+    display: flex;
+    flex-direction: column;
+}
+
+/* CABECERA */
+.cabecera-horario {
+    display: grid;
+    grid-template-columns: 10vh repeat(5, 25vh);
+    border-bottom: 2px solid #c9b98a;
+    border-right: 2px solid #c9b98a;
+}
+
+.cabecera-horario div {
+    background: #e9d5a1;
+    color: #111;
+    font-weight: bold;
+    text-align: center;
+    padding: 10px;
+    border: 1px solid #c9b98a;
+}
+
+/* CUERPO */
+.cuerpo-horario {
+    display: flex;
+}
+
+/* HORAS */
+.horas {
+    display: grid;
+    grid-template-rows: repeat(12, 50px);
+    width: 10vh;
+    border-bottom: 2px solid #c9b98a;
+    border-right: 2px solid #c9b98a;
+}
+
+.horas div {
+    background: #e9d5a1;
+    color: #111;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-top: 1px solid #c9b98a;
+}
+
+/* GRID HORARIO */
+.grid-horario {
+    display: grid;
+    grid-template-columns: repeat(5, 25vh);
+    grid-template-rows: repeat(12, 50px);
+    background: #0d0d3a;
+    border-bottom: 2px solid #c9b98a;
+    border-right: 2px solid #c9b98a;
+}
+
+/* BLOQUES */
+.bloque {
+    background: #e9b86a;
+    margin: 5px;
+    border-radius: 15px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: bold;
+    color: #000000;
+    cursor: pointer;
+}
+
+.bloque.laboratorio {
+    background: #ff7a1a;
+}
+
+/* PANEL DERECHO */
+.panel-derecha-horario {
+    background: #e9d5a1;
+    padding: 25px;
+    border-radius: 25px;
+    width: 100%;
+    color: #111;
+}
+
+.panel-derecha-horario h2 {
+    text-align: center;
+    margin-bottom: 20px;
+}
+
+/* Tabs */
+.tabs {
+    display: flex;
+    gap: 10px;
+    margin-bottom: 15px;
+}
+
+.tabs button {
+    flex: 1;
+    padding: 10px;
+    border-radius: 20px;
+    border: none;
+    cursor: pointer;
+}
+
+/* Input */
+.panel-derecha-horario input {
+    width: 100%;
+    padding: 10px;
+    border-radius: 20px;
+    border: 1px solid #aaa;
+    margin-bottom: 15px;
+}
+
+/* Filtros */
+.filtros {
+    display: flex;
+    gap: 10px;
+    margin-bottom: 20px;
+}
+
+.filtros button {
+    flex: 1;
+    padding: 10px;
+    border-radius: 20px;
+    border: none;
+    cursor: pointer;
+}
+
+.panel-derecha-horario  .activo {
+    background: linear-gradient(90deg,#000000,#3533cd);
+    color: white;
+}
+
+.panel-derecha-horario .inactivo:hover {
+    background: #ddddff;
+}
+
+/* Lista */
+.lista {
+    max-height: 325px;
+    overflow-y: auto;
+}
+
+.item {
+    background: #f1c27a;
+    padding: 12px;
+    border-radius: 10px;
+    margin-bottom: 10px;
+    cursor: pointer;
+}
+
+.item:hover {
+    background: #e9b15d;
+}
