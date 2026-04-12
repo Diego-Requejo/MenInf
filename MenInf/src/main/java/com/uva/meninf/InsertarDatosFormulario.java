@@ -61,19 +61,6 @@ public class InsertarDatosFormulario extends HttpServlet {
         
         // ID del usuario en sesión (asumiendo que está guardado en sesión)
         int idUsuario = (int) request.getSession().getAttribute("idUsuario");
-        
-        
-        
     }
-
-    /**
-     * Returns a short description of the servlet.
-     *
-     * @return a String containing servlet description
-     */
-    @Override
-    public String getServletInfo() {
-        return "Short description";
-    }// </editor-fold>
 
 }
