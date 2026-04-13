@@ -1,4 +1,4 @@
-package com.mycompany.meninf;
+package com.uva.meninf;
 
 import jakarta.ws.rs.ApplicationPath;
 import jakarta.ws.rs.core.Application;
