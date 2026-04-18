@@ -671,14 +671,24 @@ offset final   = circunferencia × (1 - porcentaje) = 339.3 × 0.37 ≈ 125.5
 ***********************************/
 .popup {
     position: fixed;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
+    top: 20px;
+    right: 20px;
     background: #1b1b1b;
     border: 3px solid #f9c16d;
     border-radius: 15px;
     padding: 30px;
     width: 450px;
+    z-index: 100000;
+    opacity: 0;
+    transform: translateY(-20px);
+    pointer-events: none;
+    transition: all 0.3s ease;
+}
+
+.popup.activo {
+    opacity: 1;
+    transform: translateY(0);
+    pointer-events: auto;
 }
 
 .popup-titulo {
@@ -688,6 +698,12 @@ offset final   = circunferencia × (1 - porcentaje) = 339.3 × 0.37 ≈ 125.5
     margin-bottom:20px;
     color:#ffebcd;
     font-size:22px;
+}
+
+.mensaje-error {
+    color: red;
+    margin-top: 10px;
+    font-weight: bold;
 }
 
 .cerrar {

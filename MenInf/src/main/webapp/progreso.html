@@ -1,137 +1,135 @@
 <!DOCTYPE html>
 <html lang="es">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>MenInf - Descubre tu camino</title>
-    <link rel="stylesheet" href="style.css">
-</head>
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>MenInf - Descubre tu camino</title>
+        <link rel="stylesheet" href="style.css">
+        <link rel="icon" type="image/png" href="./img/Logotipo.png">
+    </head>
 
-<body>
+    <body>
+        <div class="popup" id="popup">
+            <div id="contenido-popup"></div>
+        </div>
+        <header>
+            <div class="icono">
+                <a href="./index.html">
+                <img src="./img/Logotipo.png" alt="logo" >
+                </a>
+                <span>MenInf - Descubre tu camino</span>
+            </div>
 
-<header>
-    <div class="icono">
-        <a href="./index.html">
-        <img src="./img/Logotipo.png" alt="logo" >
-        </a>
-        <span>MenInf - Descubre tu camino</span>
-    </div>
+            <div class="icono" id="usuario">
+                <img src="./img/Usuario.png" alt="usuario">
+            </div>
+        </header>
 
-    <div class="icono">
-        <img src="./img/Usuario.png" alt="usuario">
-    </div>
-</header>
+        <div class="contenido-perfil">
 
-<div class="contenido-perfil">
+            <!-- Columna izquierda -->
+            <div class="columna-izq">
 
-    <!-- Columna izquierda -->
-    <div class="columna-izq">
+                <!-- Círculo de progreso -->
+                <div class="circulo-contenedor">
+                    <div class="circulo">
+                        <svg viewBox="0 0 120 120" xmlns="http://www.w3.org/2000/svg">
+                            <defs>
+                                <linearGradient id="gradCirculo" x1="0%" y1="0%" x2="100%" y2="0%">
+                                    <stop offset="0%"   stop-color="#e9d5a1"/>
+                                    <stop offset="100%" stop-color="#f9c16d"/>
+                                </linearGradient>
+                            </defs>
+                            <circle class="circulo-fondo"    cx="60" cy="60" r="54"/>
+                            <circle class="circulo-progreso" cx="60" cy="60" r="54"/>
+                        </svg>
+                        <div class="circulo-texto">63 %</div>
+                    </div>
+                </div>
 
-        <!-- Círculo de progreso -->
-        <div class="circulo-contenedor">
-            <div class="circulo">
-                <svg viewBox="0 0 120 120" xmlns="http://www.w3.org/2000/svg">
-                    <defs>
-                        <linearGradient id="gradCirculo" x1="0%" y1="0%" x2="100%" y2="0%">
-                            <stop offset="0%"   stop-color="#e9d5a1"/>
-                            <stop offset="100%" stop-color="#f9c16d"/>
-                        </linearGradient>
-                    </defs>
-                    <circle class="circulo-fondo"    cx="60" cy="60" r="54"/>
-                    <circle class="circulo-progreso" cx="60" cy="60" r="54"/>
-                </svg>
-                <div class="circulo-texto">63 %</div>
+                <!-- Nombre de usuario -->
+                <div class="campo">
+                    <label>Nombre de usuario</label>
+                    <input type="text" placeholder="Escribe aquí su nombre de su usuario" value="Paquito">
+                </div>
+
+                <!-- Mención -->
+                <div class="campo">
+                    <label>Mencion que está cursando</label>
+                    <select>
+                        <option value="" disabled selected>Seleccione la mención aquí</option>
+                        <option value="si">Ninguna</option>
+                        <option value="tsi">Tecnologías de la Información</option>
+                        <option value="is">Ingeniería del Software</option>
+                        <option value="arq">Computación</option>
+                    </select>
+                </div>
+
+                <!-- Biografía -->
+                <div class="campo">
+                    <label>Biografía</label>
+                    <textarea placeholder="Escribe aquí acerca suyo"></textarea>
+                </div>
+
+                <div class="botonesProgreso-div">
+                    <button>Guardar cambios</button>
+                </div>
+
+            </div>
+
+            <!-- Columna derecha: 4 selects como listas -->
+            <div class="columna-der">
+
+                <div class="bloque-lista">
+                    <label>Asignaturas superadas</label>
+                    <select size="2">
+                        <option>Ampliación de Matemáticas</option>
+                        <option>Estadística</option>
+                        <option>Estructuras de Datos y Algoritmos</option>
+                        <option>Iteración Persona-Computadora</option>
+                        <option>Fundamentos de Matemáticas</option>
+                        <option>Fundamentos de Programación</option>
+                    </select>
+                </div>
+
+                <div class="bloque-lista">
+                    <label>Asignaturas suspensas</label>
+                    <select size="2">
+                        <option>Arquitectura y Organización de Computadoras</option>
+                        <option>Estructura de Sistemas Operativos</option>
+                        <option>Física</option>
+                        <option>Fundamentos de Computadoras</option>
+
+                    </select>
+                </div>
+
+                <div class="bloque-lista">
+                    <label>Asignaturas por superar</label>
+                    <select size="2">
+                        <option>Arquitectura y Organización de Computadoras</option>
+                        <option>Estructura de Sistemas Operativos</option>
+                        <option>Física</option>
+                        <option>Fundamentos de Computadoras</option>
+                        <option>Paradigmas de Programación</option>
+                    </select>
+                </div>
+
+                <div class="bloque-lista">
+                    <label>Asignaturas favoritas</label>
+                    <select size="2">
+                        <option>Estructuras de Datos y Algoritmos</option>
+                        <option>Paradigmas de Programación</option>
+                    </select>
+                </div>
+
+                <div class="botonesProgreso-div" id="botonRehacerFormulario">
+                    <button onclick="location.href='formulario.html'">Rehacer formulario</button>
+                </div>
+
             </div>
         </div>
 
-        <!-- Nombre de usuario -->
-        <div class="campo">
-            <label>Nombre de usuario</label>
-            <input type="text" placeholder="Escribe aquí su nombre de su usuario" value="Paquito">
-        </div>
 
-        <!-- Mención -->
-        <div class="campo">
-            <label>Mencion que está cursando</label>
-            <select>
-                <option value="" disabled selected>Seleccione la mención aquí</option>
-                <option value="si">Ninguna</option>
-                <option value="tsi">Tecnologías de la Información</option>
-                <option value="is">Ingeniería del Software</option>
-                <option value="arq">Computación</option>
-            </select>
-        </div>
-
-        <!-- Biografía -->
-        <div class="campo">
-            <label>Biografía</label>
-            <textarea placeholder="Escribe aquí acerca suyo"></textarea>
-        </div>
-
-        <div class="botonesProgreso-div">
-            <button>Guardar cambios</button>
-        </div>
-
-    </div>
-
-    <!-- Columna derecha: 4 selects como listas -->
-    <div class="columna-der">
-
-        <div class="bloque-lista">
-            <label>Asignaturas superadas</label>
-            <select size="2">
-                <option>Ampliación de Matemáticas</option>
-                <option>Estadística</option>
-                <option>Estructuras de Datos y Algoritmos</option>
-                <option>Iteración Persona-Computadora</option>
-                <option>Fundamentos de Matemáticas</option>
-                <option>Fundamentos de Programación</option>
-            </select>
-        </div>
-
-        <div class="bloque-lista">
-            <label>Asignaturas suspensas</label>
-            <select size="2">
-                <option>Arquitectura y Organización de Computadoras</option>
-                <option>Estructura de Sistemas Operativos</option>
-                <option>Física</option>
-                <option>Fundamentos de Computadoras</option>
-
-            </select>
-        </div>
-
-        <div class="bloque-lista">
-            <label>Asignaturas por superar</label>
-            <select size="2">
-                <option>Arquitectura y Organización de Computadoras</option>
-                <option>Estructura de Sistemas Operativos</option>
-                <option>Física</option>
-                <option>Fundamentos de Computadoras</option>
-                <option>Paradigmas de Programación</option>
-            </select>
-        </div>
-
-        <div class="bloque-lista">
-            <label>Asignaturas favoritas</label>
-            <select size="2">
-                <option>Estructuras de Datos y Algoritmos</option>
-                <option>Paradigmas de Programación</option>
-            </select>
-        </div>
-
-        <div class="botonesProgreso-div" id="botonRehacerFormulario">
-            <button onclick="location.href='formulario.html'">Rehacer formulario</button>
-        </div>
-
-    </div>
-
-
-
-
-
-</div>
-
-
-
-</body>
+        <script src="./js/popup.js"></script>
+    </body>
 </html>

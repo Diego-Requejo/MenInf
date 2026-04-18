@@ -1,116 +1,120 @@
 <!DOCTYPE html>
 <html lang="es">
-<head>
-    <meta charset="UTF-8">
-    <title>MenInf - Horario</title>
-    <link rel="stylesheet" href="style.css">
-</head>
-<body>
-
-<!-- HEADER -->
-<header>
-    <div class="icono">
-        <a href="./index.html">
-        <img src="./img/Logotipo.png" alt="logo" >
-        </a>
-        <span>MenInf - Descubre tu camino</span>
-    </div>
-
-    <div class="icono">
-        <img src="./img/Usuario.png" alt="usuario">
-    </div>
-</header>
-
-<main class="contenedor-principal-horario">
-
-    <div class="horario">
-
-        <!-- CABECERA -->
-        <div class="cabecera-horario">
-            <div></div>
-            <div>Lunes</div>
-            <div>Martes</div>
-            <div>Miércoles</div>
-            <div>Jueves</div>
-            <div>Viernes</div>
+    <head>
+        <meta charset="UTF-8">
+        <title>MenInf - Horario</title>
+        <link rel="stylesheet" href="style.css">
+        <link rel="icon" type="image/png" href="./img/Logotipo.png">
+    </head>
+    <body>
+        <div class="popup" id="popup">
+            <div id="contenido-popup"></div>
         </div>
-
-        <!-- CUERPO -->
-        <div class="cuerpo-horario">
-
-            <!-- Horas -->
-            <div class="horas">
-                <div>9:00</div>
-                <div>10:00</div>
-                <div>11:00</div>
-                <div>12:00</div>
-                <div>13:00</div>
-                <div>14:00</div>
-                <div>15:00</div>
-                <div>16:00</div>
-                <div>17:00</div>
-                <div>18:00</div>
-                <div>19:00</div>
-                <div>20:00</div>
+        <!-- HEADER -->
+        <header>
+            <div class="icono" >
+                <a href="./index.html">
+                <img src="./img/Logotipo.png" alt="logo" >
+                </a>
+                <span>MenInf - Descubre tu camino</span>
             </div>
 
-            <!-- GRID -->
-            <div class="grid-horario">
-
-                <!-- LUNES -->
-                <div class="bloque" style="grid-column:1; grid-row:2;">ICON</div>
-                <div class="bloque laboratorio" style="grid-column:1; grid-row:3 / span 2;">ADBD L1</div>
-                <div class="bloque laboratorio" style="grid-column:1; grid-row:5 / span 2;">ICON L4</div>
-                <div class="bloque laboratorio" style="grid-column:1; grid-row:8 / span 2;">EDA K2</div>
-
-                <!-- MARTES -->
-                <div class="bloque" style="grid-column:2; grid-row:2;">ADBD</div>
-                <div class="bloque" style="grid-column:2; grid-row:6;">EDA T1</div>
-
-                <!-- MIÉRCOLES -->
-                <div class="bloque" style="grid-column:3; grid-row:1;">ADBD</div>
-                <div class="bloque laboratorio" style="grid-column:3; grid-row:11 / span 2;">ADBD L4</div>
-
-                <!-- JUEVES -->
-                <div class="bloque" style="grid-column:4; grid-row:1;">ICON</div>
-                <div class="bloque" style="grid-column:4; grid-row:3;">EDA T1</div>
-                <div class="bloque laboratorio" style="grid-column:4; grid-row:9 / span 2;">ADBD L1</div>
-
-                <!-- VIERNES -->
-                <div class="bloque laboratorio" style="grid-column:5; grid-row:3 / span 2;">ADBD L1</div>
-
+            <div class="icono" id="usuario">
+                <img src="./img/Usuario.png" alt="usuario">
             </div>
-        </div>
-    </div>
+        </header>
 
-    <!-- PANEL DERECHO -->
-    <div class="panel-derecha-horario">
-        <h2>ASIGNATURAS DISPONIBLES</h2>
+        <main class="contenedor-principal-horario">
 
-        <div class="tabs">
-            <button class="activo">1º CUATRI</button>
-            <button class="inactivo">2º CUATRI</button>
-        </div>
+            <div class="horario">
 
-        <input type="text" placeholder="Buscar asignatura...">
+                <!-- CABECERA -->
+                <div class="cabecera-horario">
+                    <div></div>
+                    <div>Lunes</div>
+                    <div>Martes</div>
+                    <div>Miércoles</div>
+                    <div>Jueves</div>
+                    <div>Viernes</div>
+                </div>
 
-        <h3>Filtrar por mención</h3>
+                <!-- CUERPO -->
+                <div class="cuerpo-horario">
 
-        <div class="filtros">
-            <button class="inactivo">CO</button>
-            <button class="activo">IS</button>
-            <button class="inactivo">TI</button>
-        </div>
+                    <!-- Horas -->
+                    <div class="horas">
+                        <div>9:00</div>
+                        <div>10:00</div>
+                        <div>11:00</div>
+                        <div>12:00</div>
+                        <div>13:00</div>
+                        <div>14:00</div>
+                        <div>15:00</div>
+                        <div>16:00</div>
+                        <div>17:00</div>
+                        <div>18:00</div>
+                        <div>19:00</div>
+                        <div>20:00</div>
+                    </div>
 
-        <div class="lista">
-            <div class="item">Análisis y Diseño de Bases de Datos (ADBD)</div>
-            <div class="item">Ingeniería del Conocimiento (ICON)</div>
-            <div class="item">Modelado de Sistemas Software (MOD)</div>
-            <div class="item">Seguridad de Redes y Sistemas (SRS)</div>
-        </div>
-    </div>
+                    <!-- GRID -->
+                    <div class="grid-horario">
 
-</main>
+                        <!-- LUNES -->
+                        <div class="bloque" style="grid-column:1; grid-row:2;">ICON</div>
+                        <div class="bloque laboratorio" style="grid-column:1; grid-row:3 / span 2;">ADBD L1</div>
+                        <div class="bloque laboratorio" style="grid-column:1; grid-row:5 / span 2;">ICON L4</div>
+                        <div class="bloque laboratorio" style="grid-column:1; grid-row:8 / span 2;">EDA K2</div>
 
-</body>
+                        <!-- MARTES -->
+                        <div class="bloque" style="grid-column:2; grid-row:2;">ADBD</div>
+                        <div class="bloque" style="grid-column:2; grid-row:6;">EDA T1</div>
+
+                        <!-- MIÉRCOLES -->
+                        <div class="bloque" style="grid-column:3; grid-row:1;">ADBD</div>
+                        <div class="bloque laboratorio" style="grid-column:3; grid-row:11 / span 2;">ADBD L4</div>
+
+                        <!-- JUEVES -->
+                        <div class="bloque" style="grid-column:4; grid-row:1;">ICON</div>
+                        <div class="bloque" style="grid-column:4; grid-row:3;">EDA T1</div>
+                        <div class="bloque laboratorio" style="grid-column:4; grid-row:9 / span 2;">ADBD L1</div>
+
+                        <!-- VIERNES -->
+                        <div class="bloque laboratorio" style="grid-column:5; grid-row:3 / span 2;">ADBD L1</div>
+
+                    </div>
+                </div>
+            </div>
+
+            <!-- PANEL DERECHO -->
+            <div class="panel-derecha-horario">
+                <h2>ASIGNATURAS DISPONIBLES</h2>
+
+                <div class="tabs">
+                    <button class="activo">1º CUATRI</button>
+                    <button class="inactivo">2º CUATRI</button>
+                </div>
+
+                <input type="text" placeholder="Buscar asignatura...">
+
+                <h3>Filtrar por mención</h3>
+
+                <div class="filtros">
+                    <button class="inactivo">CO</button>
+                    <button class="activo">IS</button>
+                    <button class="inactivo">TI</button>
+                </div>
+
+                <div class="lista">
+                    <div class="item">Análisis y Diseño de Bases de Datos (ADBD)</div>
+                    <div class="item">Ingeniería del Conocimiento (ICON)</div>
+                    <div class="item">Modelado de Sistemas Software (MOD)</div>
+                    <div class="item">Seguridad de Redes y Sistemas (SRS)</div>
+                </div>
+            </div>
+
+        </main>
+
+        <script src="./js/popup.js"></script>
+    </body>
 </html>

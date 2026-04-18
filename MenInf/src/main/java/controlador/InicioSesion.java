@@ -1,0 +1,23 @@
+package controlador;
+
+import modelo.UsuarioTODO;
+import jakarta.servlet.*;
+import jakarta.servlet.http.*;
+import java.io.IOException;
+
+public class InicioSesion extends HttpServlet {
+
+    protected void doPost(HttpServletRequest request, HttpServletResponse response)
+            throws ServletException, IOException {
+
+        String user = request.getParameter("username");
+        String pass = request.getParameter("password");
+
+        if (UsuarioTODO.login(user, pass)) {
+            HttpSession session = request.getSession();
+            session.setAttribute("usuario", user);
+
+            response.getWriter().write("OK");
+        }
+    }
+}
