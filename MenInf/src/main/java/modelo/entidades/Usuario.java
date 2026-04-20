@@ -1,11 +1,15 @@
-package modelo;
+package modelo.entidades;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import java.util.ArrayList;
 import javax.naming.Context;
 import javax.naming.InitialContext;
 import javax.sql.DataSource;
+
+import modelo.enums.EstadoAsignatura;
+import modelo.relaciones.Cursada;
 
 public class Usuario {
     private String nombre;
@@ -14,6 +18,8 @@ public class Usuario {
     private String mencion;
     private boolean tfg;
     private boolean practicas;
+
+    private ArrayList<Cursada> cursadas = new ArrayList<>();
 
     public Usuario() {}
 
@@ -43,6 +49,9 @@ public class Usuario {
 
     public boolean isPracticas() { return practicas; }
     public void setPracticas(boolean practicas) { this.practicas = practicas; }
+
+    public ArrayList<Cursada> getCursadas() { return cursadas; }
+    public void setCursadas(ArrayList<Cursada> cursadas) { this.cursadas = cursadas; }
 
     //######################################################################
     //# Métodos estáticos equivalentes para iteración con la base de datos #
@@ -114,5 +123,62 @@ public class Usuario {
             System.err.println("Error en login: " + e.getMessage());
             return false;
         }
+    }
+
+    public static Usuario obtenerPerfil(String nombre) {
+        Usuario usuario = null;
+        try {
+            Context ctx = new InitialContext();
+            DataSource ds = (DataSource) ctx.lookup("java:comp/env/jdbc/meninf");
+            Connection conn = ds.getConnection();
+
+            PreparedStatement ps = conn.prepareStatement("SELECT * FROM Usuario WHERE nombre = ?" );
+            ps.setString(1, nombre);
+            ResultSet rs = ps.executeQuery();
+
+            if (rs.next()) {
+                usuario = new Usuario();
+                usuario.setNombre(rs.getString("nombre"));
+                usuario.setPassword(rs.getString("contseña"));
+                usuario.setBiografia(rs.getString("biografia"));
+                usuario.setMencion(rs.getString("mencion"));
+                usuario.setTfg(rs.getBoolean("tfg"));
+                usuario.setPracticas(rs.getBoolean("practicas"));
+            }
+
+            PreparedStatement psCursadas = conn.prepareStatement( "SELECT * FROM Cursada WHERE nombre = ?" );
+            psCursadas.setString(1, nombre);
+            ResultSet rsCursadas = psCursadas.executeQuery();
+
+            while (rsCursadas.next()) {
+                int codAsig = rsCursadas.getInt("codAsignatura");
+                Asignatura asig = Asignatura.obtenerPorId(codAsig);
+                
+                if( asig != null ){
+                    String estadoStr = rsCursadas.getString("estado");
+                    EstadoAsignatura estado = EstadoAsignatura.valueOf(estadoStr);
+
+                    Cursada cursada = new Cursada();
+                    cursada.setUsuario(usuario);
+                    cursada.setAsignatura(asig);
+                    cursada.setEstado(estado);
+                    cursada.setAño(rsCursadas.getInt("año"));
+                    cursada.setFavorita(rsCursadas.getBoolean("favorita"));
+                    cursada.setOdiada(rsCursadas.getBoolean("odiada"));
+
+                    usuario.añadirCursada(cursada);
+                }
+            }
+            rs.close();
+            ps.close();
+            conn.close();
+        } catch (Exception e) {
+            System.err.println("Error en obtenerPerfil: " + e.getMessage());
+        }
+        return usuario;
+    }
+
+    private void añadirCursada(Cursada cursada) {
+        this.cursadas.add(cursada);
     }
 }

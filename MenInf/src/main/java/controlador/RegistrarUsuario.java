@@ -1,8 +1,9 @@
 package controlador;
 
-import modelo.Usuario;
 import jakarta.servlet.*;
 import jakarta.servlet.http.*;
+import modelo.entidades.Usuario;
+
 import java.io.IOException;
 
 public class RegistrarUsuario extends HttpServlet {
