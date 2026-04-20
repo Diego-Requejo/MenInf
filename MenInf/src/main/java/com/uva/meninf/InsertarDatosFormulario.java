@@ -1,6 +1,6 @@
 /*
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/JSP_Servlet/Servlet.java to edit this template
+ * Click nbfs://nbhost/SystemFileSystem/Templates/JSP_Servlet/Servlet.nivelJava to edit this template
  */
 package com.uva.meninf;
 
@@ -23,9 +23,11 @@ import javax.sql.DataSource;
 import javax.naming.Context;
 import javax.naming.InitialContext;
 
+import java.time.Year;
+
 /**
  *
- * @author ASUS
+ * @author dierequ
  */
 @WebServlet(name = "InsertarDatosFormulario", urlPatterns = {"/InsertarDatosFormulario"})
 public class InsertarDatosFormulario extends HttpServlet {
@@ -56,11 +58,13 @@ public class InsertarDatosFormulario extends HttpServlet {
         // Recoger valoraciones de estrellas
         String python = request.getParameter("python");
         String mips   = request.getParameter("mips");
-        String java   = request.getParameter("java");
+        String nivelJava   = request.getParameter("java");
         String c      = request.getParameter("c");
         
-        // ID del usuario en sesión (asumiendo que está guardado en sesión)
-        int idUsuario = (int) request.getSession().getAttribute("idUsuario");
+        int year = Year.now().getValue();
+        
+        // Nombre del usuario en sesión
+        String nomU = (String) request.getSession().getAttribute("usuario");
         
         try {
             Context ctx = new InitialContext();
@@ -68,89 +72,98 @@ public class InsertarDatosFormulario extends HttpServlet {
             Connection conn = ds.getConnection();
 
             // --- CURSADA ---
-            // Para cada asignatura marcada, insertar o actualizar su Cursada
+            // Superadas
+            if (superadas != null)
+                for (String cod : superadas)
+                    insertarCursada(conn, Integer.parseInt(cod), nomU, "superada", year,
+                                   contiene(favoritas, cod), contiene(odiadas, cod));
 
-            // Superadas: estado = 'superada'
-            insertarCursadas(conn, idUsuario, superadas, "superada", favoritas, odiadas);
+            // Suspensas
+            if (suspensas != null)
+                for (String cod : suspensas)
+                    insertarCursada(conn, Integer.parseInt(cod), nomU, "suspensa", year,
+                                   contiene(favoritas, cod), contiene(odiadas, cod));
 
-            // Suspensas: estado = 'suspensa'
-            insertarCursadas(conn, idUsuario, suspensas, "suspensa", favoritas, odiadas);
-
-            // Las que están en favoritas u odiadas pero no en superadas ni suspensas: estado = 'cursando'
-            insertarCursadas(conn, idUsuario, favoritas, "cursando", favoritas, odiadas);
-            insertarCursadas(conn, idUsuario, odiadas,   "cursando", favoritas, odiadas);
+            // Favoritas u odiadas que no estén ya en superadas/suspensas → cursando
+            String[] cursando = union(favoritas, odiadas);
+            if (cursando != null)
+                for (String cod : cursando)
+                    if (!contiene(superadas, cod) && !contiene(suspensas, cod))
+                        insertarCursada(conn, Integer.parseInt(cod), nomU, "cursando", year,
+                                        contiene(favoritas, cod), contiene(odiadas, cod));
 
             // --- PREFERENCIA LENGUAJE ---
-            guardarPreferenciaLenguaje(conn, idUsuario, "Python", python);
-            guardarPreferenciaLenguaje(conn, idUsuario, "Ensamblador MIPS", mips);
-            guardarPreferenciaLenguaje(conn, idUsuario, "Java", java);
-            guardarPreferenciaLenguaje(conn, idUsuario, "C", c);
+            // Solo se inserta si el usuario seleccionó alguna estrella
+            guardarPreferenciaLenguaje(conn, nomU, "Python", python);
+            guardarPreferenciaLenguaje(conn, nomU, "Ensamblador MIPS", mips);
+            guardarPreferenciaLenguaje(conn, nomU, "Java", nivelJava);
+            guardarPreferenciaLenguaje(conn, nomU, "C", c);
 
             conn.close();
-
-            response.sendRedirect("progreso.html");
+            response.sendRedirect("horario.html");
 
         } catch (Exception e) {
-            out.println("<p>Error: " + e.getMessage() + "</p>");
+            response.getWriter().println("<p>Error: " + e.getMessage() + "</p>");
         }
     }
 
-    private void insertarCursadas(Connection conn, int idUsuario, String[] asignaturas,
-                                   String estado, String[] favoritas, String[] odiadas)
-            throws Exception {
-
-        if (asignaturas == null) return;
-
-        String sql = "INSERT INTO Cursada (idUsuario, idAsignatura, estado, favorita, odiada) " +
-                     "VALUES (?, (SELECT id FROM Asignatura WHERE nombre = ?), ?, ?, ?) " +
-                     "ON DUPLICATE KEY UPDATE estado = ?, favorita = ?, odiada = ?";
+    private void insertarCursada(Connection conn, int codA, String nomU,
+                                  String estado, int anio,
+                                  boolean favorita, boolean odiada) throws Exception {
+        String sql = "INSERT INTO Cursada (codA, nomU, estado, año, favorita, odiada) " +
+                     "VALUES (?, ?, ?, ?, ?, ?) " +
+                     "ON DUPLICATE KEY UPDATE estado = ?, año = ?, favorita = ?, odiada = ?";
 
         PreparedStatement ps = conn.prepareStatement(sql);
+        ps.setInt(1, codA);
+        ps.setString(2, nomU);
+        ps.setString(3, estado);
+        ps.setInt(4, anio);
+        ps.setBoolean(5, favorita);
+        ps.setBoolean(6, odiada);
+        // ON DUPLICATE KEY UPDATE
+        ps.setString(7, estado);
+        ps.setInt(8, anio);
+        ps.setBoolean(9, favorita);
+        ps.setBoolean(10, odiada);
 
-        for (String asignatura : asignaturas) {
-            boolean esFavorita = favoritas != null && contains(favoritas, asignatura);
-            boolean esOdiada   = odiadas   != null && contains(odiadas,   asignatura);
-
-            ps.setInt(1, idUsuario);
-            ps.setString(2, asignatura);
-            ps.setString(3, estado);
-            ps.setBoolean(4, esFavorita);
-            ps.setBoolean(5, esOdiada);
-            // Para el ON DUPLICATE KEY UPDATE
-            ps.setString(6, estado);
-            ps.setBoolean(7, esFavorita);
-            ps.setBoolean(8, esOdiada);
-
-            ps.executeUpdate();
-        }
-        ps.close();
-    }
-
-    private void guardarPreferenciaLenguaje(Connection conn, int idUsuario,
-                                             String nombreLenguaje, String notaStr)
-            throws Exception {
-
-        if (notaStr == null) return;
-        int nota = Integer.parseInt(notaStr);
-
-        String sql = "INSERT INTO PreferenciaLenguaje (idUsuario, nombreLenguaje, nota) " +
-                     "VALUES (?, ?, ?) " +
-                     "ON DUPLICATE KEY UPDATE nota = ?";
-
-        PreparedStatement ps = conn.prepareStatement(sql);
-        ps.setInt(1, idUsuario);
-        ps.setString(2, nombreLenguaje);
-        ps.setInt(3, nota);
-        ps.setInt(4, nota);
         ps.executeUpdate();
         ps.close();
     }
 
-    private boolean contains(String[] array, String valor) {
-        for (String s : array) {
+    private void guardarPreferenciaLenguaje(Connection conn, String nomU,
+                                         String nomL, String valor) throws Exception {
+    if (valor == null) return;
+
+    int nota = Integer.parseInt(valor);
+
+    String sql = "INSERT INTO PreferenciaLenguaje (nomU, nomL, nota) " +
+                 "VALUES (?, ?, ?) " +
+                 "ON DUPLICATE KEY UPDATE nota = ?";
+
+    PreparedStatement ps = conn.prepareStatement(sql);
+    ps.setString(1, nomU);
+    ps.setString(2, nomL);
+    ps.setInt(3, nota);
+    ps.setInt(4, nota);
+    ps.executeUpdate();
+    ps.close();
+}
+
+    private boolean contiene(String[] array, String valor) {
+        if (array == null) return false;
+        for (String s : array)
             if (s.equals(valor)) return true;
-        }
         return false;
+    }
+
+    private String[] union(String[] a, String[] b) {
+        if (a == null) return b;
+        if (b == null) return a;
+        java.util.Set<String> set = new java.util.LinkedHashSet<>();
+        for (String s : a) set.add(s);
+        for (String s : b) set.add(s);
+        return set.toArray(new String[0]);
     }
     
 

@@ -1,6 +1,6 @@
 package controlador;
 
-import modelo.UsuarioTODO;
+import modelo.Usuario;
 import jakarta.servlet.*;
 import jakarta.servlet.http.*;
 import java.io.IOException;
@@ -13,7 +13,7 @@ public class InicioSesion extends HttpServlet {
         String user = request.getParameter("username");
         String pass = request.getParameter("password");
 
-        if (UsuarioTODO.login(user, pass)) {
+        if (Usuario.login(user, pass)) {
             HttpSession session = request.getSession();
             session.setAttribute("usuario", user);
 

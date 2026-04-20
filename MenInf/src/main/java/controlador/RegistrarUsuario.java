@@ -1,6 +1,6 @@
 package controlador;
 
-import modelo.UsuarioTODO;
+import modelo.Usuario;
 import jakarta.servlet.*;
 import jakarta.servlet.http.*;
 import java.io.IOException;
@@ -13,12 +13,12 @@ public class RegistrarUsuario extends HttpServlet {
         String user = request.getParameter("username");
         String pass = request.getParameter("password");
 
-        if (UsuarioTODO.existeUsuario(user)) {
+        if (Usuario.existeUsuario(user)) {
             response.getWriter().write("EXISTE");
             return;
         }
 
-        UsuarioTODO.registrar(user, pass);
+        Usuario.registrar(user, pass);
 
         // CREAR SESIÓN TRAS INICIAR
         HttpSession session = request.getSession(true);
