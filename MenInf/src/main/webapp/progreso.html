@@ -43,32 +43,26 @@
                             <circle class="circulo-fondo"    cx="60" cy="60" r="54"/>
                             <circle class="circulo-progreso" cx="60" cy="60" r="54"/>
                         </svg>
-                        <div class="circulo-texto">63 %</div>
+                        <div class="circulo-texto" id="porcentaje-texto">0 %</div>
                     </div>
                 </div>
 
                 <!-- Nombre de usuario -->
                 <div class="campo">
                     <label>Nombre de usuario</label>
-                    <input type="text" placeholder="Escribe aquí su nombre de su usuario" value="Paquito">
+                    <input type="text" id="perfil-nombre" readonly>
                 </div>
 
                 <!-- Mención -->
                 <div class="campo">
-                    <label>Mencion que está cursando</label>
-                    <select>
-                        <option value="" disabled selected>Seleccione la mención aquí</option>
-                        <option value="si">Ninguna</option>
-                        <option value="tsi">Tecnologías de la Información</option>
-                        <option value="is">Ingeniería del Software</option>
-                        <option value="arq">Computación</option>
-                    </select>
+                    <label>Mención que está cursando</label>
+                    <input type="text" id="perfil-mencion" readonly>
                 </div>
 
                 <!-- Biografía -->
                 <div class="campo">
                     <label>Biografía</label>
-                    <textarea placeholder="Escribe aquí acerca suyo"></textarea>
+                    <textarea id="perfil-bio" placeholder="Cargando biografía..."></textarea>
                 </div>
 
                 <div class="botonesProgreso-div">
@@ -77,48 +71,34 @@
 
             </div>
 
-            <!-- Columna derecha: 4 selects como listas -->
+            <!-- Columna derecha: 4 SELECTS como listas -->
             <div class="columna-der">
 
                 <div class="bloque-lista">
                     <label>Asignaturas superadas</label>
-                    <select size="2">
-                        <option>Ampliación de Matemáticas</option>
-                        <option>Estadística</option>
-                        <option>Estructuras de Datos y Algoritmos</option>
-                        <option>Iteración Persona-Computadora</option>
-                        <option>Fundamentos de Matemáticas</option>
-                        <option>Fundamentos de Programación</option>
+                    <select size="2" id="lista-superadas" class="selector-progreso">
+                        <option disabled>Cargando...</option>
                     </select>
                 </div>
 
                 <div class="bloque-lista">
                     <label>Asignaturas suspensas</label>
-                    <select size="2">
-                        <option>Arquitectura y Organización de Computadoras</option>
-                        <option>Estructura de Sistemas Operativos</option>
-                        <option>Física</option>
-                        <option>Fundamentos de Computadoras</option>
-
+                    <select size="2" id="lista-suspensas" class="selector-progreso">
+                        <option disabled>Cargando...</option>
                     </select>
                 </div>
 
                 <div class="bloque-lista">
                     <label>Asignaturas por superar</label>
-                    <select size="2">
-                        <option>Arquitectura y Organización de Computadoras</option>
-                        <option>Estructura de Sistemas Operativos</option>
-                        <option>Física</option>
-                        <option>Fundamentos de Computadoras</option>
-                        <option>Paradigmas de Programación</option>
+                    <select size="2" id="lista-cursando" class="selector-progreso">
+                        <option disabled>Cargando...</option>
                     </select>
                 </div>
 
                 <div class="bloque-lista">
                     <label>Asignaturas favoritas</label>
-                    <select size="2">
-                        <option>Estructuras de Datos y Algoritmos</option>
-                        <option>Paradigmas de Programación</option>
+                    <select size="2" id="lista-favoritas" class="selector-progreso">
+                        <option disabled>Cargando...</option>
                     </select>
                 </div>
 
@@ -129,7 +109,7 @@
             </div>
         </div>
 
-
         <script src="./js/popup.js"></script>
+        <script src="./js/asignatura.js"></script>
     </body>
 </html>

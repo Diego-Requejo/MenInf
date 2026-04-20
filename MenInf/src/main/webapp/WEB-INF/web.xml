@@ -1,3 +1,4 @@
+<?xml version="1.0" encoding="UTF-8"?>
 <web-app xmlns="https://jakarta.ee/xml/ns/jakartaee"
          version="6.0">
 
@@ -40,6 +41,32 @@
     <servlet-mapping>
         <servlet-name>ComprobarSesion</servlet-name>
         <url-pattern>/ComprobarSesion</url-pattern>
+    </servlet-mapping>
+    
+    <!-- Asignaturas -->
+    <servlet>
+        <servlet-name>ObtenerAsignatura</servlet-name>
+        <servlet-class>controlador.ObtenerAsignatura</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>ObtenerAsignatura</servlet-name>
+        <url-pattern>/ObtenerAsignatura</url-pattern>
+    </servlet-mapping>
+    <servlet>
+        <servlet-name>ListarAsignaturas</servlet-name>
+        <servlet-class>controlador.ListarAsignaturas</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>ListarAsignaturas</servlet-name>
+        <url-pattern>/ListarAsignaturas</url-pattern>
+    </servlet-mapping>
+    <servlet>
+        <servlet-name>ObtenerProgreso</servlet-name>
+        <servlet-class>controlador.ObtenerProgreso</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>ObtenerProgreso</servlet-name>
+        <url-pattern>/ObtenerProgreso</url-pattern>
     </servlet-mapping>
 
 </web-app>

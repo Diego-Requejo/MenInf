@@ -940,3 +940,49 @@ input {
 .item:hover {
     background: #e9b15d;
 }
+
+/**********************************
+***** POP-UP DE ASIGNATURAS  ******
+***********************************/
+
+
+.popup:has(.contenedor-detalle-asignatura) {
+    width: 95%;
+    max-width: 1800px;
+    height: 95vh;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
+    padding: 80px;
+    overflow-y: auto;
+}
+
+.popup.activo:has(.contenedor-detalle-asignatura) {
+    transform: translate(-50%, -50%);
+}
+
+.header-asignatura {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    border-bottom: 2px solid #f9c16d;
+    margin-bottom: 40px;
+    padding-bottom: 10px;
+}
+
+.header-asignatura .titulo0 {
+    margin-bottom: 0;
+    border-bottom: none;
+}
+
+.cerrar-asignatura {
+    font-size: 30px;
+    color: #f9c16d;
+    cursor: pointer;
+    font-weight: bold;
+    padding: 10px;
+}
+
+.cerrar-asignatura:hover {
+    color: #ffebcd;
+}
