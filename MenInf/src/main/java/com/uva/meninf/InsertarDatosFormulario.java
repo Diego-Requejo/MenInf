@@ -58,7 +58,7 @@ public class InsertarDatosFormulario extends HttpServlet {
         // Recoger valoraciones de estrellas
         String python = request.getParameter("python");
         String mips   = request.getParameter("mips");
-        String nivelJava   = request.getParameter("java");
+        String nivelJava   = request.getParameter("nivelJava");
         String c      = request.getParameter("c");
         
         int year = Year.now().getValue();
