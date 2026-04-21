@@ -3,6 +3,8 @@ package modelo.entidades;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import java.util.ArrayList;
+
 import javax.naming.Context;
 import javax.naming.InitialContext;
 import javax.sql.DataSource;
@@ -15,11 +17,13 @@ public class Asignatura implements Serializable {
     private int cuatri;
     private String menciones = "";
     private String cursoAcademico = "";
-    private String profesores = "";
+    private ArrayList<Profesor> profesores;
     private String requisitos = "";
     private String lenguajes = "";
 
-    public Asignatura() {}
+    public Asignatura() {
+        profesores = new ArrayList<>();
+    }
 
     // Getters y Setters
     public int getCod() { return cod; }
@@ -34,8 +38,9 @@ public class Asignatura implements Serializable {
     public void setMenciones(String menciones) { this.menciones = menciones; }
     public String getCursoAcademico() { return cursoAcademico; }
     public void setCursoAcademico(String cursoAcademico) { this.cursoAcademico = cursoAcademico; }
-    public String getProfesores() { return profesores; }
-    public void setProfesores(String profesores) { this.profesores = profesores; }
+    public ArrayList<Profesor> getProfesores() { return profesores; }
+    public void setProfesores(ArrayList<Profesor> profesores) { this.profesores = profesores; }
+    public void addProfesor(Profesor profesor) { this.profesores.add(profesor); }
     public String getRequisitos() { return requisitos; }
     public void setRequisitos(String requisitos) { this.requisitos = requisitos; }
     public String getLenguajes() { return lenguajes; }
@@ -123,15 +128,15 @@ public class Asignatura implements Serializable {
             rsM.close(); psM.close();
 
             // Profesores
-            PreparedStatement psP = conn.prepareStatement("SELECT p.nombre FROM Profesor p JOIN ProfesorAsignatura pa ON p.correo = pa.correoP WHERE pa.codA = ?");
+            PreparedStatement psP = conn.prepareStatement("SELECT p.nombre, p.correo FROM Profesor p JOIN ProfesorAsignatura pa ON p.correo = pa.correoP WHERE pa.codA = ?");
             psP.setInt(1, asig.getCod());
             ResultSet rsP = psP.executeQuery();
-            StringBuilder profes = new StringBuilder();
+
+
             while(rsP.next()){
-                if(profes.length() > 0) profes.append(", ");
-                profes.append(rsP.getString("nombre"));
+                Profesor prof = new Profesor(rsP.getString("nombre"), rsP.getString("correo"));
+                asig.addProfesor(prof);
             }
-            asig.setProfesores(profes.toString());
             rsP.close(); psP.close();
             
             // ... Podríamos añadir más, pero esto es lo básico para que no falle

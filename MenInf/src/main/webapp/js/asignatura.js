@@ -144,7 +144,7 @@ function cargarDatosEnPagina(id) {
 }
 
 function generarHTMLAsignatura(asig, esPopup) {
-    const listaProfes = asig.profesores ? asig.profesores.split(",") : [];
+    const listaProfes = asig.listaProfesores || [];
     const listaRequisitos = asig.requisitos ? asig.requisitos.split(",") : [];
     const listaLenguajes = asig.lenguajes ? asig.lenguajes.split(",") : [];
 
@@ -171,8 +171,9 @@ function generarHTMLAsignatura(asig, esPopup) {
                     <div>
                         <div class="titulo2">Profesores</div>
                         <div class="lista-profesores">
-                            ${listaProfes.length > 0 && listaProfes[0] !== ""
-                                ? listaProfes.map(p => `<div class="elemento-lista">${p.trim()}</div>`).join('')
+                            ${listaProfes.length > 0
+                                ? listaProfes.map(p => `<div class="elemento-lista">
+                                    ${p.nombre} (${p.correo})</div>`).join('')
                                 : '<div class="elemento-lista">No asignados</div>'}
                         </div>
                     </div>

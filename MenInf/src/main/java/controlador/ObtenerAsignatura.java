@@ -2,6 +2,8 @@ package controlador;
 
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.util.ArrayList;
+
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
@@ -38,7 +40,20 @@ public class ObtenerAsignatura extends HttpServlet {
                 json.append("\"cuatri\":").append(asig.getCuatri()).append(",");
                 json.append("\"menciones\":\"").append(escape(asig.getMenciones())).append("\",");
                 json.append("\"curso\":\"").append(escape(asig.getCursoAcademico())).append("\",");
-                json.append("\"profesores\":\"").append(escape(asig.getProfesores())).append("\",");
+                
+                json.append("\"listaProfesores\":[ ");
+                ArrayList<modelo.entidades.Profesor> profes = asig.getProfesores();
+                if(profes != null){
+                    for(int i = 0; i < profes.size(); i++){
+                        json.append("{");
+                        json.append("\"nombre\":\"").append(escape(profes.get(i).getNombre())).append("\",");
+                        json.append("\"correo\":\"").append(escape(profes.get(i).getCorreo())).append("\"");
+                        json.append("}");
+                        if(i < profes.size() - 1) json.append(", ");
+                    }
+                }
+                json.append("],");     
+                           
                 json.append("\"requisitos\":\"").append(escape(asig.getRequisitos())).append("\",");
                 json.append("\"lenguajes\":\"").append(escape(asig.getLenguajes())).append("\"");
                 json.append("}");
