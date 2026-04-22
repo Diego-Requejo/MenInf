@@ -146,7 +146,7 @@ function cargarDatosEnPagina(id) {
 function generarHTMLAsignatura(asig, esPopup) {
     const listaProfes = asig.listaProfesores || [];
     const listaRequisitos = asig.requisitos ? asig.requisitos.split(",") : [];
-    const listaLenguajes = asig.lenguajes ? asig.lenguajes.split(",") : [];
+    const listaLenguajes = asig.listaLenguajes || [];
 
     const mencionesFull = asig.menciones || "Formación básica/obligatoria";
     const cursoTexto = asig.curso ? `${asig.curso}er curso` : "Curso no definido";
@@ -190,11 +190,10 @@ function generarHTMLAsignatura(asig, esPopup) {
                                 : '<div class="elemento-lista">Ninguno</div>'}
                         </div>
                     </div>
-                    <div>
                         <div class="titulo2">Lenguajes o aplicaciones</div>
                         <div class="lista-asignaturas">
-                            ${listaLenguajes.length > 0 && listaLenguajes[0] !== ""
-                                ? listaLenguajes.map(l => `<div class="elemento-lista">${l.trim()}</div>`).join('')
+                            ${listaLenguajes.length > 0
+                                ? listaLenguajes.map(l => `<div class="elemento-lista">${l.nombre}</div>`).join('')
                                 : '<div class="elemento-lista">No especificados</div>'}
                         </div>
                     </div>

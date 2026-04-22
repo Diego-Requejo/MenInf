@@ -19,10 +19,11 @@ public class Asignatura implements Serializable {
     private String cursoAcademico = "";
     private ArrayList<Profesor> profesores;
     private String requisitos = "";
-    private String lenguajes = "";
+    private ArrayList<Lenguaje> lenguajes;
 
     public Asignatura() {
         profesores = new ArrayList<>();
+        lenguajes = new ArrayList<>();
     }
 
     // Getters y Setters
@@ -43,8 +44,9 @@ public class Asignatura implements Serializable {
     public void addProfesor(Profesor profesor) { this.profesores.add(profesor); }
     public String getRequisitos() { return requisitos; }
     public void setRequisitos(String requisitos) { this.requisitos = requisitos; }
-    public String getLenguajes() { return lenguajes; }
-    public void setLenguajes(String lenguajes) { this.lenguajes = lenguajes; }
+    public ArrayList<Lenguaje> getLenguajes() { return lenguajes; }
+    public void setLenguajes(ArrayList<Lenguaje> lenguajes) { this.lenguajes = lenguajes; }
+    public void addLenguaje(Lenguaje lenguaje) { this.lenguajes.add(lenguaje); }
 
     /**
      * Obtiene todas las asignaturas de la base de datos.
@@ -132,13 +134,24 @@ public class Asignatura implements Serializable {
             psP.setInt(1, asig.getCod());
             ResultSet rsP = psP.executeQuery();
 
-
             while(rsP.next()){
                 Profesor prof = new Profesor(rsP.getString("nombre"), rsP.getString("correo"));
                 asig.addProfesor(prof);
-            }
+            } 
             rsP.close(); psP.close();
-            
+
+            // Lenguajes
+            PreparedStatement psL = conn.prepareStatement("SELECT l.nombre FROM Lenguaje l JOIN LenguajesAsignatura la ON l.nombre = la.nomL WHERE la.codA = ?");
+            psL.setInt(1, asig.getCod());
+            ResultSet rsL = psL.executeQuery();
+
+            while(rsL.next()){
+                Lenguaje lenguaje = new Lenguaje(rsL.getString("nombre"));
+                asig.addLenguaje(lenguaje);
+            }
+            rsL.close(); psL.close();
+
+           
             // ... Podríamos añadir más, pero esto es lo básico para que no falle
         } catch (Exception e) {
             System.err.println("Error al cargar datos adicionales (ignorable): " + e.getMessage());

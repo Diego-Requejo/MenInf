@@ -55,7 +55,19 @@ public class ObtenerAsignatura extends HttpServlet {
                 json.append("],");     
                            
                 json.append("\"requisitos\":\"").append(escape(asig.getRequisitos())).append("\",");
-                json.append("\"lenguajes\":\"").append(escape(asig.getLenguajes())).append("\"");
+                
+                json.append("\"listaLenguajes\":[ ");
+                ArrayList<modelo.entidades.Lenguaje> lengs = asig.getLenguajes();
+                if(lengs != null){
+                    for(int i = 0; i < lengs.size(); i++){
+                        json.append("{");
+                        json.append("\"nombre\":\"").append(escape(lengs.get(i).getNombre())).append("\"");
+                        json.append("}");
+                        if(i < lengs.size() - 1) json.append(", ");
+                    }
+                }
+                json.append("]");
+
                 json.append("}");
                 out.print(json.toString());
             } else {
