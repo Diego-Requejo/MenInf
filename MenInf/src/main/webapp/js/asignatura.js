@@ -145,7 +145,7 @@ function cargarDatosEnPagina(id) {
 
 function generarHTMLAsignatura(asig, esPopup) {
     const listaProfes = asig.listaProfesores || [];
-    const listaRequisitos = asig.requisitos ? asig.requisitos.split(",") : [];
+    const listaRequisitos = asig.listaRequisitos || [];
     const listaLenguajes = asig.listaLenguajes || [];
 
     const mencionesFull = asig.menciones || "Formación básica/obligatoria";
@@ -185,8 +185,9 @@ function generarHTMLAsignatura(asig, esPopup) {
                     <div>
                         <div class="titulo2">Prerrequisitos</div>
                         <div class="lista-asignaturas">
-                            ${listaRequisitos.length > 0 && listaRequisitos[0] !== ""
-                                ? listaRequisitos.map(r => `<div class="elemento-lista">${r.trim()}</div>`).join('')
+                            ${listaRequisitos.length > 0
+                                ? listaRequisitos.map(r => `<div class="elemento-lista ver-asignatura" data-id="${r.cod}" style="cursor:pointer;">
+                                    ${r.nombre} (${r.abreviatura})</div>`).join('')
                                 : '<div class="elemento-lista">Ninguno</div>'}
                         </div>
                     </div>

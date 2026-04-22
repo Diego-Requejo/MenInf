@@ -54,7 +54,19 @@ public class ObtenerAsignatura extends HttpServlet {
                 }
                 json.append("],");     
                            
-                json.append("\"requisitos\":\"").append(escape(asig.getRequisitos())).append("\",");
+                json.append("\"listaRequisitos\":[ ");
+                ArrayList<modelo.entidades.Asignatura> asigs = asig.getRequisitos();
+                if(asigs != null){
+                    for(int i = 0; i < asigs.size(); i++){
+                        json.append("{");
+                        json.append("\"cod\":").append(asigs.get(i).getCod()).append(",");
+                        json.append("\"nombre\":\"").append(escape(asigs.get(i).getNombre())).append("\",");
+                        json.append("\"abreviatura\":\"").append(escape(asigs.get(i).getAbreviatura())).append("\"");
+                        json.append("}");
+                        if(i < asigs.size() - 1) json.append(", ");
+                    }
+                }
+                json.append("],"); 
                 
                 json.append("\"listaLenguajes\":[ ");
                 ArrayList<modelo.entidades.Lenguaje> lengs = asig.getLenguajes();

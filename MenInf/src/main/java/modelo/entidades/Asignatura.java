@@ -18,11 +18,12 @@ public class Asignatura implements Serializable {
     private String menciones = "";
     private String cursoAcademico = "";
     private ArrayList<Profesor> profesores;
-    private String requisitos = "";
+    private ArrayList<Asignatura> requisitos;
     private ArrayList<Lenguaje> lenguajes;
 
     public Asignatura() {
         profesores = new ArrayList<>();
+        requisitos = new ArrayList<>();
         lenguajes = new ArrayList<>();
     }
 
@@ -42,8 +43,9 @@ public class Asignatura implements Serializable {
     public ArrayList<Profesor> getProfesores() { return profesores; }
     public void setProfesores(ArrayList<Profesor> profesores) { this.profesores = profesores; }
     public void addProfesor(Profesor profesor) { this.profesores.add(profesor); }
-    public String getRequisitos() { return requisitos; }
-    public void setRequisitos(String requisitos) { this.requisitos = requisitos; }
+    public ArrayList<Asignatura> getRequisitos() { return requisitos; }
+    public void setRequisitos(ArrayList<Asignatura> requisitos) { this.requisitos = requisitos; }
+    public void addRequisito(Asignatura requisito) { this.requisitos.add(requisito); }
     public ArrayList<Lenguaje> getLenguajes() { return lenguajes; }
     public void setLenguajes(ArrayList<Lenguaje> lenguajes) { this.lenguajes = lenguajes; }
     public void addLenguaje(Lenguaje lenguaje) { this.lenguajes.add(lenguaje); }
@@ -151,6 +153,18 @@ public class Asignatura implements Serializable {
             }
             rsL.close(); psL.close();
 
+            PreparedStatement psReq = conn.prepareStatement("SELECT a2.cod, a2.nombre, a2.abreviatura FROM Asignatura a2 JOIN AsignaturaPrerrequisito ap ON a2.cod = ap.codAPre WHERE ap.codA = ?");
+            psReq.setInt(1, asig.getCod());
+            ResultSet rsReq = psReq.executeQuery();
+
+            while(rsReq.next()){
+                Asignatura req = new Asignatura();
+                req.setCod(rsReq.getInt("cod"));
+                req.setNombre(rsReq.getString("nombre"));
+                req.setAbreviatura(rsReq.getString("abreviatura"));
+                asig.addRequisito(req);
+            }
+            rsReq.close(); psReq.close();
            
             // ... Podríamos añadir más, pero esto es lo básico para que no falle
         } catch (Exception e) {
