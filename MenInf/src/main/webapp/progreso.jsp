@@ -20,14 +20,28 @@
 %>
 
 <!DOCTYPE html>
-<!DOCTYPE html>
 <html lang="es">
     <head>
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <title>MenInf - Descubre tu camino</title>
-        <link rel="stylesheet" href="style.css">
+        <link rel="stylesheet" href="style.css?v=2">
         <link rel="icon" type="image/png" href="./img/Logotipo.png">
+        <style>
+    .circulo-progreso {
+        stroke-dasharray: <%= circ %>;
+        /* Inicializamos el offset igual a la circunferencia para que empiece vacío */
+        stroke-dashoffset: <%= circ %>; 
+        animation: llenar-circulo 1s ease forwards;
+    }
+    
+    @keyframes llenar-circulo {
+        to {
+            /* Termina en el valor calculado del progreso */
+            stroke-dashoffset: <%= dash %>; 
+        }
+    }
+</style>
     </head>
 
     <body>
@@ -37,11 +51,10 @@
         <header>
             <div class="icono">
                 <a href="./index.html">
-                <img src="./img/Logotipo.png" alt="logo" >
+                    <img src="./img/Logotipo.png" alt="logo">
                 </a>
                 <span>MenInf - Descubre tu camino</span>
             </div>
-
             <div class="icono" id="usuario">
                 <img src="./img/Usuario.png" alt="usuario">
             </div>
@@ -65,69 +78,85 @@
                             <circle class="circulo-fondo"    cx="60" cy="60" r="54"/>
                             <circle class="circulo-progreso" cx="60" cy="60" r="54"/>
                         </svg>
-                        <div class="circulo-texto" id="porcentaje-texto">0 %</div>
+                        <div class="circulo-texto"><%= porcentaje %> %</div>
                     </div>
                 </div>
 
-                <!-- Nombre de usuario -->
-                <div class="campo">
-                    <label>Nombre de usuario</label>
-                    <input type="text" placeholder="Escribe aquí su nombre de su usuario" value="Paquito">
-                </div>
+                <!-- Formulario de edición de perfil -->
+                <form action="ActualizarPerfil" method="POST" style="margin: 0;">
 
-                <!-- Mención -->
-                <div class="campo">
-                    <label>Mencion que está cursando</label>
-                    <select>
-                        <option value="" disabled selected>Seleccione la mención aquí</option>
-                        <option value="PreMencion">Ninguna</option>
-                        <option value="">Tecnologías de la Información (TI)</option>
-                        <option value="3">Ingeniería del Software (SO)</option>
-                        <option value="arq">Computación (CO)</option>
-                    </select>
+                    <div class="campo">
+                        <label>Nombre de usuario</label>
+                        <input type="text" value="<%= nomU %>" disabled>
+                    </div>
 
-                </div>
+                    <div class="campo">
+                        <label>Mencion que está cursando</label>
+                        <select name="mencion">
+                            <option value="PreMención" <%= "PreMención".equals(mencion) ? "selected" : "" %>>Ninguna (no elegida)</option>
+                            <option value="TI"         <%= "TI".equals(mencion)         ? "selected" : "" %>>Tecnologías de la Información (TI)</option>
+                            <option value="IS"         <%= "IS".equals(mencion)         ? "selected" : "" %>>Ingeniería del Software (IS)</option>
+                            <option value="CO"         <%= "CO".equals(mencion)         ? "selected" : "" %>>Computación (CO)</option>
+                        </select>
+                    </div>
 
-                <!-- Biografía -->
-                <div class="campo">
-                    <label>Biografía</label>
-                    <textarea placeholder="Escriba aquí acerca suyo"></textarea>
-                </div>
+                    <div class="campo">
+                        <label>Biografía</label>
+                        <textarea name="biografia" placeholder="Escriba aquí acerca suyo"><%= biografia %></textarea>
+                    </div>
 
-                <div class="botonesProgreso-div">
-                    <button>Guardar cambios</button>
-                </div>
+                    <div class="botonesProgreso-div">
+                        <button type="submit">Guardar cambios</button>
+                    </div>
+
+                </form>
 
             </div>
 
-            <!-- Columna derecha: 4 SELECTS como listas -->
+            <!-- Columna derecha: listas de asignaturas -->
             <div class="columna-der">
 
                 <div class="bloque-lista">
-                    <label>Asignaturas superadas</label>
-                    <select size="2" id="lista-superadas" class="selector-progreso">
-                        <option disabled>Cargando...</option>
+                    <label>Asignaturas superadas (<%= superadas.size() %>)</label>
+                    <select size="2">
+                        <% if (superadas.isEmpty()) { %>
+                            <option disabled>Sin asignaturas superadas</option>
+                        <% } else { for (String a : superadas) { %>
+                            <option><%= a %></option>
+                        <% } } %>
                     </select>
                 </div>
 
                 <div class="bloque-lista">
-                    <label>Asignaturas suspensas</label>
-                    <select size="2" id="lista-suspensas" class="selector-progreso">
-                        <option disabled>Cargando...</option>
+                    <label>Asignaturas suspensas (<%= suspensas.size() %>)</label>
+                    <select size="2">
+                        <% if (suspensas.isEmpty()) { %>
+                            <option disabled>Sin asignaturas suspensas</option>
+                        <% } else { for (String a : suspensas) { %>
+                            <option><%= a %></option>
+                        <% } } %>
                     </select>
                 </div>
 
                 <div class="bloque-lista">
-                    <label>Asignaturas por superar</label>
-                    <select size="2" id="lista-cursando" class="selector-progreso">
-                        <option disabled>Cargando...</option>
+                    <label>Asignaturas por superar (<%= cursando.size() %>)</label>
+                    <select size="2">
+                        <% if (cursando.isEmpty()) { %>
+                            <option disabled>Sin asignaturas cursando</option>
+                        <% } else { for (String a : cursando) { %>
+                            <option><%= a %></option>
+                        <% } } %>
                     </select>
                 </div>
 
                 <div class="bloque-lista">
-                    <label>Asignaturas favoritas</label>
-                    <select size="2" id="lista-favoritas" class="selector-progreso">
-                        <option disabled>Cargando...</option>
+                    <label>Asignaturas favoritas (<%= favoritas.size() %>)</label>
+                    <select size="2">
+                        <% if (favoritas.isEmpty()) { %>
+                            <option disabled>Sin asignaturas favoritas</option>
+                        <% } else { for (String a : favoritas) { %>
+                            <option><%= a %></option>
+                        <% } } %>
                     </select>
                 </div>
 
@@ -138,7 +167,7 @@
             </div>
         </div>
 
+       
         <script src="./js/popup.js"></script>
-        <script src="./js/asignatura.js"></script>
     </body>
 </html>

@@ -37,7 +37,7 @@ public class ActualizarPerfil extends HttpServlet {
         // Validar mención
         if (!mencion.equals("IS") && !mencion.equals("CO") &&
             !mencion.equals("TI") && !mencion.equals("PreMención")) {
-            response.sendRedirect("progreso.jsp?error=mencion");
+            response.sendRedirect("MostrarProgreso?error=mencion");
             return;
         }
  

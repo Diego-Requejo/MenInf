@@ -152,8 +152,8 @@
                 </div>
 
                 <div class="columna-asignaturas">
-                    <label for="superadas">Asignaturas superadas<span style="color: red;">*</span></label>
-                    <select id="superadas" name="superadas" multiple required>
+                    <label for="superadas">Asignaturas superadas</label>
+                    <select id="superadas" name="superadas" multiple>
                         <% for (String[] a : asignaturas) { %>
                             <option value="<%= a[0] %>"
                                 <%= contiene(codssuperadas, a[0]) ? "selected" : "" %>>
@@ -164,8 +164,8 @@
                 </div>
 
                 <div class="columna-asignaturas">
-                    <label for="suspensas">Asignaturas suspensas<span style="color: red;">*</span></label>
-                    <select id="suspensas" name="suspensas" multiple required>
+                    <label for="suspensas">Asignaturas suspensas</label>
+                    <select id="suspensas" name="suspensas" multiple>
                         <% for (String[] a : asignaturas) { %>
                             <option value="<%= a[0] %>"
                                 <%= contiene(codsSuspensas, a[0]) ? "selected" : "" %>>

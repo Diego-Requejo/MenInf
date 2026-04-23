@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="es">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>MenInf - Descubre tu camino</title>
+        <link rel="stylesheet" href="style.css">
+        <link rel="icon" type="image/png" href="./img/Logotipo.png">
+    </head>
+
+    <body>
+        <div class="popup" id="popup">
+            <div id="contenido-popup"></div>
+        </div>
+        <header>
+            <div class="icono">
+                <a href="./index.html">
+                <img src="./img/Logotipo.png" alt="logo" >
+                </a>
+                <span>MenInf - Descubre tu camino</span>
+            </div>
+
+            <div class="icono" id="usuario">
+                <img src="./img/Usuario.png" alt="usuario">
+            </div>
+        </header>
+
+        <div class="contenido-perfil">
+
+            <!-- Columna izquierda -->
+            <div class="columna-izq">
+
+                <!-- Círculo de progreso -->
+                <div class="circulo-contenedor">
+                    <div class="circulo">
+                        <svg viewBox="0 0 120 120" xmlns="http://www.w3.org/2000/svg">
+                            <defs>
+                                <linearGradient id="gradCirculo" x1="0%" y1="0%" x2="100%" y2="0%">
+                                    <stop offset="0%"   stop-color="#e9d5a1"/>
+                                    <stop offset="100%" stop-color="#f9c16d"/>
+                                </linearGradient>
+                            </defs>
+                            <circle class="circulo-fondo"    cx="60" cy="60" r="54"/>
+                            <circle class="circulo-progreso" cx="60" cy="60" r="54"/>
+                        </svg>
+                        <div class="circulo-texto" id="porcentaje-texto">0 %</div>
+                    </div>
+                </div>
+
+                <!-- Nombre de usuario -->
+                <div class="campo">
+                    <label>Nombre de usuario</label>
+                    <input type="text" placeholder="Escribe aquí su nombre de su usuario" value="Paquito">
+                </div>
+
+                <!-- Mención -->
+                <div class="campo">
+                    <label>Mencion que está cursando</label>
+                    <select>
+                        <option value="" disabled selected>Seleccione la mención aquí</option>
+                        <option value="si">Ninguna</option>
+                        <option value="tsi">Tecnologías de la Información (TI)</option>
+                        <option value="is">Ingeniería del Software (SO)</option>
+                        <option value="arq">Computación (CO)</option>
+                    </select>
+
+                </div>
+
+                <!-- Biografía -->
+                <div class="campo">
+                    <label>Biografía</label>
+                    <textarea placeholder="Escriba aquí acerca suyo"></textarea>
+                </div>
+
+                <div class="botonesProgreso-div">
+                    <button>Guardar cambios</button>
+                </div>
+
+            </div>
+
+            <!-- Columna derecha: 4 SELECTS como listas -->
+            <div class="columna-der">
+
+                <div class="bloque-lista">
+                    <label>Asignaturas superadas</label>
+                    <select size="2" id="lista-superadas" class="selector-progreso">
+                        <option disabled>Cargando...</option>
+                    </select>
+                </div>
+
+                <div class="bloque-lista">
+                    <label>Asignaturas suspensas</label>
+                    <select size="2" id="lista-suspensas" class="selector-progreso">
+                        <option disabled>Cargando...</option>
+                    </select>
+                </div>
+
+                <div class="bloque-lista">
+                    <label>Asignaturas por superar</label>
+                    <select size="2" id="lista-cursando" class="selector-progreso">
+                        <option disabled>Cargando...</option>
+                    </select>
+                </div>
+
+                <div class="bloque-lista">
+                    <label>Asignaturas favoritas</label>
+                    <select size="2" id="lista-favoritas" class="selector-progreso">
+                        <option disabled>Cargando...</option>
+                    </select>
+                </div>
+
+                <div class="botonesProgreso-div" id="botonRehacerFormulario">
+                    <button onclick="location.href='formulario.jsp'">Rehacer formulario</button>
+                </div>
+
+            </div>
+        </div>
+
+        <script src="./js/popup.js"></script>
+        <script src="./js/asignatura.js"></script>
+    </body>
+</html>

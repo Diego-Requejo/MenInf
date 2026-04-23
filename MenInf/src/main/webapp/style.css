@@ -450,25 +450,32 @@ select[multiple] option:checked {
 *********************************/
 
 /* Círculo de progreso */
+/* Círculo de progreso */
 .circulo-contenedor {
     display: flex;
     justify-content: center;
-    padding: 10px 0;
-    flex-shrink: 1;
-    min-height: 0;
+    align-items: center;
+    width: 50%;
+    margin: 0 auto;
 }
 
 .circulo {
     position: relative;
     width: 100%;
-    height: 100%;
+    max-width: 250px;
+    min-width: 100px;
+    aspect-ratio: 1 / 1; 
+    margin: 0 auto;
 }
 
 .circulo svg {
     width: 100%;
     height: 100%;
     transform: rotate(-90deg);
+    display: block; 
+    overflow: visible;
 }
+
 
 .circulo-fondo {
     fill: none;
@@ -480,17 +487,9 @@ select[multiple] option:checked {
     fill: none;
     stroke: url(#gradCirculo);
     stroke-width: 10;
-    stroke-linecap: round;
-    stroke-dasharray: 339.3;
-    stroke-dashoffset: 339.3; /* empieza vacío */
-    animation: llenar-circulo 1s ease forwards;
+    
 }
 
-@keyframes llenar-circulo {
-    to {
-        stroke-dashoffset: 125.5; /* 339.3 * (1 - 0.63) */
-    }
-}
 /*
 El valor de `stroke-dashoffset` final se calcula así:
 circunferencia = 2 × π × radio = 2 × 3.1416 × 54 ≈ 339.3
@@ -513,8 +512,8 @@ offset final   = circunferencia × (1 - porcentaje) = 339.3 × 0.37 ≈ 125.5
     display: grid;
     grid-template-columns: 1fr 3fr;
     gap: 24px;
-    padding: 24px 40px 24px 40px;
-    height: 79vh;
+    padding: 24px 40px 100px 40px;
+    height: 69vh;
 }
 
 /* Columna izquierda */
@@ -522,7 +521,7 @@ offset final   = circunferencia × (1 - porcentaje) = 339.3 × 0.37 ≈ 125.5
     display: grid;
     grid-template-columns: 1fr;
     flex-direction: column;
-    gap: 3.5% 15px;
+    gap: 0;
     justify-content: center;
     height: 79vh;
 
@@ -532,7 +531,7 @@ offset final   = circunferencia × (1 - porcentaje) = 339.3 × 0.37 ≈ 125.5
 .campo {
     display: flex;
     flex-direction: column;
-    gap: 5px;
+    gap: 0;
 }
 
 .campo label {
