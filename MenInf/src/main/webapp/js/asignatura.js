@@ -180,7 +180,13 @@ function actualizarListaAsignaturas() {
         const item = document.createElement("div");
         item.className = "item";
         item.dataset.id = asig.cod;
-        item.innerText = `${asig.nombre} (${asig.abreviatura})`;
+
+        item.innerHTML = `${asig.nombre} 
+            <span style="white-space: nowrap;">(${asig.abreviatura})
+            <img src="./img/Informacion.png" alt="Info" class="ver-asignatura" 
+                data-id="${asig.cod}" style="width:20px; height:20px; cursor:pointer; vertical-align:middle; margin-left:5px; position:relative; top:-2px;">
+            </span>`;
+        
         contenedor.appendChild(item);
     });
 }
