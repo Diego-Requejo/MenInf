@@ -127,7 +127,7 @@ public class Asignatura implements Serializable {
             PreparedStatement psM = conn.prepareStatement("SELECT mencion, cursoAcademico FROM AsignaturasMencion WHERE codA = ?");
             psM.setInt(1, asig.getCod());
             ResultSet rsM = psM.executeQuery();
-            if(rsM.next()){
+            while(rsM.next()){
                 Mencion m = new Mencion(MencionTipo.valueOf(rsM.getString("mencion")));
                 AsignaturaMencion am = new AsignaturaMencion();
                 am.setMencion(m);

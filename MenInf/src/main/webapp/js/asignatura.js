@@ -11,6 +11,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
     // 2. Si estamos en horario.html
     if (path.includes("horario.html")) {
+        configurarBotonesHorario();
         cargarListaAsignaturas();
     }
 
@@ -30,6 +31,8 @@ document.addEventListener("DOMContentLoaded", () => {
 
 });
 
+let cuatriActivo = "1"; 
+let todasAsignaturas = [];
 /**
  * Carga el progreso del usuario y rellena los SELECTS originales de progreso.jsp
  */
@@ -101,16 +104,32 @@ function cargarListaAsignaturas() {
     fetch("ListarAsignaturas")
         .then(res => res.json())
         .then(lista => {
-            contenedor.innerHTML = "";
-            lista.forEach(asig => {
-                const item = document.createElement("div");
-                item.className = "item"; 
-                // Aseguramos que no tenga dataset.id
-                delete item.dataset.id;
-                item.innerText = `${asig.nombre} (${asig.abreviatura})`;
-                contenedor.appendChild(item);
-            });
+            todasAsignaturas = lista; 
+            actualizarListaAsignaturas(); 
+    })
+    .catch(err => console.error("Error al cargar:", err));
+}
+
+function configurarBotonesHorario() {
+    const btnC1 = document.getElementById("btn-cuatri-1");
+    const btnC2 = document.getElementById("btn-cuatri-2");
+
+    if (!btnC1 || !btnC2) return;
+
+   if (btnC1 && btnC2) {
+        btnC1.addEventListener("click", () => {
+            cuatriActivo = 1;
+            btnC1.className = "activo"; 
+            btnC2.className = "inactivo";
+            actualizarListaAsignaturas(); 
         });
+        btnC2.addEventListener("click", () => {
+            cuatriActivo = 2;
+            btnC2.className = "activo"; 
+            btnC1.className = "inactivo";
+            actualizarListaAsignaturas();
+        });
+    }
 }
 
 function abrirPopupAsignatura(id) {
@@ -130,6 +149,28 @@ function abrirPopupAsignatura(id) {
         });
 }
 
+function actualizarListaAsignaturas() {
+    const contenedor = document.getElementById("contenedor-lista-asignaturas");
+    if (!contenedor) return;
+
+    contenedor.innerHTML = "";
+
+    const filtradas  = todasAsignaturas.filter(a => a.cuatri === cuatriActivo);
+
+    if(filtradas.length === 0) {
+        contenedor.innerHTML = "<div class='item'>No hay asignaturas para este cuatrimestre.</div>";
+        return;
+    }
+
+    filtradas.forEach(asig => {
+        const item = document.createElement("div");
+        item.className = "item";
+        item.dataset.id = asig.cod;
+        item.innerText = `${asig.nombre} (${asig.abreviatura})`;
+        contenedor.appendChild(item);
+    });
+}
+
 function cargarDatosEnPagina(id) {
     const main = document.getElementById("detalle-asignatura");
     if (!main) return;
@@ -147,17 +188,18 @@ function generarHTMLAsignatura(asig, esPopup) {
     const listaProfes = asig.listaProfesores || [];
     const listaRequisitos = asig.listaRequisitos || [];
     const listaLenguajes = asig.listaLenguajes || [];
-
     const listaMenciones = asig.listaMenciones || [];
-    let mencionesFull = "Formación básica/obligatoria";
-    let cursoTexto = "Curso no definido";
+
     const cuatriTexto = asig.cuatri ? `${asig.cuatri}º cuatrimestre` : "";
+    let mencionesHTML = "";
 
     if (listaMenciones.length > 0) {
-        mencionesFull = listaMenciones.map(m => m.mencion).join(" / ");
-        cursoTexto = listaMenciones[0].curso ? `${listaMenciones[0].curso}º curso` : "Curso no definido";
+        mencionesHTML = listaMenciones.map(m => 
+            `<div class="comun1">${m.mencion} - ${m.curso}º curso</div>`
+        ).join('');
+    } else {
+        mencionesHTML = "<div class='comun1'>Formación básica/obligatoria</div>";
     }
-    // ----------------------------------------------
 
     return `
         <div class="contenedor-detalle-asignatura">
@@ -170,8 +212,8 @@ function generarHTMLAsignatura(asig, esPopup) {
                 <div class="caja-izquierda-asignaturas">
                     <div>
                         <div class="titulo2">Mención / Rama</div>
-                        <div class="comun1">${mencionesFull}</div>
-                        <div class="comun1">${cursoTexto} - ${cuatriTexto}</div>
+                        ${mencionesHTML}
+                        <div class="comun1">${cuatriTexto}</div>
                     </div>
                     
                     <div>
