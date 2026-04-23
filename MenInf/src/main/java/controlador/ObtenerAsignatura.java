@@ -46,7 +46,7 @@ public class ObtenerAsignatura extends HttpServlet {
                         json.append("{");
                         json.append("\"mencion\":\"").append(mencs.get(i).getMencion().getTipo().name()).append("\",");
                         json.append("\"curso\":\"").append(mencs.get(i).getCursoAcademico());
-                        json.append("}");
+                        json.append("\"}");
                         if(i < mencs.size() - 1) json.append(", ");
                     }
                 }
