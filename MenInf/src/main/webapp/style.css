@@ -508,12 +508,12 @@ offset final   = circunferencia × (1 - porcentaje) = 339.3 × 0.37 ≈ 125.5
 
 /* Layout principal */
 .contenido-perfil {
-    margin-top: 100px;
+    margin-top: 60px;
     display: grid;
     grid-template-columns: 1fr 3fr;
     gap: 24px;
     padding: 24px 40px 100px 40px;
-    height: 69vh;
+    height: 79vh;
 }
 
 /* Columna izquierda */
