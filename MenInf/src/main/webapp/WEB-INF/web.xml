@@ -1,11 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<web-app xmlns="https://jakarta.ee/xml/ns/jakartaee"
-         version="6.0">
-
+<web-app version="6.0" xmlns="https://jakarta.ee/xml/ns/jakartaee">
     <session-config>
         <session-timeout>30</session-timeout>
     </session-config>
-
     <servlet>
         <servlet-name>InicioSesion</servlet-name>
         <servlet-class>controlador.InicioSesion</servlet-class>
@@ -14,7 +11,6 @@
         <servlet-name>InicioSesion</servlet-name>
         <url-pattern>/InicioSesion</url-pattern>
     </servlet-mapping>
-
     <servlet>
         <servlet-name>RegistrarUsuario</servlet-name>
         <servlet-class>controlador.RegistrarUsuario</servlet-class>
@@ -23,7 +19,6 @@
         <servlet-name>RegistrarUsuario</servlet-name>
         <url-pattern>/RegistrarUsuario</url-pattern>
     </servlet-mapping>
-
     <servlet>
         <servlet-name>CerrarSesion</servlet-name>
         <servlet-class>controlador.CerrarSesion</servlet-class>
@@ -32,17 +27,14 @@
         <servlet-name>CerrarSesion</servlet-name>
         <url-pattern>/CerrarSesion</url-pattern>
     </servlet-mapping>
-    
     <servlet>
         <servlet-name>ComprobarSesion</servlet-name>
         <servlet-class>controlador.ComprobarSesion</servlet-class>
     </servlet>
-
     <servlet-mapping>
         <servlet-name>ComprobarSesion</servlet-name>
         <url-pattern>/ComprobarSesion</url-pattern>
     </servlet-mapping>
-    
     <!-- Asignaturas -->
     <servlet>
         <servlet-name>ObtenerAsignatura</servlet-name>
@@ -62,11 +54,10 @@
     </servlet-mapping>
     <servlet>
         <servlet-name>ObtenerProgreso</servlet-name>
-        <servlet-class>controlador.ObtenerProgreso</servlet-class>
+        <servlet-class>controlador.MostrarPerfil</servlet-class>
     </servlet>
     <servlet-mapping>
         <servlet-name>ObtenerProgreso</servlet-name>
         <url-pattern>/ObtenerProgreso</url-pattern>
     </servlet-mapping>
-
 </web-app>

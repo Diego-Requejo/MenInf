@@ -1,3 +1,25 @@
+<%-- 
+    Document   : progreso
+    Created on : 23 abr 2026, 13:59:02
+    Author     : dierequ
+--%>
+
+<%@page contentType="text/html" pageEncoding="UTF-8"%>
+<%@ page import="java.util.List" %>
+<%
+    String nomU        = (String) request.getAttribute("nomU");
+    String biografia   = (String) request.getAttribute("biografia");
+    String mencion     = (String) request.getAttribute("mencion");
+    int porcentaje     = (Integer) request.getAttribute("porcentaje");
+    String circ        = (String) request.getAttribute("circunferencia");
+    String dash        = (String) request.getAttribute("dashoffset");
+    List<String> superadas = (List<String>) request.getAttribute("superadas");
+    List<String> suspensas = (List<String>) request.getAttribute("suspensas");
+    List<String> cursando  = (List<String>) request.getAttribute("cursando");
+    List<String> favoritas = (List<String>) request.getAttribute("favoritas");
+%>
+
+<!DOCTYPE html>
 <!DOCTYPE html>
 <html lang="es">
     <head>
@@ -50,19 +72,26 @@
                 <!-- Nombre de usuario -->
                 <div class="campo">
                     <label>Nombre de usuario</label>
-                    <input type="text" id="perfil-nombre" readonly>
+                    <input type="text" placeholder="Escribe aquí su nombre de su usuario" value="Paquito">
                 </div>
 
                 <!-- Mención -->
                 <div class="campo">
-                    <label>Mención que está cursando</label>
-                    <input type="text" id="perfil-mencion" readonly>
+                    <label>Mencion que está cursando</label>
+                    <select>
+                        <option value="" disabled selected>Seleccione la mención aquí</option>
+                        <option value="PreMencion">Ninguna</option>
+                        <option value="">Tecnologías de la Información (TI)</option>
+                        <option value="3">Ingeniería del Software (SO)</option>
+                        <option value="arq">Computación (CO)</option>
+                    </select>
+
                 </div>
 
                 <!-- Biografía -->
                 <div class="campo">
                     <label>Biografía</label>
-                    <textarea id="perfil-bio" placeholder="Cargando biografía..."></textarea>
+                    <textarea placeholder="Escriba aquí acerca suyo"></textarea>
                 </div>
 
                 <div class="botonesProgreso-div">

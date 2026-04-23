@@ -87,7 +87,7 @@ public class Usuario {
             Connection conn = ds.getConnection();
 
             PreparedStatement ps = conn.prepareStatement(
-                "INSERT INTO Usuario (nombre, contseña, biografia, mencion, tfg, practicas) " +
+                "INSERT INTO Usuario (nombre, contraseña, biografia, mencion, tfg, practicas) " +
                 "VALUES (?, ?, NULL, 'PreMención', FALSE, FALSE)"
             );
             ps.setString(1, nombre);
@@ -107,7 +107,7 @@ public class Usuario {
             Connection conn = ds.getConnection();
 
             PreparedStatement ps = conn.prepareStatement(
-                "SELECT COUNT(*) FROM Usuario WHERE nombre = ? AND contseña = ?"
+                "SELECT COUNT(*) FROM Usuario WHERE nombre = ? AND contraseña = ?"
             );
             ps.setString(1, nombre);
             ps.setString(2, password);
@@ -139,7 +139,7 @@ public class Usuario {
             if (rs.next()) {
                 usuario = new Usuario();
                 usuario.setNombre(rs.getString("nombre"));
-                usuario.setPassword(rs.getString("contseña"));
+                usuario.setPassword(rs.getString("contraseña"));
                 usuario.setBiografia(rs.getString("biografia"));
                 usuario.setMencion(rs.getString("mencion"));
                 usuario.setTfg(rs.getBoolean("tfg"));
@@ -181,4 +181,6 @@ public class Usuario {
     private void añadirCursada(Cursada cursada) {
         this.cursadas.add(cursada);
     }
+    
+    
 }

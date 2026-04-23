@@ -14,8 +14,8 @@ document.addEventListener("DOMContentLoaded", () => {
         cargarListaAsignaturas();
     }
 
-    // 3. Si estamos en progreso.html
-    if (path.includes("progreso.html")) {
+    // 3. Si estamos en progreso.jsp
+    if (path.includes("progreso.jsp")) {
         cargarProgresoUsuario();
     }
 
@@ -31,7 +31,7 @@ document.addEventListener("DOMContentLoaded", () => {
 });
 
 /**
- * Carga el progreso del usuario y rellena los SELECTS originales de progreso.html
+ * Carga el progreso del usuario y rellena los SELECTS originales de progreso.jsp
  */
 function cargarProgresoUsuario() {
     const listSuperadas = document.getElementById("lista-superadas");
