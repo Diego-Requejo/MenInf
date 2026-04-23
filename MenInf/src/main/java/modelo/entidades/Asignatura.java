@@ -1,5 +1,8 @@
 package modelo.entidades;
 
+import modelo.enums.MencionTipo;
+import modelo.relaciones.AsignaturaMencion;
+
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -15,8 +18,7 @@ public class Asignatura implements Serializable {
     private String nombre;
     private String abreviatura;
     private int cuatri;
-    private String menciones = "";
-    private String cursoAcademico = "";
+    private ArrayList<AsignaturaMencion> menciones;
     private ArrayList<Profesor> profesores;
     private ArrayList<Asignatura> requisitos;
     private ArrayList<Lenguaje> lenguajes;
@@ -25,6 +27,7 @@ public class Asignatura implements Serializable {
         profesores = new ArrayList<>();
         requisitos = new ArrayList<>();
         lenguajes = new ArrayList<>();
+        menciones = new ArrayList<>();
     }
 
     // Getters y Setters
@@ -36,10 +39,9 @@ public class Asignatura implements Serializable {
     public void setAbreviatura(String abreviatura) { this.abreviatura = abreviatura; }
     public int getCuatri() { return cuatri; }
     public void setCuatri(int cuatri) { this.cuatri = cuatri; }
-    public String getMenciones() { return menciones; }
-    public void setMenciones(String menciones) { this.menciones = menciones; }
-    public String getCursoAcademico() { return cursoAcademico; }
-    public void setCursoAcademico(String cursoAcademico) { this.cursoAcademico = cursoAcademico; }
+    public ArrayList<AsignaturaMencion> getMenciones() { return menciones; }
+    public void setMenciones(ArrayList<AsignaturaMencion> menciones) { this.menciones = menciones; }
+    public void addMencion(AsignaturaMencion mencion) { this.menciones.add(mencion); }
     public ArrayList<Profesor> getProfesores() { return profesores; }
     public void setProfesores(ArrayList<Profesor> profesores) { this.profesores = profesores; }
     public void addProfesor(Profesor profesor) { this.profesores.add(profesor); }
@@ -126,8 +128,11 @@ public class Asignatura implements Serializable {
             psM.setInt(1, asig.getCod());
             ResultSet rsM = psM.executeQuery();
             if(rsM.next()){
-                asig.setMenciones(rsM.getString("mencion"));
-                asig.setCursoAcademico(rsM.getString("cursoAcademico"));
+                Mencion m = new Mencion(MencionTipo.valueOf(rsM.getString("mencion")));
+                AsignaturaMencion am = new AsignaturaMencion();
+                am.setMencion(m);
+                am.setCursoAcademico(rsM.getInt("cursoAcademico"));
+                asig.addMencion(am);
             }
             rsM.close(); psM.close();
 

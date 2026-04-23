@@ -148,11 +148,17 @@ function generarHTMLAsignatura(asig, esPopup) {
     const listaRequisitos = asig.listaRequisitos || [];
     const listaLenguajes = asig.listaLenguajes || [];
 
-    const mencionesFull = asig.menciones || "Formación básica/obligatoria";
-    const cursoTexto = asig.curso ? `${asig.curso}er curso` : "Curso no definido";
+    const listaMenciones = asig.listaMenciones || [];
+    let mencionesFull = "Formación básica/obligatoria";
+    let cursoTexto = "Curso no definido";
     const cuatriTexto = asig.cuatri ? `${asig.cuatri}º cuatrimestre` : "";
 
-    // Ahora ambos usan la misma estructura base
+    if (listaMenciones.length > 0) {
+        mencionesFull = listaMenciones.map(m => m.mencion).join(" / ");
+        cursoTexto = listaMenciones[0].curso ? `${listaMenciones[0].curso}º curso` : "Curso no definido";
+    }
+    // ----------------------------------------------
+
     return `
         <div class="contenedor-detalle-asignatura">
             <div class="header-asignatura">
@@ -191,6 +197,8 @@ function generarHTMLAsignatura(asig, esPopup) {
                                 : '<div class="elemento-lista">Ninguno</div>'}
                         </div>
                     </div>
+                    
+                    <div>
                         <div class="titulo2">Lenguajes o aplicaciones</div>
                         <div class="lista-asignaturas">
                             ${listaLenguajes.length > 0

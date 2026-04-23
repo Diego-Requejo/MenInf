@@ -38,8 +38,19 @@ public class ObtenerAsignatura extends HttpServlet {
                 json.append("\"nombre\":\"").append(escape(asig.getNombre())).append("\",");
                 json.append("\"abreviatura\":\"").append(escape(asig.getAbreviatura())).append("\",");
                 json.append("\"cuatri\":").append(asig.getCuatri()).append(",");
-                json.append("\"menciones\":\"").append(escape(asig.getMenciones())).append("\",");
-                json.append("\"curso\":\"").append(escape(asig.getCursoAcademico())).append("\",");
+
+                json.append("\"listaMenciones\":[ ");
+                ArrayList<modelo.relaciones.AsignaturaMencion> mencs = asig.getMenciones();
+                if(mencs != null){
+                    for(int i = 0; i < mencs.size(); i++){
+                        json.append("{");
+                        json.append("\"mencion\":\"").append(mencs.get(i).getMencion().getTipo().name()).append("\",");
+                        json.append("\"curso\":\"").append(mencs.get(i).getCursoAcademico());
+                        json.append("}");
+                        if(i < mencs.size() - 1) json.append(", ");
+                    }
+                }
+                json.append("],");
                 
                 json.append("\"listaProfesores\":[ ");
                 ArrayList<modelo.entidades.Profesor> profes = asig.getProfesores();

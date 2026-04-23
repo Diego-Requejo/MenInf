@@ -1,5 +1,5 @@
 package modelo.enums;
 
 public enum MencionTipo {
-    IS, CO, TI
+    IS, CO, TI, PreMención
 }
