@@ -31,8 +31,9 @@ document.addEventListener("DOMContentLoaded", () => {
 
 });
 
-let cuatriActivo = "1"; 
+let cuatriActivo = 1; 
 let todasAsignaturas = [];
+let textoBusqueda = "";
 /**
  * Carga el progreso del usuario y rellena los SELECTS originales de progreso.jsp
  */
@@ -130,6 +131,14 @@ function configurarBotonesHorario() {
             actualizarListaAsignaturas();
         });
     }
+
+    const buscador = document.getElementById("buscardor-asignatura");
+    if (buscador) {
+        buscador.addEventListener("input", (e) => {
+            textoBusqueda = e.target.value.toLowerCase();
+            actualizarListaAsignaturas();
+        });
+    }
 }
 
 function abrirPopupAsignatura(id) {
@@ -155,7 +164,12 @@ function actualizarListaAsignaturas() {
 
     contenedor.innerHTML = "";
 
-    const filtradas  = todasAsignaturas.filter(a => a.cuatri === cuatriActivo);
+    const filtradas  = todasAsignaturas.filter(a => {
+        const coindiceCuatri = a.cuatri === cuatriActivo;
+        const coincideBusqueda = a.nombre.toLowerCase().includes(textoBusqueda) || 
+                                a.abreviatura.toLowerCase().includes(textoBusqueda);
+        return coindiceCuatri && coincideBusqueda;      
+    });
 
     if(filtradas.length === 0) {
         contenedor.innerHTML = "<div class='item'>No hay asignaturas para este cuatrimestre.</div>";
