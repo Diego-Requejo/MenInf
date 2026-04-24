@@ -81,29 +81,33 @@ public class MostrarProgreso extends HttpServlet {
             
 
             // Cursadas del usuario
-            ArrayList<String> superadas = new ArrayList<>();
-            ArrayList<String> suspensas = new ArrayList<>();
-            ArrayList<String> odiadas  = new ArrayList<>();
-            ArrayList<String> favoritas = new ArrayList<>();
+            ArrayList<modelo.entidades.Asignatura> superadas = new ArrayList<>();
+            ArrayList<modelo.entidades.Asignatura> suspensas = new ArrayList<>();
+            ArrayList<modelo.entidades.Asignatura> odiadas  = new ArrayList<>();
+            ArrayList<modelo.entidades.Asignatura> favoritas = new ArrayList<>();
 
             PreparedStatement psC = conn.prepareStatement(
-                "SELECT a.nombre, c.estado, c.favorita, c.odiada " +
+                "SELECT a.cod, a.nombre, a.abreviatura, c.estado, c.favorita, c.odiada " +
                 "FROM Cursada c JOIN Asignatura a ON c.codA = a.cod " +
                 "WHERE c.nomU = ? ORDER BY a.nombre"
             );
             psC.setString(1, nomU);
             ResultSet rsC = psC.executeQuery();
             while (rsC.next()) {
-                String nombreAsig  = rsC.getString("nombre");
+                modelo.entidades.Asignatura asig = new modelo.entidades.Asignatura();
+                asig.setCod(rsC.getInt("cod"));
+                asig.setNombre(rsC.getString("nombre"));
+                asig.setAbreviatura(rsC.getString("abreviatura"));
+                
                 String estado      = rsC.getString("estado");
                 boolean esOdiada = rsC.getBoolean("odiada");
                 boolean esFavorita = rsC.getBoolean("favorita");
                
 
-                if ("superada".equals(estado))       superadas.add(nombreAsig);
-                else  suspensas.add(nombreAsig);
-                if (esOdiada) odiadas.add(nombreAsig);
-                if (esFavorita) favoritas.add(nombreAsig);
+                if ("superada".equals(estado))       superadas.add(asig);
+                else  suspensas.add(asig);
+                if (esOdiada) odiadas.add(asig);
+                if (esFavorita) favoritas.add(asig);
                 
             }
             rsC.close();

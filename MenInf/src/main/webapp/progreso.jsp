@@ -6,6 +6,7 @@
 
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <%@ page import="java.util.List" %>
+<%@ page import="modelo.entidades.Asignatura" %>
 <%
     String nomU        = (String) request.getAttribute("nomU");
     String biografia   = (String) request.getAttribute("biografia");
@@ -13,10 +14,10 @@
     int porcentaje     = (Integer) request.getAttribute("porcentaje");
     String circ        = (String) request.getAttribute("circunferencia");
     String dash        = (String) request.getAttribute("dashoffset");
-    List<String> superadas = (List<String>) request.getAttribute("superadas");
-    List<String> suspensas = (List<String>) request.getAttribute("suspensas");
-    List<String> odiadas  = (List<String>) request.getAttribute("odiadas");
-    List<String> favoritas = (List<String>) request.getAttribute("favoritas");
+    List<Asignatura> superadas = (List<Asignatura>) request.getAttribute("superadas");
+    List<Asignatura> suspensas = (List<Asignatura>) request.getAttribute("suspensas");
+    List<Asignatura> odiadas  = (List<Asignatura>) request.getAttribute("odiadas");
+    List<Asignatura> favoritas = (List<Asignatura>) request.getAttribute("favoritas");
     
     Boolean tfgObj = (Boolean) request.getAttribute("tfg");
     boolean tieneTfg = (tfgObj != null) ? tfgObj : false;
@@ -138,44 +139,44 @@
 
                 <div class="bloque-lista">
                     <label>Asignaturas superadas (<%= superadas.size() %>)</label>
-                    <select size="2">
+                    <select size="2" onchange="if(this.value) abrirPopupAsignatura(this.value)">
                         <% if (superadas.isEmpty()) { %>
                             <option disabled>Sin asignaturas superadas</option>
-                        <% } else { for (String a : superadas) { %>
-                            <option><%= a %></option>
+                        <% } else { for (Asignatura a : superadas) { %>
+                            <option value="<%= a.getCod() %>"><%= a.getNombre() %></option>
                         <% } } %>
                     </select>
                 </div>
 
                 <div class="bloque-lista">
                     <label>Asignaturas suspensas (<%= suspensas.size() %>)</label>
-                    <select size="2">
+                    <select size="2" onchange="if(this.value) abrirPopupAsignatura(this.value)">
                         <% if (suspensas.isEmpty()) { %>
                             <option disabled>Sin asignaturas suspensas</option>
-                        <% } else { for (String a : suspensas) { %>
-                            <option><%= a %></option>
+                        <% } else { for (Asignatura a : suspensas) { %>
+                            <option value="<%= a.getCod() %>"><%= a.getNombre() %></option>
                         <% } } %>
                     </select>
                 </div>
 
                 <div class="bloque-lista">
                     <label>Asignaturas odiadas (<%= odiadas.size() %>)</label>
-                    <select size="2">
+                    <select size="2" onchange="if(this.value) abrirPopupAsignatura(this.value)">
                         <% if (odiadas.isEmpty()) { %>
                             <option disabled>Sin asignaturas odiadas</option>
-                        <% } else { for (String a : odiadas) { %>
-                            <option><%= a %></option>
+                        <% } else { for (Asignatura a : odiadas) { %>
+                            <option value="<%= a.getCod() %>"><%= a.getNombre() %></option>
                         <% } } %>
                     </select>
                 </div>
 
                 <div class="bloque-lista">
                     <label>Asignaturas favoritas (<%= favoritas.size() %>)</label>
-                    <select size="2">
+                    <select size="2" onchange="if(this.value) abrirPopupAsignatura(this.value)">
                         <% if (favoritas.isEmpty()) { %>
                             <option disabled>Sin asignaturas favoritas</option>
-                        <% } else { for (String a : favoritas) { %>
-                            <option><%= a %></option>
+                        <% } else { for (Asignatura a : favoritas) { %>
+                            <option value="<%= a.getCod() %>"><%= a.getNombre() %></option>
                         <% } } %>
                     </select>
                 </div>
@@ -189,5 +190,6 @@
 
        
         <script src="./js/popup.js"></script>
+        <script src="./js/asignatura.js"></script>
     </body>
 </html>
