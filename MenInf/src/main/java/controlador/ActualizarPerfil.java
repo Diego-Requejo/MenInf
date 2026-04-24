@@ -15,52 +15,50 @@ import javax.naming.InitialContext;
  
 @WebServlet(name = "ActualizarPerfil", urlPatterns = {"/ActualizarPerfil"})
 public class ActualizarPerfil extends HttpServlet {
- 
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
- 
-        response.setContentType("text/html;charset=UTF-8");
-        request.setCharacterEncoding("UTF-8");
- 
-        // Obtener usuario de sesión
+        
+        // 1. Obtener el usuario de la sesión
         String nomU = (String) request.getSession().getAttribute("usuario");
         if (nomU == null) {
             response.sendRedirect("index.html");
             return;
         }
- 
-        // Recoger datos del formulario
+
+        // 2. Capturar datos del formulario 
         String biografia = request.getParameter("biografia");
-        String mencion   = request.getParameter("mencion");
- 
-        // Validar mención
-        if (!mencion.equals("IS") && !mencion.equals("CO") &&
-            !mencion.equals("TI") && !mencion.equals("PreMención")) {
-            response.sendRedirect("MostrarProgreso?error=mencion");
-            return;
-        }
- 
+        String mencion = request.getParameter("mencion");
+        
+        // Lógica para los checkboxes: si es null, es que no se marcó
+        boolean tienePracticas = request.getParameter("practicas") != null;
+        boolean tieneTfg = request.getParameter("tfg") != null;
+
         try {
+            // 3. Conexión a la base de datos (usando tu DataSource)
             Context ctx = new InitialContext();
             DataSource ds = (DataSource) ctx.lookup("java:comp/env/jdbc/meninf");
             Connection conn = ds.getConnection();
- 
-            PreparedStatement ps = conn.prepareStatement(
-                "UPDATE Usuario SET biografia = ?, mencion = ? WHERE nombre = ?"
-            );
+
+            // 4. Sentencia SQL de actualización
+            String sql = "UPDATE Usuario SET biografia = ?, mencion = ?, practicas = ?, tfg = ? WHERE nombre = ?";
+            PreparedStatement ps = conn.prepareStatement(sql);
             ps.setString(1, biografia);
             ps.setString(2, mencion);
-            ps.setString(3, nomU);
+            ps.setBoolean(3, tienePracticas);
+            ps.setBoolean(4, tieneTfg);
+            ps.setString(5, nomU);
+
             ps.executeUpdate();
- 
+
             ps.close();
             conn.close();
- 
+
+            // 5. Redirigir para refrescar los datos
             response.sendRedirect("MostrarProgreso");
- 
+
         } catch (Exception e) {
-            response.getWriter().println("<p>Error al guardar: " + e.getMessage() + "</p>");
+            response.getWriter().println("Error al actualizar: " + e.getMessage());
         }
     }
 }
