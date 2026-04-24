@@ -42,7 +42,6 @@ let mencionFiltro = "";
 function cargarProgresoUsuario() {
     const listSuperadas = document.getElementById("lista-superadas");
     const listSuspensas = document.getElementById("lista-suspensas");
-    const listCursando = document.getElementById("lista-cursando");
     const listFavoritas = document.getElementById("lista-favoritas");
 
     if (!listSuperadas) return;
@@ -51,7 +50,7 @@ function cargarProgresoUsuario() {
         .then(res => res.json())
         .then(data => {
             // Limpiar listas y añadir evento de cambio para abrir popup
-            [listSuperadas, listSuspensas, listCursando, listFavoritas].forEach(select => {
+            [listSuperadas, listSuspensas, listFavoritas].forEach(select => {
                 select.innerHTML = "";
                 // Al cambiar la selección en el select, abrir el popup
                 select.onchange = (e) => {
@@ -73,8 +72,6 @@ function cargarProgresoUsuario() {
                     superadasCount++;
                 } else if (asig.estado === "suspensa") {
                     listSuspensas.appendChild(opt.cloneNode(true));
-                } else if (asig.estado === "cursando") {
-                    listCursando.appendChild(opt.cloneNode(true));
                 }
 
                 if (asig.favorita) {
