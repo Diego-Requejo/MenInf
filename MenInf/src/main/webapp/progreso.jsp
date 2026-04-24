@@ -17,6 +17,12 @@
     List<String> suspensas = (List<String>) request.getAttribute("suspensas");
     List<String> cursando  = (List<String>) request.getAttribute("cursando");
     List<String> favoritas = (List<String>) request.getAttribute("favoritas");
+    
+    Boolean tfgObj = (Boolean) request.getAttribute("tfg");
+    boolean tieneTfg = (tfgObj != null) ? tfgObj : false;
+
+    Boolean practicasObj = (Boolean) request.getAttribute("practicas");
+    boolean tienePracticas = (practicasObj != null) ? practicasObj : false;
 %>
 
 <!DOCTYPE html>
@@ -86,8 +92,7 @@
                 <form action="ActualizarPerfil" method="POST" style="margin: 0;">
 
                     <div class="campo">
-                        <label>Nombre de usuario</label>
-                        <input type="text" value="<%= nomU %>" disabled>
+                        <label>Nombre de usuario: <b><%= nomU %></b></label>
                     </div>
 
                     <div class="campo">
@@ -103,6 +108,21 @@
                     <div class="campo">
                         <label>Biografía</label>
                         <textarea name="biografia" placeholder="Escriba aquí acerca suyo"><%= biografia %></textarea>
+                    </div>
+                    
+                    <div class="campo-checkboxes">
+                        <label class="titulo-secundario">TFG y prácticas en empresa</label>
+                        <div class="fila-controles">
+                            <label class="etiqueta-checkbox">
+                                <input type="checkbox" name="practicas" value="true" <%= tienePracticas ? "checked" : "" %>>
+                                Prácticas en empresa
+                            </label>
+
+                            <label class="etiqueta-checkbox">
+                                <input type="checkbox" name="tfg" value="true" <%= tieneTfg ? "checked" : "" %>>
+                                TFG defendido
+                            </label>
+                        </div>
                     </div>
 
                     <div class="botonesProgreso-div">

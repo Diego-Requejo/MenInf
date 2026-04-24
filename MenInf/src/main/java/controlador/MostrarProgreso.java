@@ -125,6 +125,8 @@ public class MostrarProgreso extends HttpServlet {
             request.setAttribute("cursando",      cursando);
             request.setAttribute("favoritas",     favoritas);
             request.setAttribute("porcentaje",    porcentaje);
+            request.setAttribute("tfg", tfg);
+            request.setAttribute("practicas", practicas);
             request.setAttribute("circunferencia", String.format("%.1f", circunferencia).replace(",", "."));
             request.setAttribute("dashoffset",     String.format("%.1f", dashoffset).replace(",", "."));
 

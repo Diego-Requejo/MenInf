@@ -490,11 +490,6 @@ select[multiple] option:checked {
     
 }
 
-/*
-El valor de `stroke-dashoffset` final se calcula así:
-circunferencia = 2 × π × radio = 2 × 3.1416 × 54 ≈ 339.3
-offset final   = circunferencia × (1 - porcentaje) = 339.3 × 0.37 ≈ 125.5
- */
 
 .circulo-texto {
     position: absolute;
@@ -665,6 +660,51 @@ offset final   = circunferencia × (1 - porcentaje) = 339.3 × 0.37 ≈ 125.5
     font-weight: bold;
 }
 
+
+.campo-checkboxes {
+    display: flex;
+    flex-direction: column; 
+    gap: 12px;
+    margin-top: 20px;
+    margin-bottom: 20px;
+}
+
+
+.titulo-secundario {
+    font-size: 20px !important;
+    font-weight: bold !important;
+    color: #feebba;
+    margin: 0;
+}
+
+
+.fila-controles {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    gap: 35px; 
+    align-items: center;
+}
+
+
+.etiqueta-checkbox {
+    display: flex !important;
+    flex-direction: row !important;
+    align-items: center !important;
+    gap: 10px !important;
+    font-size: 15px !important;
+    font-weight: normal !important;
+    color: #feebba;
+    cursor: pointer;
+    white-space: nowrap;
+}
+
+.etiqueta-checkbox input[type="checkbox"] {
+    width: 20px !important;
+    height: 20px !important;
+    cursor: pointer;
+    accent-color: #f9c16d;
+}
 
 /**********************************
 ***** POP-UP INICIO DE SESIÓN *****
