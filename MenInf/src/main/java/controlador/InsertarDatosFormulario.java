@@ -100,7 +100,7 @@ public class InsertarDatosFormulario extends HttpServlet {
             guardarPreferenciaLenguaje(conn, nomU, "C", c);
 
             conn.close();
-            response.sendRedirect("horario.html");
+            response.sendRedirect("horario.jsp");
 
         } catch (Exception e) {
             response.getWriter().println("<p>Error: " + e.getMessage() + "</p>");
