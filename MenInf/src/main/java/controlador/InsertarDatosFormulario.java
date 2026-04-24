@@ -84,14 +84,6 @@ public class InsertarDatosFormulario extends HttpServlet {
                     insertarCursada(conn, Integer.parseInt(cod), nomU, "suspensa", year,
                                    contiene(favoritas, cod), contiene(odiadas, cod));
 
-            // Favoritas u odiadas que no estén ya en superadas/suspensas → cursando
-            String[] cursando = union(favoritas, odiadas);
-            if (cursando != null)
-                for (String cod : cursando)
-                    if (!contiene(superadas, cod) && !contiene(suspensas, cod))
-                        insertarCursada(conn, Integer.parseInt(cod), nomU, "cursando", year,
-                                        contiene(favoritas, cod), contiene(odiadas, cod));
-
             // --- PREFERENCIA LENGUAJE ---
             // Solo se inserta si el usuario seleccionó alguna estrella
             guardarPreferenciaLenguaje(conn, nomU, "Python", python);
