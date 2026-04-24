@@ -9,8 +9,8 @@ document.addEventListener("DOMContentLoaded", () => {
         if (id) { cargarDatosEnPagina(id); }
     }
 
-    // 2. Si estamos en horario.jsp
-    if (path.includes("horario.jsp")) {
+    // 2. Si estamos en horario.html
+    if (path.includes("horario.html")) {
         configurarBotonesHorario();
         cargarListaAsignaturas();
     }
