@@ -87,7 +87,7 @@ public class MostrarProgreso extends HttpServlet {
             ArrayList<String> favoritas = new ArrayList<>();
 
             PreparedStatement psC = conn.prepareStatement(
-                "SELECT a.nombre, c.estado, c.favorita " +
+                "SELECT a.nombre, c.estado, c.favorita, c.odiada " +
                 "FROM Cursada c JOIN Asignatura a ON c.codA = a.cod " +
                 "WHERE c.nomU = ? ORDER BY a.nombre"
             );
@@ -96,7 +96,7 @@ public class MostrarProgreso extends HttpServlet {
             while (rsC.next()) {
                 String nombreAsig  = rsC.getString("nombre");
                 String estado      = rsC.getString("estado");
-                boolean esOdiada = rsC.getBoolean("suspensa");
+                boolean esOdiada = rsC.getBoolean("odiada");
                 boolean esFavorita = rsC.getBoolean("favorita");
                
 

@@ -159,7 +159,7 @@
                 </div>
 
                 <div class="bloque-lista">
-                    <label>Asignaturas por superar (<%= odiadas.size() %>)</label>
+                    <label>Asignaturas odiadas (<%= odiadas.size() %>)</label>
                     <select size="2">
                         <% if (odiadas.isEmpty()) { %>
                             <option disabled>Sin asignaturas odiadas</option>
