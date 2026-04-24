@@ -63,18 +63,32 @@ public class Asignatura implements Serializable {
             Connection conn = ds.getConnection();
 
             PreparedStatement ps = conn.prepareStatement("SELECT * FROM Asignatura ORDER BY nombre ASC");
-            ResultSet rs = ps.executeQuery();
+            ResultSet rs = ps.executeQuery();     
+
+            PreparedStatement psM = conn.prepareStatement("SELECT mencion, cursoAcademico FROM AsignaturasMencion WHERE codA = ?");
+            ResultSet rsM = null;
 
             while (rs.next()) {
                 Asignatura asig = new Asignatura();
                 asig.setCod(rs.getInt("cod"));
                 asig.setNombre(rs.getString("nombre"));
                 asig.setAbreviatura(rs.getString("abreviatura"));
-                asig.setCuatri(rs.getInt("cuatri"));
+                asig.setCuatri(rs.getInt("cuatri"));            
+                
+                psM.setInt(1, asig.getCod());
+                rsM = psM.executeQuery();
+                while(rsM.next()){
+                    Mencion m = new Mencion(MencionTipo.valueOf(rsM.getString("mencion")));
+                    AsignaturaMencion am = new AsignaturaMencion();
+                    am.setMencion(m);
+                    am.setCursoAcademico(rsM.getInt("cursoAcademico"));
+                    asig.addMencion(am);
+                }
                 lista.add(asig);
             }
-
             rs.close(); ps.close(); conn.close();
+            rsM.close(); psM.close();
+
         } catch (Exception e) {
             System.err.println("Error en listarTodas: " + e.getMessage());
         }
@@ -123,18 +137,6 @@ public class Asignatura implements Serializable {
 
     private static void cargarDatosAdicionales(Connection conn, Asignatura asig) {
         try {
-            // Menciones
-            PreparedStatement psM = conn.prepareStatement("SELECT mencion, cursoAcademico FROM AsignaturasMencion WHERE codA = ?");
-            psM.setInt(1, asig.getCod());
-            ResultSet rsM = psM.executeQuery();
-            while(rsM.next()){
-                Mencion m = new Mencion(MencionTipo.valueOf(rsM.getString("mencion")));
-                AsignaturaMencion am = new AsignaturaMencion();
-                am.setMencion(m);
-                am.setCursoAcademico(rsM.getInt("cursoAcademico"));
-                asig.addMencion(am);
-            }
-            rsM.close(); psM.close();
 
             // Profesores
             PreparedStatement psP = conn.prepareStatement("SELECT p.nombre, p.correo FROM Profesor p JOIN ProfesorAsignatura pa ON p.correo = pa.correoP WHERE pa.codA = ?");

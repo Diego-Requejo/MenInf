@@ -30,7 +30,18 @@ public class ListarAsignaturas extends HttpServlet {
                 json.append("\"cod\":").append(a.getCod()).append(",");
                 json.append("\"nombre\":\"").append(escape(a.getNombre())).append("\",");
                 json.append("\"abreviatura\":\"").append(escape(a.getAbreviatura())).append("\",");
-                json.append("\"cuatri\":").append(a.getCuatri());
+                json.append("\"cuatri\":").append(a.getCuatri()).append(",");
+
+                json.append("\"menciones\":[");
+                List<modelo.relaciones.AsignaturaMencion> menciones = a.getMenciones();
+                for (int j = 0; j < menciones.size(); j++) {
+                    json.append("\"").append(menciones.get(j).getMencion().getTipo().name()).append("\"");
+                    if (j < menciones.size() - 1) {
+                        json.append(",");
+                    }
+                }
+                json.append("]");
+
                 json.append("}");
                 if (i < lista.size() - 1) {
                     json.append(",");

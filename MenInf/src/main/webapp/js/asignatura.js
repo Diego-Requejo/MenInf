@@ -34,6 +34,8 @@ document.addEventListener("DOMContentLoaded", () => {
 let cuatriActivo = 1; 
 let todasAsignaturas = [];
 let textoBusqueda = "";
+let mencionFiltro = "";
+
 /**
  * Carga el progreso del usuario y rellena los SELECTS originales de progreso.jsp
  */
@@ -139,6 +141,23 @@ function configurarBotonesHorario() {
             actualizarListaAsignaturas();
         });
     }
+
+    const botonesMencion = document.querySelectorAll(".filtros button");
+    botonesMencion.forEach(btn => {
+        btn.addEventListener("click", (e) => {
+            const mencion = e.target.innerText;
+
+            if (e.target.classList.contains('activo')) {
+                e.target.classList.replace('activo', 'inactivo');
+                mencionFiltro = "";
+            } else {
+                botonesMencion.forEach(b => b.classList.replace('activo', 'inactivo'));
+                e.target.classList.replace('inactivo', 'activo');
+                mencionFiltro = mencion;
+            }
+            actualizarListaAsignaturas();
+        });
+    });
 }
 
 function abrirPopupAsignatura(id) {
@@ -168,7 +187,10 @@ function actualizarListaAsignaturas() {
         const coindiceCuatri = a.cuatri === cuatriActivo;
         const coincideBusqueda = a.nombre.toLowerCase().includes(textoBusqueda) || 
                                 a.abreviatura.toLowerCase().includes(textoBusqueda);
-        return coindiceCuatri && coincideBusqueda;      
+        const coincideMencion = (mencionFiltro === "") ||
+                                (!a.menciones || a.menciones.length === 0) ||
+                                (a.menciones.includes(mencionFiltro));
+        return coindiceCuatri && coincideBusqueda && coincideMencion;
     });
 
     if(filtradas.length === 0) {
