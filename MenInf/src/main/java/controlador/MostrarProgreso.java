@@ -83,7 +83,7 @@ public class MostrarProgreso extends HttpServlet {
             // Cursadas del usuario
             ArrayList<String> superadas = new ArrayList<>();
             ArrayList<String> suspensas = new ArrayList<>();
-            ArrayList<String> cursando  = new ArrayList<>();
+            ArrayList<String> odiadas  = new ArrayList<>();
             ArrayList<String> favoritas = new ArrayList<>();
 
             PreparedStatement psC = conn.prepareStatement(
@@ -96,12 +96,15 @@ public class MostrarProgreso extends HttpServlet {
             while (rsC.next()) {
                 String nombreAsig  = rsC.getString("nombre");
                 String estado      = rsC.getString("estado");
+                boolean esOdiada = rsC.getBoolean("suspensa");
                 boolean esFavorita = rsC.getBoolean("favorita");
+               
 
                 if ("superada".equals(estado))       superadas.add(nombreAsig);
-                else if ("suspensa".equals(estado))  suspensas.add(nombreAsig);
-                else                                 cursando.add(nombreAsig);
+                else  suspensas.add(nombreAsig);
+                if (esOdiada) odiadas.add(nombreAsig);
                 if (esFavorita) favoritas.add(nombreAsig);
+                
             }
             rsC.close();
             psC.close();
@@ -122,7 +125,7 @@ public class MostrarProgreso extends HttpServlet {
             request.setAttribute("nomU",          nomU);
             request.setAttribute("superadas",     superadas);
             request.setAttribute("suspensas",     suspensas);
-            request.setAttribute("cursando",      cursando);
+            request.setAttribute("odiadas",      odiadas);
             request.setAttribute("favoritas",     favoritas);
             request.setAttribute("porcentaje",    porcentaje);
             request.setAttribute("tfg", tfg);

@@ -15,7 +15,7 @@
     String dash        = (String) request.getAttribute("dashoffset");
     List<String> superadas = (List<String>) request.getAttribute("superadas");
     List<String> suspensas = (List<String>) request.getAttribute("suspensas");
-    List<String> cursando  = (List<String>) request.getAttribute("cursando");
+    List<String> odiadas  = (List<String>) request.getAttribute("odiadas");
     List<String> favoritas = (List<String>) request.getAttribute("favoritas");
     
     Boolean tfgObj = (Boolean) request.getAttribute("tfg");
@@ -159,11 +159,11 @@
                 </div>
 
                 <div class="bloque-lista">
-                    <label>Asignaturas por superar (<%= cursando.size() %>)</label>
+                    <label>Asignaturas por superar (<%= odiadas.size() %>)</label>
                     <select size="2">
-                        <% if (cursando.isEmpty()) { %>
-                            <option disabled>Sin asignaturas cursando</option>
-                        <% } else { for (String a : cursando) { %>
+                        <% if (odiadas.isEmpty()) { %>
+                            <option disabled>Sin asignaturas odiadas</option>
+                        <% } else { for (String a : odiadas) { %>
                             <option><%= a %></option>
                         <% } } %>
                     </select>
