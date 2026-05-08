@@ -28,6 +28,14 @@ document.addEventListener("DOMContentLoaded", () => {
             abrirPopupAsignatura(id);
         }
     });
+    
+    document.getElementById("btn-cuatri-1").addEventListener("click", () => {
+        cambiarCuatri(1);
+    });
+
+    document.getElementById("btn-cuatri-2").addEventListener("click", () => {
+        cambiarCuatri(2);
+    });
 
 });
 
@@ -205,6 +213,10 @@ function actualizarListaAsignaturas() {
             <img src="./img/Informacion.png" alt="Info" class="ver-asignatura" 
                 data-id="${asig.cod}" style="width:20px; height:20px; cursor:pointer; vertical-align:middle; margin-left:5px; position:relative; top:-2px;">
             </span>`;
+        
+        item.addEventListener("click", () => {
+            toggleAsignatura(asig.cod);
+        });
         
         contenedor.appendChild(item);
     });

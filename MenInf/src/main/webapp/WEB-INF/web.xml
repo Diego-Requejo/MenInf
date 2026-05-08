@@ -54,10 +54,18 @@
     </servlet-mapping>
     <servlet>
         <servlet-name>ObtenerProgreso</servlet-name>
-        <servlet-class>controlador.MostrarPerfil</servlet-class>
+        <servlet-class>controlador.MostrarProgreso</servlet-class>
     </servlet>
     <servlet-mapping>
         <servlet-name>ObtenerProgreso</servlet-name>
         <url-pattern>/ObtenerProgreso</url-pattern>
+    </servlet-mapping>
+     <servlet>
+        <servlet-name>ObtenerPeriodos</servlet-name>
+        <servlet-class>controlador.ObtenerPeriodos</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>ObtenerPeriodos</servlet-name>
+        <url-pattern>/ObtenerPeriodos</url-pattern>
     </servlet-mapping>
 </web-app>

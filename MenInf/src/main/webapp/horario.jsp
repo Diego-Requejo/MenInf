@@ -58,7 +58,7 @@
                     </div>
 
                     <!-- GRID -->
-                    <div class="grid-horario">
+                    <div class="grid-horario" id="grid-horario">
 
                         <!-- LUNES -->
                         <div class="bloque ver-asignatura" data-id="46922" style="grid-column:1; grid-row:2;">ICON</div>
@@ -113,6 +113,7 @@
         </main>
 
         <script src="./js/popup.js"></script>
+        <script src="./js/periodos.js"></script>
         <script src="./js/asignatura.js"></script>
     </body>
 </html>
