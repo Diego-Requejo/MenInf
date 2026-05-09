@@ -121,7 +121,7 @@
             </div>
         </header>
 
-        <form action="InsertarDatosFormulario" method="POST">
+        <form action="DatosFormulario" method="POST">
 
             <h1>Formulario de afinidad académica</h1>
 

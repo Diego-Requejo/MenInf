@@ -6,7 +6,7 @@ public class AsignaturaMencion {
 
     private Mencion tipo;
     private int cursoAcademico;
-    private boolean esObligatoria;
+    private boolean obligatoriedad;
 
     public AsignaturaMencion(){}
 
@@ -14,8 +14,7 @@ public class AsignaturaMencion {
     public void setMencion(Mencion tipo) {this.tipo = tipo;}
     public int getCursoAcademico() {return cursoAcademico;}
     public void setCursoAcademico(int cursoAcademico) {this.cursoAcademico = cursoAcademico;}
-    public boolean isEsObligatoria() {return esObligatoria;}
-    public void setEsObligatoria(boolean esObligatoria) {this.esObligatoria = esObligatoria;}
-    
+    public boolean isObligatoriedad() { return obligatoriedad; } 
+    public void setObligatoriedad(boolean obligatoriedad) { this.obligatoriedad = obligatoriedad; }
 
 }
