@@ -1,31 +1,24 @@
-<%-- 
-    Document   : progreso
-    Created on : 23 abr 2026, 13:59:02
-    Author     : dierequ
---%>
-
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
-<%@ page import="java.util.List" %>
-<%@ page import="modelo.entidades.Asignatura" %>
+<%@ page import="java.util.Map, java.util.LinkedHashMap" %>
 <%
-    String nomU        = (String) request.getAttribute("nomU");
-    String biografia   = (String) request.getAttribute("biografia");
-    String mencion     = (String) request.getAttribute("mencion");
-    int porcentaje     = (Integer) request.getAttribute("porcentaje");
-    String circ        = (String) request.getAttribute("circunferencia");
-    String dash        = (String) request.getAttribute("dashoffset");
-    List<Asignatura> superadas = (List<Asignatura>) request.getAttribute("superadas");
-    List<Asignatura> suspensas = (List<Asignatura>) request.getAttribute("suspensas");
-    List<Asignatura> odiadas  = (List<Asignatura>) request.getAttribute("odiadas");
-    List<Asignatura> favoritas = (List<Asignatura>) request.getAttribute("favoritas");
-    
-    Boolean tfgObj = (Boolean) request.getAttribute("tfg");
-    boolean tieneTfg = (tfgObj != null) ? tfgObj : false;
+    String nomU      = (String)  request.getAttribute("nomU");
+    String biografia = (String)  request.getAttribute("biografia");
+    String mencion   = (String)  request.getAttribute("mencion");
+    int porcentaje   = (Integer) request.getAttribute("porcentaje");
+    String circ      = (String)  request.getAttribute("circunferencia");
+    String dash      = (String)  request.getAttribute("dashoffset");
 
-    Boolean practicasObj = (Boolean) request.getAttribute("practicas");
-    boolean tienePracticas = (practicasObj != null) ? practicasObj : false;
+    Map<Integer, String> superadas = (Map<Integer, String>) request.getAttribute("superadas");
+    Map<Integer, String> suspensas = (Map<Integer, String>) request.getAttribute("suspensas");
+    Map<Integer, String> odiadas   = (Map<Integer, String>) request.getAttribute("odiadas");
+    Map<Integer, String> favoritas = (Map<Integer, String>) request.getAttribute("favoritas");
+
+    Boolean tfgObj       = (Boolean) request.getAttribute("tfg");
+    boolean tieneTfg     = (tfgObj != null) ? tfgObj : false;
+
+    Boolean practicasObj    = (Boolean) request.getAttribute("practicas");
+    boolean tienePracticas  = (practicasObj != null) ? practicasObj : false;
 %>
-
 <!DOCTYPE html>
 <html lang="es">
     <head>
@@ -35,20 +28,18 @@
         <link rel="stylesheet" href="style.css?v=2">
         <link rel="icon" type="image/png" href="./img/Logotipo.png">
         <style>
-    .circulo-progreso {
-        stroke-dasharray: <%= circ %>;
-        /* Inicializamos el offset igual a la circunferencia para que empiece vacío */
-        stroke-dashoffset: <%= circ %>; 
-        animation: llenar-circulo 1s ease forwards;
-    }
-    
-    @keyframes llenar-circulo {
-        to {
-            /* Termina en el valor calculado del progreso */
-            stroke-dashoffset: <%= dash %>; 
-        }
-    }
-</style>
+            .circulo-progreso {
+                stroke-dasharray: <%= circ %>;
+                stroke-dashoffset: <%= circ %>;
+                animation: llenar-circulo 1s ease forwards;
+            }
+
+            @keyframes llenar-circulo {
+                to {
+                    stroke-dashoffset: <%= dash %>;
+                }
+            }
+        </style>
     </head>
 
     <body>
@@ -110,7 +101,7 @@
                         <label>Biografía</label>
                         <textarea name="biografia" placeholder="Escriba aquí acerca suyo"><%= biografia %></textarea>
                     </div>
-                    
+
                     <div class="campo-checkboxes">
                         <label class="titulo-secundario">TFG y prácticas en empresa</label>
                         <div class="fila-controles">
@@ -118,7 +109,6 @@
                                 <input type="checkbox" name="practicas" value="true" <%= tienePracticas ? "checked" : "" %>>
                                 Prácticas en empresa
                             </label>
-
                             <label class="etiqueta-checkbox">
                                 <input type="checkbox" name="tfg" value="true" <%= tieneTfg ? "checked" : "" %>>
                                 TFG defendido
@@ -142,8 +132,8 @@
                     <select size="2" onchange="if(this.value) abrirPopupAsignatura(this.value)">
                         <% if (superadas.isEmpty()) { %>
                             <option disabled>Sin asignaturas superadas</option>
-                        <% } else { for (Asignatura a : superadas) { %>
-                            <option value="<%= a.getCod() %>"><%= a.getNombre() %></option>
+                        <% } else { for (Map.Entry<Integer, String> e : superadas.entrySet()) { %>
+                            <option value="<%= e.getKey() %>"><%= e.getValue() %></option>
                         <% } } %>
                     </select>
                 </div>
@@ -153,8 +143,8 @@
                     <select size="2" onchange="if(this.value) abrirPopupAsignatura(this.value)">
                         <% if (suspensas.isEmpty()) { %>
                             <option disabled>Sin asignaturas suspensas</option>
-                        <% } else { for (Asignatura a : suspensas) { %>
-                            <option value="<%= a.getCod() %>"><%= a.getNombre() %></option>
+                        <% } else { for (Map.Entry<Integer, String> e : suspensas.entrySet()) { %>
+                            <option value="<%= e.getKey() %>"><%= e.getValue() %></option>
                         <% } } %>
                     </select>
                 </div>
@@ -164,8 +154,8 @@
                     <select size="2" onchange="if(this.value) abrirPopupAsignatura(this.value)">
                         <% if (odiadas.isEmpty()) { %>
                             <option disabled>Sin asignaturas odiadas</option>
-                        <% } else { for (Asignatura a : odiadas) { %>
-                            <option value="<%= a.getCod() %>"><%= a.getNombre() %></option>
+                        <% } else { for (Map.Entry<Integer, String> e : odiadas.entrySet()) { %>
+                            <option value="<%= e.getKey() %>"><%= e.getValue() %></option>
                         <% } } %>
                     </select>
                 </div>
@@ -175,8 +165,8 @@
                     <select size="2" onchange="if(this.value) abrirPopupAsignatura(this.value)">
                         <% if (favoritas.isEmpty()) { %>
                             <option disabled>Sin asignaturas favoritas</option>
-                        <% } else { for (Asignatura a : favoritas) { %>
-                            <option value="<%= a.getCod() %>"><%= a.getNombre() %></option>
+                        <% } else { for (Map.Entry<Integer, String> e : favoritas.entrySet()) { %>
+                            <option value="<%= e.getKey() %>"><%= e.getValue() %></option>
                         <% } } %>
                     </select>
                 </div>
@@ -188,7 +178,6 @@
             </div>
         </div>
 
-       
         <script src="./js/popup.js"></script>
         <script src="./js/asignatura.js"></script>
     </body>

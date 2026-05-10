@@ -2,17 +2,14 @@ package modelo.dao;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
-import java.sql.ResultSet;
 import java.time.Year;
-import java.util.LinkedHashSet;
-import java.util.Set;
 import javax.naming.Context;
 import javax.naming.InitialContext;
 import javax.sql.DataSource;
 
 /**
- * DAO responsable exclusivamente de persistir los datos del formulario
- * de afinidad académica en la base de datos.
+ * DAO responsable exclusivamente de persistir los datos
+ * del formulario de afinidad académica en la base de datos.
  */
 public class FormularioDAO {
 
@@ -22,43 +19,26 @@ public class FormularioDAO {
         return ds.getConnection();
     }
 
-    /**
-     * Guarda todos los datos del formulario en la BD.
-     * - Inserta/actualiza registros en Cursada para superadas, suspensas y cursando.
-     * - Inserta/actualiza registros en PreferenciaLenguaje.
-     */
     public void guardarFormulario(String nomU,
-                                   String[] favoritas,
-                                   String[] odiadas,
-                                   String[] superadas,
-                                   String[] suspensas,
-                                   String python,
-                                   String mips,
-                                   String nivelJava,
-                                   String c) throws Exception {
+                                   String[] favoritas, String[] odiadas,
+                                   String[] superadas, String[] suspensas,
+                                   String python, String mips,
+                                   String nivelJava, String c) throws Exception {
 
         Connection conn = getConnection();
         int year = Year.now().getValue();
 
         try {
-            // Superadas: estado = 'superada'
             if (superadas != null)
                 for (String cod : superadas)
                     insertarCursada(conn, Integer.parseInt(cod), nomU, "superada", year,
                                    contiene(favoritas, cod), contiene(odiadas, cod));
 
-            // Suspensas: estado = 'suspensa'
             if (suspensas != null)
                 for (String cod : suspensas)
                     insertarCursada(conn, Integer.parseInt(cod), nomU, "suspensa", year,
                                    contiene(favoritas, cod), contiene(odiadas, cod));
 
-            // Favoritas u odiadas no superadas ni suspensas → estado = 'cursando'
-            // Nota: 'cursando' no existe en el ENUM de la BD actual (superada/suspensa).
-            // Solo se insertan si están en superadas o suspensas también.
-            // Las marcadas únicamente como favoritas/odiadas se guardan dentro de esas categorías.
-
-            // Preferencias de lenguaje
             guardarPreferenciaLenguaje(conn, nomU, "Python",           python);
             guardarPreferenciaLenguaje(conn, nomU, "Ensamblador MIPS", mips);
             guardarPreferenciaLenguaje(conn, nomU, "Java",             nivelJava);
@@ -74,19 +54,14 @@ public class FormularioDAO {
                                   boolean favorita, boolean odiada) throws Exception {
         String sql = "INSERT INTO Cursada (codA, nomU, estado, año, favorita, odiada) " +
                      "VALUES (?, ?, ?, ?, ?, ?) " +
-                     "ON DUPLICATE KEY UPDATE estado = ?, año = ?, favorita = ?, odiada = ?";
+                     "ON DUPLICATE KEY UPDATE estado=?, año=?, favorita=?, odiada=?";
 
         PreparedStatement ps = conn.prepareStatement(sql);
-        ps.setInt(1, codA);
-        ps.setString(2, nomU);
-        ps.setString(3, estado);
-        ps.setInt(4, anio);
-        ps.setBoolean(5, favorita);
-        ps.setBoolean(6, odiada);
-        ps.setString(7, estado);
-        ps.setInt(8, anio);
-        ps.setBoolean(9, favorita);
-        ps.setBoolean(10, odiada);
+        ps.setInt(1, codA);      ps.setString(2, nomU);
+        ps.setString(3, estado); ps.setInt(4, anio);
+        ps.setBoolean(5, favorita); ps.setBoolean(6, odiada);
+        ps.setString(7, estado); ps.setInt(8, anio);
+        ps.setBoolean(9, favorita); ps.setBoolean(10, odiada);
         ps.executeUpdate();
         ps.close();
     }
@@ -96,23 +71,19 @@ public class FormularioDAO {
         if (valor == null) return;
         int nota = Integer.parseInt(valor);
 
-        String sql = "INSERT INTO PreferenciaLenguaje (nomU, nomL, nota) " +
-                     "VALUES (?, ?, ?) " +
-                     "ON DUPLICATE KEY UPDATE nota = ?";
+        String sql = "INSERT INTO PreferenciaLenguaje (nomU, nomL, nota) VALUES (?, ?, ?) " +
+                     "ON DUPLICATE KEY UPDATE nota=?";
 
         PreparedStatement ps = conn.prepareStatement(sql);
-        ps.setString(1, nomU);
-        ps.setString(2, nomL);
-        ps.setInt(3, nota);
-        ps.setInt(4, nota);
+        ps.setString(1, nomU); ps.setString(2, nomL);
+        ps.setInt(3, nota);    ps.setInt(4, nota);
         ps.executeUpdate();
         ps.close();
     }
 
     private boolean contiene(String[] array, String valor) {
         if (array == null) return false;
-        for (String s : array)
-            if (s.equals(valor)) return true;
+        for (String s : array) if (s.equals(valor)) return true;
         return false;
     }
 }

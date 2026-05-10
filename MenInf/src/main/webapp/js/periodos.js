@@ -4,7 +4,28 @@ let periodosPorCuatri = {
 };
 
 
-function initHorario() {
+
+
+async function cargarRecomendacion() {
+    const res = await fetch("GetResultadoJson");
+    
+    if (!res.ok) {
+        console.warn("No hay recomendación en sesión");
+        return;
+    }
+
+    const data = await res.json();
+    // data.mencion  → "IS" | "TI" | "CO"
+    // data.cuatri1  → [46901, 46902, ...]
+    // data.cuatri2  → [46906, 46907, ...]
+
+    mostrarHorario(data.mencion, data.cuatri1, data.cuatri2);
+}
+
+function initHorario(mencion, cuatri1, cuatri2) {
+    console.log("Mención:", mencion);
+    console.log("Cuatri 1:", cuatri1);
+    console.log("Cuatri 2:", cuatri2);
     // reservado para inicialización futura
 }
 
