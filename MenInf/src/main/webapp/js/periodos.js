@@ -440,65 +440,65 @@ function renderHorario() {
    const periodosSeleccionados =
     periodosPorCuatri[cuatriActivo];
 
-const layout = calcularLayout(periodosSeleccionados);
+    const layout = calcularLayout(periodosSeleccionados);
 
-const yaRenderizados = new Set();
+    const yaRenderizados = new Set();
 
-periodosSeleccionados.forEach(p => {
+    periodosSeleccionados.forEach(p => {
 
-    if (yaRenderizados.has(p.idPeriodo)) return;
-    yaRenderizados.add(p.idPeriodo);
+        if (yaRenderizados.has(p.idPeriodo)) return;
+        yaRenderizados.add(p.idPeriodo);
 
-    const div = document.createElement("div");
+        const div = document.createElement("div");
 
-    const esTeoria = p.grupo.startsWith("T");
+        const esTeoria = p.grupo.startsWith("T");
 
-    div.classList.add("bloque", "ver-asignatura");
+        div.classList.add("bloque", "ver-asignatura");
 
-    const esLaboratorio = !esTeoria;
+        const esLaboratorio = !esTeoria;
 
-    if (esLaboratorio) {
-        div.classList.add("laboratorio");
-    }
+        if (esLaboratorio) {
+            div.classList.add("laboratorio");
+        }
 
-    if (usarColoresAsignatura) {
-        const color = getColorAsignatura(
-            p.codA,
-            esLaboratorio
-        );
+        if (usarColoresAsignatura) {
+            const color = getColorAsignatura(
+                p.codA,
+                esLaboratorio
+            );
 
-        div.style.background = color;
-    }
-    else {
+            div.style.background = color;
+        }
+        else {
 
-        // Modo clásico accesible
-        div.style.background =
-            esLaboratorio
-                ? "#ff7a1a"
-                : "#e9b86a";
-    }
+            // Modo clásico accesible
+            div.style.background =
+                esLaboratorio
+                    ? "#ff7a1a"
+                    : "#e9b86a";
+        }
 
-    div.dataset.id = p.codA;
+        div.dataset.id = p.codA;
 
-    const rowStart = p.horaIni - 8;
-    const rowSpan = p.horaFin - p.horaIni;
+        const rowStart = p.horaIni - 8;
+        const rowSpan = p.horaFin - p.horaIni;
 
-    div.style.gridColumn = p.dia;
-    div.style.gridRow = `${rowStart} / span ${rowSpan}`;
+        div.style.gridColumn = p.dia;
+        div.style.gridRow = `${rowStart} / span ${rowSpan}`;
 
-    // Layout robusto
-    const info = layout[p.idPeriodo];
+        // Layout robusto
+        const info = layout[p.idPeriodo];
 
-    const width = 100 / info.totalCols;
-    const left = width * info.col;
+        const width = 100 / info.totalCols;
+        const left = width * info.col;
 
-    div.style.position = "relative";
-    div.style.width = `calc(${width}% - 4px)`;
-    div.style.left = `${left}%`;
+        div.style.position = "relative";
+        div.style.width = `calc(${width}% - 4px)`;
+        div.style.left = `${left}%`;
 
-    div.innerText =
-        `${p.abreviatura} - ${p.grupo}`;
+        div.innerText =
+            `${p.abreviatura} - ${p.grupo}`;
 
-    grid.appendChild(div);
-});
+        grid.appendChild(div);
+    });
 }
