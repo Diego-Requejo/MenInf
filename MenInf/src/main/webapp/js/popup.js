@@ -77,6 +77,19 @@ function vistaLogin() {
 
         <button onclick="enviarLogin()" class="boton-enviar">Enviar</button>
     `;
+
+    // Detectar Enter
+    document.getElementById("loginPass").addEventListener("keydown", (e) => {
+        if (e.key === "Enter") {
+            enviarLogin();
+        }
+    });
+
+    document.getElementById("loginUser").addEventListener("keydown", (e) => {
+        if (e.key === "Enter") {
+            enviarLogin();
+        }
+    });
 }
 
 function vistaRegistro() {
@@ -96,6 +109,19 @@ function vistaRegistro() {
 
         <button onclick="enviarRegistro()" class="boton-enviar">Enviar</button>
     `;
+
+    // Detectar Enter
+    document.getElementById("regPass").addEventListener("keydown", (e) => {
+        if (e.key === "Enter") {
+            enviarRegistro();
+        }
+    });
+
+    document.getElementById("regUser").addEventListener("keydown", (e) => {
+        if (e.key === "Enter") {
+            enviarRegistro();
+        }
+    });
 }
 
 function vistaSesion(nombre) {
