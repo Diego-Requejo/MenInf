@@ -58,7 +58,7 @@ async function cargarRecomendacion() {
     // data.cuatri1  → [46901, 46902, ...]
     // data.cuatri2  → [46906, 46907, ...]
 
-    mostrarHorario(data.mencion, data.cuatri1, data.cuatri2);
+    initHorario(data.mencion, data.cuatri1, data.cuatri2);
 }
 
 function initHorario(mencion, cuatri1, cuatri2) {
@@ -432,3 +432,5 @@ function renderHorario() {
         grid.appendChild(div);
     });
 }
+
+cargarRecomendacion();
