@@ -480,7 +480,7 @@ function renderHorario() {
 
         div.dataset.id = p.codA;
 
-        const rowStart = p.horaIni - 8;
+        const rowStart = p.horaIni - 7;
         const rowSpan = p.horaFin - p.horaIni;
 
         div.style.gridColumn = p.dia;
