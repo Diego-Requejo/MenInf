@@ -84,6 +84,14 @@
                 <div class="lista" id="contenedor-lista-asignaturas">
                     <div class="item">Cargando asignaturas...</div>
                 </div>
+                
+                <button
+                    id="btn-toggle-colores"
+                    class="inactivo"
+                    onclick="toggleModoColores()"
+                >
+                    Colores: ON
+                </button>
             </div>
 
         </main>

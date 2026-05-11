@@ -3,8 +3,47 @@ let periodosPorCuatri = {
     2: []
 };
 
+let usarColoresAsignatura = false;
 
+const PALETA_BASE = [
 
+    // Rojos
+    0,
+    8,
+    15,
+
+    // Naranjas
+    25,
+    32,
+
+    // Amarillos
+    45,
+    55,
+
+    // Verdes
+    90,
+    105,
+    120,
+    135,
+
+    // Turquesas
+    160,
+    175,
+
+    // Azules
+    200,
+    215,
+    230,
+
+    // Morados
+    255,
+    270,
+    285,
+
+    // Rosas
+    310,
+    330
+];
 
 async function cargarRecomendacion() {
     const res = await fetch("GetResultadoJson");
@@ -104,8 +143,6 @@ function eliminarAsignatura(codA) {
 
 /* =========================================================
    CALCULAR LAYOUT SIN COLISIONES
-   Para cada periodo, encuentra el slot (columna lógica) que
-   esté libre en TODAS las franjas horarias que ocupa.
 ========================================================= */
 function calcularLayout(periodosSeleccionados) {
 
@@ -179,6 +216,254 @@ function cambiarCuatri(nuevo) {
     renderHorario();
 }
 
+function toggleModoColores() {
+
+    usarColoresAsignatura =
+        !usarColoresAsignatura;
+
+    actualizarBotonColores();
+
+    renderHorario();
+}
+
+function actualizarBotonColores() {
+
+    const btn =
+        document.getElementById("btn-toggle-colores");
+
+    if (!btn) return;
+
+    if (usarColoresAsignatura) {
+
+        btn.textContent =
+            "Colores: ON";
+
+        btn.classList.add("activo");
+        btn.classList.remove("inactivo");
+    }
+    else {
+
+        btn.textContent =
+            "Colores: OFF";
+
+        btn.classList.remove("activo");
+        btn.classList.add("inactivo");
+    }
+}
+
+function hashCode(str) {
+
+    str = String(str);
+
+    let hash = 0;
+
+    for (let i = 0; i < str.length; i++) {
+
+        hash =
+            ((hash << 5) - hash)
+            + str.charCodeAt(i);
+
+        hash |= 0;
+    }
+
+    return Math.abs(hash);
+}
+
+/* =========================================================
+   COLOR CONSISTENTE POR ASIGNATURA
+========================================================= */
+function getColorAsignatura(codA, esLaboratorio = false) {
+
+    const hash = hashCode(codA);
+
+    // Elegir hue desde paleta
+    const hue = (hash * 137.508) % 360;
+
+    // Pequeña variación para evitar clones exactos
+    const hueOffset =
+        (hash % 7) - 3;
+
+    const finalHue =
+        hue + hueOffset;
+
+    let saturation;
+    let lightness;
+
+    // TEORÍA
+    if (!esLaboratorio) {
+
+        saturation = 90;
+        lightness = 72;
+    }
+
+    // LABORATORIO
+    else {
+        saturation = 90;
+        lightness = 60;
+    }
+
+    const background =
+        `hsl(${finalHue}, ${saturation}%, ${lightness}%)`;
+
+    return background;
+}
+
+function calcularLayout(periodos) {
+
+    const layout = {};
+
+    // =====================================================
+    // AGRUPAR POR DÍA
+    // =====================================================
+
+    const porDia = {};
+
+    periodos.forEach(p => {
+
+        if (!porDia[p.dia]) {
+            porDia[p.dia] = [];
+        }
+
+        porDia[p.dia].push(p);
+    });
+
+    // =====================================================
+    // PROCESAR CADA DÍA
+    // =====================================================
+
+    Object.values(porDia).forEach(listaDia => {
+
+        // -------------------------------------------------
+        // 1. Construir grafo de conflictos
+        // -------------------------------------------------
+
+        const grafo = new Map();
+
+        listaDia.forEach(p => {
+            grafo.set(p.idPeriodo, []);
+        });
+
+        for (let i = 0; i < listaDia.length; i++) {
+
+            for (let j = i + 1; j < listaDia.length; j++) {
+
+                const a = listaDia[i];
+                const b = listaDia[j];
+
+                const solapan =
+                    a.horaIni < b.horaFin &&
+                    b.horaIni < a.horaFin;
+
+                if (solapan) {
+
+                    grafo.get(a.idPeriodo).push(b);
+                    grafo.get(b.idPeriodo).push(a);
+                }
+            }
+        }
+
+        // -------------------------------------------------
+        // 2. Encontrar componentes conexas
+        // -------------------------------------------------
+
+        const visitados = new Set();
+
+        const grupos = [];
+
+        listaDia.forEach(p => {
+
+            if (visitados.has(p.idPeriodo)) return;
+
+            const grupo = [];
+
+            const stack = [p];
+
+            visitados.add(p.idPeriodo);
+
+            while (stack.length) {
+
+                const actual = stack.pop();
+
+                grupo.push(actual);
+
+                grafo.get(actual.idPeriodo).forEach(vecino => {
+
+                    if (!visitados.has(vecino.idPeriodo)) {
+
+                        visitados.add(vecino.idPeriodo);
+
+                        stack.push(vecino);
+                    }
+                });
+            }
+
+            grupos.push(grupo);
+        });
+
+        // -------------------------------------------------
+        // 3. Layout por grupo
+        // -------------------------------------------------
+
+        grupos.forEach(grupo => {
+
+            grupo.sort((a, b) => {
+
+                if (a.horaIni !== b.horaIni) {
+                    return a.horaIni - b.horaIni;
+                }
+
+                return (b.horaFin - b.horaIni)
+                     - (a.horaFin - a.horaIni);
+            });
+
+            const columnas = [];
+
+            let totalCols = 0;
+
+            grupo.forEach(p => {
+
+                let col = 0;
+
+                while (true) {
+
+                    const conflicto = columnas[col]?.some(otro => {
+
+                        return (
+                            p.horaIni < otro.horaFin &&
+                            otro.horaIni < p.horaFin
+                        );
+                    });
+
+                    if (!conflicto) break;
+
+                    col++;
+                }
+
+                if (!columnas[col]) {
+                    columnas[col] = [];
+                }
+
+                columnas[col].push(p);
+
+                totalCols = Math.max(totalCols, col + 1);
+
+                layout[p.idPeriodo] = {
+                    col
+                };
+            });
+
+            // IMPORTANTÍSIMO:
+            // mismo totalCols para TODO el grupo
+            grupo.forEach(p => {
+
+                layout[p.idPeriodo].totalCols = totalCols;
+            });
+        });
+    });
+
+    return layout;
+}
+
 /* =========================================================
    RENDER HORARIO
 ========================================================= */
@@ -189,122 +474,68 @@ function renderHorario() {
 
     grid.innerHTML = "";
 
-    const periodosSeleccionados = periodosPorCuatri[cuatriActivo];
+   const periodosSeleccionados =
+    periodosPorCuatri[cuatriActivo];
 
-    const solapamientos = getSolapamientos();
+const layout = calcularLayout(periodosSeleccionados);
 
-    const renderData = [];
+const yaRenderizados = new Set();
 
-    /* =====================================================
-       1ª PASADA: cálculo inicial
-    ===================================================== */
-    periodosSeleccionados.forEach(p => {
+periodosSeleccionados.forEach(p => {
 
-        const esTeoria = p.grupo.startsWith("T");
+    if (yaRenderizados.has(p.idPeriodo)) return;
+    yaRenderizados.add(p.idPeriodo);
 
-        let maxSolape = 1;
-        let posicion = 0;
+    const div = document.createElement("div");
 
-        for (let h = p.horaIni; h < p.horaFin; h++) {
+    const esTeoria = p.grupo.startsWith("T");
 
-            const key = `${p.dia}-${h}`;
+    div.classList.add("bloque", "ver-asignatura");
 
-            if (solapamientos[key]) {
+    const esLaboratorio = !esTeoria;
 
-                maxSolape = Math.max(maxSolape, solapamientos[key].length);
+    if (esLaboratorio) {
+        div.classList.add("laboratorio");
+    }
 
-                posicion = Math.max(
-                    posicion,
-                    getPosicionEnSolape(p, h, solapamientos)
-                );
-            }
-        }
+    if (usarColoresAsignatura) {
+        const color = getColorAsignatura(
+            p.codA,
+            esLaboratorio
+        );
 
-        renderData.push({
-            p,
-            esTeoria,
-            maxSolape,
-            posicion
-        });
-    });
+        div.style.background = color;
+    }
+    else {
 
-    /* =====================================================
-        2ª PASADA: ocupación real por celda
-     ===================================================== */
+        // Modo clásico accesible
+        div.style.background =
+            esLaboratorio
+                ? "#ff7a1a"
+                : "#e9b86a";
+    }
 
-     const ocupacionCelda = {};
+    div.dataset.id = p.codA;
 
-     // 1. contar cuántos periodos ocupan cada celda (día-hora)
-     periodosSeleccionados.forEach(p => {
+    const rowStart = p.horaIni - 8;
+    const rowSpan = p.horaFin - p.horaIni;
 
-         for (let h = p.horaIni; h < p.horaFin; h++) {
+    div.style.gridColumn = p.dia;
+    div.style.gridRow = `${rowStart} / span ${rowSpan}`;
 
-             const key = `${p.dia}-${h}`;
+    // Layout robusto
+    const info = layout[p.idPeriodo];
 
-             if (!ocupacionCelda[key]) {
-                 ocupacionCelda[key] = 0;
-             }
+    const width = 100 / info.totalCols;
+    const left = width * info.col;
 
-             ocupacionCelda[key]++;
-         }
-     });
+    div.style.position = "relative";
+    div.style.width = `calc(${width}% - 4px)`;
+    div.style.left = `${left}%`;
 
-     // 2. calcular el máximo solape que afecta a cada periodo
-     const ajusteFinal = {};
+    div.innerText =
+        `${p.abreviatura} - ${p.grupo}`;
 
-     periodosSeleccionados.forEach(p => {
-
-         let maxSolape = 1;
-
-         for (let h = p.horaIni; h < p.horaFin; h++) {
-
-             const key = `${p.dia}-${h}`;
-
-             maxSolape = Math.max(maxSolape, ocupacionCelda[key] || 1);
-         }
-
-         ajusteFinal[p.idPeriodo] = maxSolape;
-     });
-
-    /* =====================================================
-       RENDER FINAL
-    ===================================================== */
-    const yaRenderizados = new Set();
-
-    renderData.forEach(r => {
-
-        const p = r.p;
-
-        if (yaRenderizados.has(p.idPeriodo)) return;
-        yaRenderizados.add(p.idPeriodo);
-
-        const div = document.createElement("div");
-
-        const esTeoria = r.esTeoria;
-
-        div.classList.add("bloque", "ver-asignatura");
-
-        if (!esTeoria) div.classList.add("laboratorio");
-
-        div.dataset.id = p.codA;
-
-        const col = p.dia;
-        const rowStart = p.horaIni - 8;
-        const rowSpan = p.horaFin - p.horaIni;
-
-        div.style.gridColumn = col;
-        div.style.gridRow = `${rowStart} / span ${rowSpan}`;
-
-        const max = ajusteFinal[p.idPeriodo];
-        const ancho = 100 / max;
-        const margen = ancho * r.posicion + 0.01;
-
-        div.style.width = `${ancho - 1}%`;
-        div.style.left = `${margen}%`;
-        div.style.position = "relative";
-
-        div.innerText = `${p.abreviatura} - ${p.grupo}`;
-
-        grid.appendChild(div);
-    });
+    grid.appendChild(div);
+});
 }

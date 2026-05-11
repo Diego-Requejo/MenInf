@@ -877,6 +877,7 @@ input {
 /* GRID HORARIO */
 .grid-horario {
     display: grid;
+    position: relative;
     grid-template-columns: repeat(5, 25vh);
     grid-template-rows: repeat(12, 50px);
     background: #0d0d3a;
@@ -886,19 +887,41 @@ input {
 
 /* BLOQUES */
 .bloque {
-    background: #e9b86a;
+    position: relative;
+    overflow: hidden;
+
     margin: 5px;
+
     border-radius: 15px;
+
     display: flex;
     align-items: center;
     justify-content: center;
+
     font-weight: bold;
-    color: #000000;
+
+    color: #111;
+
     cursor: pointer;
+
+    box-sizing: border-box;
+
+    padding: 6px;
+
+    text-align: center;
+
+    transition:
+        transform 0.15s ease,
+        filter 0.15s ease;
 }
 
-.bloque.laboratorio {
-    background: #ff7a1a;
+.bloque:hover {
+
+    filter: brightness(0.96);
+
+    transform: scale(1.02);
+
+    z-index: 10;
 }
 
 /* PANEL DERECHO */
@@ -948,6 +971,15 @@ input {
 
 .filtros button {
     flex: 1;
+    padding: 10px;
+    border-radius: 20px;
+    border: none;
+    cursor: pointer;
+}
+
+#btn-toggle-colores{
+    display: block;
+    margin: 10px auto 0 auto;
     padding: 10px;
     border-radius: 20px;
     border: none;
