@@ -69,43 +69,6 @@ function initHorario(mencion, cuatri1, cuatri2) {
 }
 
 /* =========================================================
-   AGRUPAR SOLAPAMIENTOS (día + hora)
-========================================================= */
-function getSolapamientos() {
-
-    const mapa = {};
-
-    periodosPorCuatri[cuatriActivo].forEach(p => {
-
-        for (let h = p.horaIni; h < p.horaFin; h++) {
-
-            const key = `${p.dia}-${h}`;
-
-            if (!mapa[key]) mapa[key] = [];
-
-            mapa[key].push(p);
-        }
-    });
-
-    return mapa;
-}
-
-/* =========================================================
-   POSICIÓN dentro del grupo de solapamiento
-========================================================= */
-function getPosicionEnSolape(p, h, solapamientos) {
-
-    const key = `${p.dia}-${h}`;
-    const grupo = solapamientos[key];
-
-    if (!grupo) return 0;
-
-    const ordenado = [...grupo].sort((a, b) => a.codA - b.codA);
-
-    return ordenado.findIndex(x => x.idPeriodo === p.idPeriodo);
-}
-
-/* =========================================================
    TOGGLE asignatura
 ========================================================= */
 function toggleAsignatura(codA) {
