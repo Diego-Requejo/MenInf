@@ -58,31 +58,7 @@
                     </div>
 
                     <!-- GRID -->
-                    <div class="grid-horario" id="grid-horario">
-
-                        <!-- LUNES -->
-                        <div class="bloque ver-asignatura" data-id="46922" style="grid-column:1; grid-row:2;">ICON</div>
-                        <div class="bloque laboratorio ver-asignatura" data-id="46921" style="grid-column:1; grid-row:3 / span 2;">ADBD L1</div>
-                        <div class="bloque laboratorio ver-asignatura" data-id="46922" style="grid-column:1; grid-row:5 / span 2;">ICON L4</div>
-                        <div class="bloque laboratorio ver-asignatura" data-id="46913" style="grid-column:1; grid-row:8 / span 2;">EDA K2</div>
-
-                        <!-- MARTES -->
-                        <div class="bloque ver-asignatura" data-id="46921" style="grid-column:2; grid-row:2;">ADBD</div>
-                        <div class="bloque ver-asignatura" data-id="46913" style="grid-column:2; grid-row:6;">EDA T1</div>
-
-                        <!-- MIÉRCOLES -->
-                        <div class="bloque ver-asignatura" data-id="46921" style="grid-column:3; grid-row:1;">ADBD</div>
-                        <div class="bloque laboratorio ver-asignatura" data-id="46921" style="grid-column:3; grid-row:11 / span 2;">ADBD L4</div>
-
-                        <!-- JUEVES -->
-                        <div class="bloque ver-asignatura" data-id="46922" style="grid-column:4; grid-row:1;">ICON</div>
-                        <div class="bloque ver-asignatura" data-id="46913" style="grid-column:4; grid-row:3;">EDA T1</div>
-                        <div class="bloque laboratorio ver-asignatura" data-id="46921" style="grid-column:4; grid-row:9 / span 2;">ADBD L1</div>
-
-                        <!-- VIERNES -->
-                        <div class="bloque laboratorio ver-asignatura" data-id="46921" style="grid-column:5; grid-row:3 / span 2;">ADBD L1</div>
-
-                    </div>
+                    <div class="grid-horario" id="grid-horario"> </div>
                 </div>
             </div>
 
