@@ -90,7 +90,7 @@
                     class="inactivo"
                     onclick="toggleModoColores()"
                 >
-                    Colores: ON
+                    Colores: OFF
                 </button>
             </div>
 
