@@ -162,13 +162,11 @@ public class RecomendadorMencion {
             double totalMencion = 0.0;
             List<Integer> codsCuatri1 = new ArrayList<>();
             List<Integer> codsCuatri2 = new ArrayList<>();
-            System.out.println(mencion);
  
             // Cursos 3 y 4, cuatris 1 y 2
             for (int curso = 3; curso <= 4; curso++) {
                 for (int cuatri = 1; cuatri <= 2; cuatri++) {
 
-                    System.out.println("Curso: "+curso+"; Cuatri: "+cuatri);
  
                     // Obligatorias de esta mención/curso/cuatri
                     List<Asignatura> obligatorias = getObligatorias(

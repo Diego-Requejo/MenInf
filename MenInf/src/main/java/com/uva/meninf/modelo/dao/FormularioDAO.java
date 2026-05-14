@@ -29,15 +29,32 @@ public class FormularioDAO {
         int year = Year.now().getValue();
 
         try {
-            if (superadas != null)
-                for (String cod : superadas)
-                    insertarCursada(conn, Integer.parseInt(cod), nomU, "superada", year,
-                                   contiene(favoritas, cod), contiene(odiadas, cod));
+            // Primero eliminar todas las cursadas anteriores del usuario
+            eliminarCursadasAnteriores(conn, nomU);
+            // Luego insertar las nuevas
+        if (superadas != null)
+            for (String cod : superadas)
+                insertarCursada(conn, Integer.parseInt(cod), nomU, "superada", year,
+                               contiene(favoritas, cod), contiene(odiadas, cod));
 
-            if (suspensas != null)
-                for (String cod : suspensas)
-                    insertarCursada(conn, Integer.parseInt(cod), nomU, "suspensa", year,
-                                   contiene(favoritas, cod), contiene(odiadas, cod));
+        if (suspensas != null)
+            for (String cod : suspensas)
+                insertarCursada(conn, Integer.parseInt(cod), nomU, "suspensa", year,
+                               contiene(favoritas, cod), contiene(odiadas, cod));
+
+        // Las marcadas como favoritas u odiadas pero no superadas ni suspensas
+        if (favoritas != null)
+            for (String cod : favoritas)
+                if (!contiene(superadas, cod) && !contiene(suspensas, cod))
+                    insertarCursada(conn, Integer.parseInt(cod), nomU, null, year,
+                                   true, contiene(odiadas, cod));
+
+        if (odiadas != null)
+            for (String cod : odiadas)
+                if (!contiene(superadas, cod) && !contiene(suspensas, cod)
+                        && !contiene(favoritas, cod))
+                    insertarCursada(conn, Integer.parseInt(cod), nomU, null, year,
+                                   false, true);
 
             guardarPreferenciaLenguaje(conn, nomU, "Python",           python);
             guardarPreferenciaLenguaje(conn, nomU, "Ensamblador MIPS", mips);
@@ -85,5 +102,14 @@ public class FormularioDAO {
         if (array == null) return false;
         for (String s : array) if (s.equals(valor)) return true;
         return false;
+    }
+    
+    private void eliminarCursadasAnteriores(Connection conn, String nomU) throws Exception {
+        PreparedStatement ps = conn.prepareStatement(
+            "DELETE FROM Cursada WHERE nomU = ?"
+        );
+        ps.setString(1, nomU);
+        ps.executeUpdate();
+        ps.close();
     }
 }
