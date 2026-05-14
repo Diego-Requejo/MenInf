@@ -39,7 +39,6 @@ document.addEventListener("DOMContentLoaded", () => {
 
 });
 
-let cuatriActivo = 1; 
 let todasAsignaturas = [];
 let textoBusqueda = "";
 let mencionFiltro = "";

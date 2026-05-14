@@ -52,6 +52,8 @@ public class DatosFormulario extends HttpServlet {
             // ── 4. OBTENER ASIGNATURAS DE 3º Y 4º ────────────────────────
             AsignaturaDAO asignaturaDAO = new AsignaturaDAO();
             List<Asignatura> asignaturas = asignaturaDAO.listarTerceroYCuarto();
+            
+            System.out.println(asignaturas.size());
 
             // ── 5. CALCULAR RECOMENDACIÓN ─────────────────────────────────
             RecomendadorMencion recomendador = new RecomendadorMencion();

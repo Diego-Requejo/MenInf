@@ -12,95 +12,111 @@ import java.util.*;
  */
 public class RecomendadorMencion {
 
-    // ── SLOTS DE OPTATIVAS (según el plan de estudios del PDF) ────────────
-    // Estructura: mencion -> curso -> cuatri -> lista de slots
-    // Cada slot es una lista de nombres de asignaturas que compiten entre sí
-    private static final Map<String, Map<Integer, Map<Integer, List<List<String>>>>> SLOTS_OPTATIVAS;
-
+    /**
+     * Estructura de optativas por mención/curso/cuatri.
+     * Cada entrada es un hueco optativo: una lista de nombres candidatos
+     * de los que se elegirá el de mayor puntuación.
+     *
+     * Formato: mencion -> curso -> cuatri -> lista de huecos
+     * Cada hueco es una List<String> con los nombres candidatos.
+     */
+    private static final Map<String, Map<Integer, Map<Integer, List<List<String>>>>> OPTATIVAS;
+ 
     static {
-        SLOTS_OPTATIVAS = new HashMap<>();
+        OPTATIVAS = new HashMap<>();
 
         // ── IS ────────────────────────────────────────────────────────────
         Map<Integer, Map<Integer, List<List<String>>>> is = new HashMap<>();
 
         Map<Integer, List<List<String>>> is3 = new HashMap<>();
         is3.put(1, List.of(
-            List.of("Seguridad de Redes y Sistemas",
-                    "Tecnologías para el Desarrollo del Software")
+            List.of("SEGURIDAD DE REDES Y SISTEMAS",
+                    "TECNOLOGIAS PARA EL DESARROLLO DE SOFTWARE")
         ));
         is3.put(2, List.of(
-            List.of("Servicios y Sistemas Web",
-                    "Técnicas de Aprendizaje Automático",
-                    "Computación Paralela")
+            List.of("SERVICIOS Y SISTEMAS WEB",
+                    "TÉCNICAS DE APRENDIZAJE AUTOMATICO",
+                    "COMPUTACIÓN PARALELA"),
+            List.of("SERVICIOS Y SISTEMAS WEB",
+                    "TÉCNICAS DE APRENDIZAJE AUTOMATICO",
+                    "COMPUTACIÓN PARALELA")
         ));
-        is.put(3, is3);
 
         Map<Integer, List<List<String>>> is4 = new HashMap<>();
         is4.put(1, List.of(
-            List.of("Sistemas Móviles"),
-            List.of("Arquitectura de Redes y Servicios", "Informática Forense")
+            List.of("SISTEMAS MÓVILES"),
+            List.of("ARQUITECTURA DE REDES Y SERVICIOS",
+                    "INFORMÁTICA FORENSE")
         ));
         is4.put(2, List.of(
-            List.of("Sistemas Empotrados", "Principios de Análisis Financiero")
+            List.of("SISTEMAS EMPOTRADOS",
+                    "MODELOS DE INVESTIGACIÓN OPERATIVA")
         ));
         is.put(4, is4);
-        SLOTS_OPTATIVAS.put("IS", is);
+        OPTATIVAS.put("IS", is);
 
         // ── TI ────────────────────────────────────────────────────────────
         Map<Integer, Map<Integer, List<List<String>>>> ti = new HashMap<>();
 
         Map<Integer, List<List<String>>> ti3 = new HashMap<>();
         ti3.put(1, List.of(
-            List.of("Sistemas Multimedia", "Arquitecturas de Redes y Servicios")
+            List.of("SISTEMAS MULTIMEDIA",
+                    "ARQUITECTURA DE REDES Y SERVICIOS")
         ));
         ti3.put(2, List.of(
-            List.of("Sistemas Empotrados"),
-            List.of("Computación Paralela", "Arquitecturas de Computadores Avanzadas")
+            List.of("SISTEMAS EMPOTRADOS"),
+            List.of("COMPUTACIÓN PARALELA",
+                    "ARQUITECTURAS DE COMPUTACIÓN AVANZADA")
         ));
         ti.put(3, ti3);
 
         Map<Integer, List<List<String>>> ti4 = new HashMap<>();
         ti4.put(1, List.of(
-            List.of("Informática Forense"),
-            List.of("Sistemas Móviles",
-                    "Sistemas de Información y Dirección de Organizaciones")
+            List.of("INFORMÁTICA FORENSE"),
+            List.of("SISTEMAS MÓVILES",
+                    "SISTEMAS DE INFORMACIÓN Y DIRECCIÓN DE ORGANIZACIONES")
         ));
         ti4.put(2, List.of(
-            List.of("Diseño de Hardware Específico",
-                    "Rendimiento y Evaluación de Computadores",
-                    "Hardware Empotrado")
+            List.of("RENDIMIENTO Y EVALUACIÓN DE COMPUTADORES",
+                    "HARDWARE EMPOTRADO")
         ));
         ti.put(4, ti4);
-        SLOTS_OPTATIVAS.put("TI", ti);
+        OPTATIVAS.put("TI", ti);
 
         // ── CO ────────────────────────────────────────────────────────────
         Map<Integer, Map<Integer, List<List<String>>>> co = new HashMap<>();
 
         Map<Integer, List<List<String>>> co3 = new HashMap<>();
         co3.put(1, List.of(
-            List.of("Códigos y Criptografía", "Programación de Aplicaciones Gráficas")
+            List.of("CODIGOS Y CRIPTOGRAFIA",
+                    "PROGRAMACIÓN DE APLICACIONES GRAFICAS")
         ));
         co3.put(2, List.of(
-            List.of("Computación Paralela",
-                    "Sistemas Avanzados de Integración de la Información"),
-            List.of("Servicios y Sistemas Web", "Inferencia Estadística I")
+            List.of("COMPUTACIÓN PARALELA",
+                    "SISTEMAS AVANZADOS DE INTEGRACION DE LA INFORMACION"),
+            List.of("SERVICIOS Y SISTEMAS WEB",
+                    "INFERENCIA ESTADISTICA I")
         ));
         co.put(3, co3);
 
         Map<Integer, List<List<String>>> co4 = new HashMap<>();
         co4.put(1, List.of(
-            List.of("Sistemas de Información y Dirección de Organizaciones",
-                    "Regresión y Anova", "Garantía y Seguridad de la Información",
-                    "Señales y Sistemas", "Estadística Descriptiva"),
-            List.of("Regresión y Anova", "Garantía y Seguridad de la Información",
-                    "Señales y Sistemas", "Estadística Descriptiva")
+            List.of("SISTEMAS DE INFORMACIÓN Y DIRECCIÓN DE ORGANIZACIONES",
+                    "REGRESIÓN Y ANOVA",
+                    "GARANTIA Y SEGURIDAD DE LA INFORMACION",
+                    "ESTADÍSTICA DESCRIPTIVA"),
+            List.of("REGRESIÓN Y ANOVA",
+                    "GARANTIA Y SEGURIDAD DE LA INFORMACION",
+                    "ESTADÍSTICA DESCRIPTIVA")
         ));
         co4.put(2, List.of(
-            List.of("Modelos de IO", "Evaluación y Rendimiento de Sistemas Software")
+            List.of("MODELOS PARA LA TOMA DE DECISISIONES",
+                    "EVALUACIÓN Y RENDIMIENTO DE SISTEMAS SOFTWARE")
         ));
         co.put(4, co4);
-        SLOTS_OPTATIVAS.put("CO", co);
+        OPTATIVAS.put("CO", co);
     }
+
 
     // ══════════════════════════════════════════════════════════════════════
     // MÉTODO PÚBLICO
@@ -125,52 +141,74 @@ public class RecomendadorMencion {
         Set<String> setSuperadas = toSet(superadas);
         Set<String> setSuspensas = toSet(suspensas);
 
-        // ── CALCULAR PUNTUACIÓN POR ASIGNATURA (cod -> puntuación) ────────
+        // Índice nombre -> Asignatura para búsqueda rápida
+        Map<String, Asignatura> porNombre = new HashMap<>();
+        for (Asignatura a : asignaturas) porNombre.put(a.getNombre(), a);
+ 
+        // ── CALCULAR PUNTUACIÓN POR ASIGNATURA ────────────────────────────
         Map<Integer, Double> puntuacionPorCod = calcularPuntuaciones(
             asignaturas, setFavoritas, setOdiadas,
             setSuperadas, setSuspensas, notasLenguajes
         );
-
-        // ── SELECCIÓN POR MENCIÓN Y CUATRIMESTRE ──────────────────────────
-        String[] menciones      = {"IS", "CO", "TI"};
-        int[][] cursosCuatris   = {{3, 1}, {3, 2}, {4, 1}, {4, 2}};
-
+ 
+        // ── SELECCIÓN Y PUNTUACIÓN POR MENCIÓN ───────────────────────────
+        String[] menciones    = {"IS", "CO", "TI"};
+ 
         Map<String, Double>        puntuacionMencion    = new HashMap<>();
         Map<String, List<Integer>> seleccionCuatri1Terc = new HashMap<>();
         Map<String, List<Integer>> seleccionCuatri2Terc = new HashMap<>();
-
+ 
         for (String mencion : menciones) {
             double totalMencion = 0.0;
+            List<Integer> codsCuatri1 = new ArrayList<>();
+            List<Integer> codsCuatri2 = new ArrayList<>();
+            System.out.println(mencion);
+ 
+            // Cursos 3 y 4, cuatris 1 y 2
+            for (int curso = 3; curso <= 4; curso++) {
+                for (int cuatri = 1; cuatri <= 2; cuatri++) {
 
-            for (int[] cc : cursosCuatris) {
-                int curso  = cc[0];
-                int cuatri = cc[1];
-                int limite = (curso == 4 && cuatri == 2) ? 1 : 5;
-
-                List<Asignatura> seleccion = seleccionarAsignaturas(
-                    asignaturas, mencion, curso, cuatri, limite, puntuacionPorCod
-                );
-
-                for (Asignatura asig : seleccion)
-                    totalMencion += puntuacionPorCod.getOrDefault(asig.getCod(), 0.0);
-
-                if (curso == 3) {
-                    List<Integer> cods = new ArrayList<>();
-                    for (Asignatura asig : seleccion) cods.add(asig.getCod());
-                    if (cuatri == 1) seleccionCuatri1Terc.put(mencion, cods);
-                    else             seleccionCuatri2Terc.put(mencion, cods);
+                    System.out.println("Curso: "+curso+"; Cuatri: "+cuatri);
+ 
+                    // Obligatorias de esta mención/curso/cuatri
+                    List<Asignatura> obligatorias = getObligatorias(
+                        asignaturas, mencion, curso, cuatri
+                    );
+ 
+                    // Optativas elegidas para este hueco
+                    List<Asignatura> optativas = elegirOptativas(
+                        mencion, curso, cuatri, porNombre, puntuacionPorCod
+                    );
+ 
+                    // Combinar
+                    List<Asignatura> seleccion = new ArrayList<>(obligatorias);
+                    seleccion.addAll(optativas);
+ 
+                    // Acumular puntuación de la mención
+                    for (Asignatura a : seleccion)
+                        totalMencion += puntuacionPorCod.getOrDefault(a.getCod(), 0.0);
+ 
+                    // Guardar códigos de 3º
+                    if (curso == 3) {
+                        List<Integer> cods = new ArrayList<>();
+                        for (Asignatura a : seleccion) cods.add(a.getCod());
+                        if (cuatri == 1) codsCuatri1 = cods;
+                        else             codsCuatri2 = cods;
+                    }
                 }
             }
-
+ 
             puntuacionMencion.put(mencion, totalMencion);
+            seleccionCuatri1Terc.put(mencion, codsCuatri1);
+            seleccionCuatri2Terc.put(mencion, codsCuatri2);
         }
-
+ 
         // ── MENCIÓN RECOMENDADA ───────────────────────────────────────────
         String mencionRecomendada = puntuacionMencion.entrySet().stream()
             .max(Map.Entry.comparingByValue())
             .map(Map.Entry::getKey)
             .orElse("IS");
-
+ 
         return new ResultadoFormulario(
             mencionRecomendada,
             seleccionCuatri1Terc.getOrDefault(mencionRecomendada, new ArrayList<>()),
@@ -182,12 +220,38 @@ public class RecomendadorMencion {
     // ══════════════════════════════════════════════════════════════════════
     // MÉTODOS PRIVADOS
     // ══════════════════════════════════════════════════════════════════════
+    
+    /**
+     * Devuelve las asignaturas obligatorias de una mención/curso/cuatri.
+     */
+    private List<Asignatura> getObligatorias(List<Asignatura> asignaturas,
+                                              String mencion, int curso, int cuatri) {
+        List<Asignatura> resultado = new ArrayList<>();
+        String men;
+        for (Asignatura asig : asignaturas) {
+            for (AsignaturaMencion am : asig.getMenciones()) {
+                men=am.getMencion().getTipo().name();
+                if ((men.equals(mencion) || men.equals("PreMencion"))
+                        && am.getCursoAcademico() == curso
+                        && asig.getCuatri() == cuatri
+                        && am.isObligatoriedad()) {
+                    resultado.add(asig);
+                    break;
+                }
+            }
+        }
+        
+        
+            
+        return resultado;
+    }
 
     private Map<Integer, Double> calcularPuntuaciones(
             List<Asignatura> asignaturas,
             Set<String> setFavoritas, Set<String> setOdiadas,
             Set<String> setSuperadas, Set<String> setSuspensas,
             Map<String, Integer> notasLenguajes) {
+        
 
         Map<Integer, Double> puntuacionPorCod = new HashMap<>();
 
@@ -213,47 +277,36 @@ public class RecomendadorMencion {
         return puntuacionPorCod;
     }
 
-    private List<Asignatura> seleccionarAsignaturas(
-            List<Asignatura> todasAsignaturas,
-            String mencion, int curso, int cuatri,
-            int limite,
-            Map<Integer, Double> puntuacionPorCod) {
+   /**
+     * Para cada hueco optativo de una mención/curso/cuatri,
+     * elige la asignatura candidata con mayor puntuación.
+     */
+    private List<Asignatura> elegirOptativas(String mencion, int curso, int cuatri,
+                                          Map<String, Asignatura> porNombre,
+                                          Map<Integer, Double> puntuacionPorCod) {
 
-        List<Asignatura> obligatorias = new ArrayList<>();
-        Map<String, Asignatura> optativasPorNombre = new HashMap<>();
+        List<Asignatura> elegidas = new ArrayList<>();
+        Set<Integer> yaElegidosCods = new HashSet<>(); // evita repetir
 
-        for (Asignatura asig : todasAsignaturas) {
-            for (AsignaturaMencion am : asig.getMenciones()) {
-                if (am.getMencion().getTipo().name().equals(mencion)
-                        && am.getCursoAcademico() == curso
-                        && asig.getCuatri() == cuatri) {
-                    if (am.isObligatoriedad()) obligatorias.add(asig);
-                    else                       optativasPorNombre.put(asig.getNombre(), asig);
-                    break;
-                }
-            }
-        }
-
-        List<Asignatura> seleccion = new ArrayList<>(obligatorias);
-
-        List<List<String>> slots = SLOTS_OPTATIVAS
+        List<List<String>> huecos = OPTATIVAS
             .getOrDefault(mencion, new HashMap<>())
             .getOrDefault(curso,   new HashMap<>())
             .getOrDefault(cuatri,  new ArrayList<>());
 
-        for (List<String> slot : slots) {
-            if (seleccion.size() >= limite) break;
-            slot.stream()
-                .map(optativasPorNombre::get)
-                .filter(a -> a != null)
+        for (List<String> candidatas : huecos) {
+            candidatas.stream()
+                .map(porNombre::get)
+                .filter(Objects::nonNull)
+                .filter(a -> !yaElegidosCods.contains(a.getCod())) // excluir ya elegidas
                 .max(Comparator.comparingDouble(
                     a -> puntuacionPorCod.getOrDefault(a.getCod(), 0.0)))
                 .ifPresent(mejor -> {
-                    if (seleccion.size() < limite) seleccion.add(mejor);
+                    elegidas.add(mejor);
+                    yaElegidosCods.add(mejor.getCod());
                 });
         }
 
-        return seleccion;
+        return elegidas;
     }
 
     private Set<String> toSet(String[] array) {

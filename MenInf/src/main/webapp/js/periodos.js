@@ -3,69 +3,67 @@ let periodosPorCuatri = {
     2: []
 };
 
+
 let usarColoresAsignatura = false;
 
 const PALETA_BASE = [
-
     // Rojos
-    0,
-    8,
-    15,
-
+    0, 8, 15,
     // Naranjas
-    25,
-    32,
-
+    25, 32,
     // Amarillos
-    45,
-    55,
-
+    45, 55,
     // Verdes
-    90,
-    105,
-    120,
-    135,
-
+    90, 105, 120, 135,
     // Turquesas
-    160,
-    175,
-
+    160, 175,
     // Azules
-    200,
-    215,
-    230,
-
+    200, 215, 230,
     // Morados
-    255,
-    270,
-    285,
-
+    255, 270, 285,
     // Rosas
-    310,
-    330
+    310, 330
 ];
 
-async function cargarRecomendacion() {
-    const res = await fetch("GetResultadoJson");
-    
-    if (!res.ok) {
-        console.warn("No hay recomendación en sesión");
-        return;
-    }
+/* =========================================================
+   CARGA INICIAL DEL HORARIO RECOMENDADO
+   Llamado desde horario.jsp con los datos inyectados desde sesión.
+   Carga los periodos de cada asignatura recomendada y renderiza.
+========================================================= */
+async function initHorario(mencion, cuatri1, cuatri2) {
 
-    const data = await res.json();
-    // data.mencion  → "IS" | "TI" | "CO"
-    // data.cuatri1  → [46901, 46902, ...]
-    // data.cuatri2  → [46906, 46907, ...]
-
-    initHorario(data.mencion, data.cuatri1, data.cuatri2);
-}
-
-function initHorario(mencion, cuatri1, cuatri2) {
-    console.log("Mención:", mencion);
+    console.log("Mención recomendada:", mencion);
     console.log("Cuatri 1:", cuatri1);
     console.log("Cuatri 2:", cuatri2);
-    // reservado para inicialización futura
+
+    // Cargar periodos de las asignaturas del cuatri 1
+    for (const cod of cuatri1) {
+        await cargarPeriodosEnCuatri(cod, 1);
+    }
+
+    // Cargar periodos de las asignaturas del cuatri 2
+    for (const cod of cuatri2) {
+        await cargarPeriodosEnCuatri(cod, 2);
+    }
+
+    // Mostrar el cuatrimestre 1 por defecto
+    cuatriActivo = 1;
+    renderHorario();
+}
+
+/* =========================================================
+   CARGA LOS PERIODOS DE UNA ASIGNATURA EN UN CUATRI CONCRETO
+========================================================= */
+async function cargarPeriodosEnCuatri(codA, cuatri) {
+
+    try {
+        const res = await fetch(`ObtenerPeriodos?id=${codA}`);
+        if (!res.ok) return;
+        const periodos = await res.json();
+        periodosPorCuatri[cuatri].push(...periodos);
+    } catch (e) {
+        console.warn(`Error cargando periodos de asignatura ${codA}:`, e);
+    }
 }
 
 /* =========================================================
@@ -74,7 +72,6 @@ function initHorario(mencion, cuatri1, cuatri2) {
 function toggleAsignatura(codA) {
 
     const lista = periodosPorCuatri[cuatriActivo];
-
     const yaExiste = lista.some(p => p.codA === codA);
 
     if (yaExiste) {
@@ -87,7 +84,6 @@ function toggleAsignatura(codA) {
     fetch(`ObtenerPeriodos?id=${codA}`)
         .then(res => res.json())
         .then(periodos => {
-
             periodosPorCuatri[cuatriActivo].push(...periodos);
             renderHorario();
         });
@@ -104,41 +100,42 @@ function eliminarAsignatura(codA) {
     renderHorario();
 }
 
+/* =========================================================
+   CAMBIAR CUATRIMESTRE
+========================================================= */
 function cambiarCuatri(nuevo) {
+
     cuatriActivo = nuevo;
+
+    document.getElementById("btn-cuatri-1").className =
+        nuevo === 1 ? "activo" : "inactivo";
+    document.getElementById("btn-cuatri-2").className =
+        nuevo === 2 ? "activo" : "inactivo";
+
     renderHorario();
 }
 
+/* =========================================================
+   MODO COLORES
+========================================================= */
 function toggleModoColores() {
 
-    usarColoresAsignatura =
-        !usarColoresAsignatura;
-
+    usarColoresAsignatura = !usarColoresAsignatura;
     actualizarBotonColores();
-
     renderHorario();
 }
 
 function actualizarBotonColores() {
 
-    const btn =
-        document.getElementById("btn-toggle-colores");
-
+    const btn = document.getElementById("btn-toggle-colores");
     if (!btn) return;
 
     if (usarColoresAsignatura) {
-
-        btn.textContent =
-            "Colores: ON";
-
+        btn.textContent = "Colores: ON";
         btn.classList.add("activo");
         btn.classList.remove("inactivo");
-    }
-    else {
-
-        btn.textContent =
-            "Colores: OFF";
-
+    } else {
+        btn.textContent = "Colores: OFF";
         btn.classList.remove("activo");
         btn.classList.add("inactivo");
     }
@@ -147,208 +144,109 @@ function actualizarBotonColores() {
 function hashCode(str) {
 
     str = String(str);
-
     let hash = 0;
 
     for (let i = 0; i < str.length; i++) {
-
-        hash =
-            ((hash << 5) - hash)
-            + str.charCodeAt(i);
-
+        hash = ((hash << 5) - hash) + str.charCodeAt(i);
         hash |= 0;
     }
 
     return Math.abs(hash);
 }
 
-/* =========================================================
-   COLOR CONSISTENTE POR ASIGNATURA
-========================================================= */
 function getColorAsignatura(codA, esLaboratorio = false) {
 
     const hash = hashCode(codA);
-
-    // Elegir hue desde paleta
     const hue = (hash * 137.508) % 360;
+    const hueOffset = (hash % 7) - 3;
+    const finalHue = hue + hueOffset;
 
-    // Pequeña variación para evitar clones exactos
-    const hueOffset =
-        (hash % 7) - 3;
+    const saturation = 90;
+    const lightness = esLaboratorio ? 60 : 72;
 
-    const finalHue =
-        hue + hueOffset;
-
-    let saturation;
-    let lightness;
-
-    // TEORÍA
-    if (!esLaboratorio) {
-
-        saturation = 90;
-        lightness = 72;
-    }
-
-    // LABORATORIO
-    else {
-        saturation = 90;
-        lightness = 60;
-    }
-
-    const background =
-        `hsl(${finalHue}, ${saturation}%, ${lightness}%)`;
-
-    return background;
+    return `hsl(${finalHue}, ${saturation}%, ${lightness}%)`;
 }
 
+/* =========================================================
+   CALCULAR LAYOUT SIN COLISIONES
+========================================================= */
 function calcularLayout(periodos) {
 
     const layout = {};
 
-    // =====================================================
-    // AGRUPAR POR DÍA
-    // =====================================================
-
     const porDia = {};
-
     periodos.forEach(p => {
-
-        if (!porDia[p.dia]) {
-            porDia[p.dia] = [];
-        }
-
+        if (!porDia[p.dia]) porDia[p.dia] = [];
         porDia[p.dia].push(p);
     });
 
-    // =====================================================
-    // PROCESAR CADA DÍA
-    // =====================================================
-
     Object.values(porDia).forEach(listaDia => {
 
-        // -------------------------------------------------
-        // 1. Construir grafo de conflictos
-        // -------------------------------------------------
-
+        // Grafo de conflictos
         const grafo = new Map();
-
-        listaDia.forEach(p => {
-            grafo.set(p.idPeriodo, []);
-        });
+        listaDia.forEach(p => grafo.set(p.idPeriodo, []));
 
         for (let i = 0; i < listaDia.length; i++) {
-
             for (let j = i + 1; j < listaDia.length; j++) {
-
                 const a = listaDia[i];
                 const b = listaDia[j];
-
-                const solapan =
-                    a.horaIni < b.horaFin &&
-                    b.horaIni < a.horaFin;
-
+                const solapan = a.horaIni < b.horaFin && b.horaIni < a.horaFin;
                 if (solapan) {
-
                     grafo.get(a.idPeriodo).push(b);
                     grafo.get(b.idPeriodo).push(a);
                 }
             }
         }
 
-        // -------------------------------------------------
-        // 2. Encontrar componentes conexas
-        // -------------------------------------------------
-
+        // Componentes conexas
         const visitados = new Set();
-
         const grupos = [];
 
         listaDia.forEach(p => {
-
             if (visitados.has(p.idPeriodo)) return;
-
             const grupo = [];
-
             const stack = [p];
-
             visitados.add(p.idPeriodo);
-
             while (stack.length) {
-
                 const actual = stack.pop();
-
                 grupo.push(actual);
-
                 grafo.get(actual.idPeriodo).forEach(vecino => {
-
                     if (!visitados.has(vecino.idPeriodo)) {
-
                         visitados.add(vecino.idPeriodo);
-
                         stack.push(vecino);
                     }
                 });
             }
-
             grupos.push(grupo);
         });
 
-        // -------------------------------------------------
-        // 3. Layout por grupo
-        // -------------------------------------------------
-
+        // Layout por grupo
         grupos.forEach(grupo => {
 
             grupo.sort((a, b) => {
-
-                if (a.horaIni !== b.horaIni) {
-                    return a.horaIni - b.horaIni;
-                }
-
-                return (b.horaFin - b.horaIni)
-                     - (a.horaFin - a.horaIni);
+                if (a.horaIni !== b.horaIni) return a.horaIni - b.horaIni;
+                return (b.horaFin - b.horaIni) - (a.horaFin - a.horaIni);
             });
 
             const columnas = [];
-
             let totalCols = 0;
 
             grupo.forEach(p => {
-
                 let col = 0;
-
                 while (true) {
-
-                    const conflicto = columnas[col]?.some(otro => {
-
-                        return (
-                            p.horaIni < otro.horaFin &&
-                            otro.horaIni < p.horaFin
-                        );
-                    });
-
+                    const conflicto = columnas[col]?.some(otro =>
+                        p.horaIni < otro.horaFin && otro.horaIni < p.horaFin
+                    );
                     if (!conflicto) break;
-
                     col++;
                 }
-
-                if (!columnas[col]) {
-                    columnas[col] = [];
-                }
-
+                if (!columnas[col]) columnas[col] = [];
                 columnas[col].push(p);
-
                 totalCols = Math.max(totalCols, col + 1);
-
-                layout[p.idPeriodo] = {
-                    col
-                };
+                layout[p.idPeriodo] = { col };
             });
 
-            // IMPORTANTÍSIMO:
-            // mismo totalCols para TODO el grupo
             grupo.forEach(p => {
-
                 layout[p.idPeriodo].totalCols = totalCols;
             });
         });
@@ -367,11 +265,8 @@ function renderHorario() {
 
     grid.innerHTML = "";
 
-   const periodosSeleccionados =
-    periodosPorCuatri[cuatriActivo];
-
+    const periodosSeleccionados = periodosPorCuatri[cuatriActivo];
     const layout = calcularLayout(periodosSeleccionados);
-
     const yaRenderizados = new Set();
 
     periodosSeleccionados.forEach(p => {
@@ -380,57 +275,36 @@ function renderHorario() {
         yaRenderizados.add(p.idPeriodo);
 
         const div = document.createElement("div");
-
         const esTeoria = p.grupo.startsWith("T");
-
-        div.classList.add("bloque", "ver-asignatura");
-
         const esLaboratorio = !esTeoria;
 
-        if (esLaboratorio) {
-            div.classList.add("laboratorio");
-        }
+        div.classList.add("bloque", "ver-asignatura");
+        if (esLaboratorio) div.classList.add("laboratorio");
 
         if (usarColoresAsignatura) {
-            const color = getColorAsignatura(
-                p.codA,
-                esLaboratorio
-            );
-
-            div.style.background = color;
-        }
-        else {
-
-            // Modo clásico accesible
-            div.style.background =
-                esLaboratorio
-                    ? "#ff7a1a"
-                    : "#e9b86a";
+            div.style.background = getColorAsignatura(p.codA, esLaboratorio);
+        } else {
+            div.style.background = esLaboratorio ? "#ff7a1a" : "#e9b86a";
         }
 
         div.dataset.id = p.codA;
 
         const rowStart = p.horaIni - 7;
-        const rowSpan = p.horaFin - p.horaIni;
+        const rowSpan  = p.horaFin - p.horaIni;
 
         div.style.gridColumn = p.dia;
-        div.style.gridRow = `${rowStart} / span ${rowSpan}`;
+        div.style.gridRow    = `${rowStart} / span ${rowSpan}`;
 
-        // Layout robusto
-        const info = layout[p.idPeriodo];
-
+        const info  = layout[p.idPeriodo];
         const width = 100 / info.totalCols;
-        const left = width * info.col;
+        const left  = width * info.col;
 
         div.style.position = "relative";
-        div.style.width = `calc(${width}% - 4px)`;
-        div.style.left = `${left}%`;
+        div.style.width    = `calc(${width}% - 4px)`;
+        div.style.left     = `${left}%`;
 
-        div.innerText =
-            `${p.abreviatura} - ${p.grupo}`;
+        div.innerText = `${p.abreviatura} - ${p.grupo}`;
 
         grid.appendChild(div);
     });
 }
-
-cargarRecomendacion();

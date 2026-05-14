@@ -90,7 +90,7 @@
                     <div class="campo">
                         <label>Mencion que está cursando</label>
                         <select name="mencion">
-                            <option value="PreMención" <%= "PreMención".equals(mencion) ? "selected" : "" %>>Ninguna (no elegida)</option>
+                            <option value="PreMencion" <%= "PreMencion".equals(mencion) ? "selected" : "" %>>Ninguna (no elegida)</option>
                             <option value="TI"         <%= "TI".equals(mencion)         ? "selected" : "" %>>Tecnologías de la Información (TI)</option>
                             <option value="IS"         <%= "IS".equals(mencion)         ? "selected" : "" %>>Ingeniería del Software (IS)</option>
                             <option value="CO"         <%= "CO".equals(mencion)         ? "selected" : "" %>>Computación (CO)</option>

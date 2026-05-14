@@ -88,7 +88,7 @@ public class Usuario {
 
             PreparedStatement ps = conn.prepareStatement(
                 "INSERT INTO Usuario (nombre, contraseña, biografia, mencion, tfg, practicas) " +
-                "VALUES (?, ?, NULL, 'PreMención', FALSE, FALSE)"
+                "VALUES (?, ?, NULL, 'PreMencion', FALSE, FALSE)"
             );
             ps.setString(1, nombre);
             ps.setString(2, password);

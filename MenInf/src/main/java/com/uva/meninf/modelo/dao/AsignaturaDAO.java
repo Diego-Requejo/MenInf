@@ -28,7 +28,7 @@ public class AsignaturaDAO {
 
     /**
      * Devuelve todas las asignaturas de 3º y 4º con sus menciones,
-     * lenguajes y prerrequisitos. Excluye PreMención.
+     * lenguajes y prerrequisitos.
      */
     public List<Asignatura> listarTerceroYCuarto() throws Exception {
         List<Asignatura> lista = new ArrayList<>();
@@ -39,7 +39,7 @@ public class AsignaturaDAO {
                 "SELECT DISTINCT a.cod, a.nombre, a.abreviatura, a.cuatri " +
                 "FROM Asignatura a " +
                 "JOIN AsignaturasMencion am ON a.cod = am.codA " +
-                "WHERE am.mencion != 'PreMención' AND am.cursoAcademico IN (3, 4) " +
+                "WHERE am.cursoAcademico IN (3, 4) " +
                 "ORDER BY a.nombre"
             );
             ResultSet rs = ps.executeQuery();
@@ -69,7 +69,7 @@ public class AsignaturaDAO {
     private void cargarMenciones(Connection conn, Asignatura asig) throws Exception {
         PreparedStatement ps = conn.prepareStatement(
             "SELECT mencion, cursoAcademico, obligatoriedad " +
-            "FROM AsignaturasMencion WHERE codA = ? AND mencion != 'PreMención'"
+            "FROM AsignaturasMencion WHERE codA = ?"
         );
         ps.setInt(1, asig.getCod());
         ResultSet rs = ps.executeQuery();
