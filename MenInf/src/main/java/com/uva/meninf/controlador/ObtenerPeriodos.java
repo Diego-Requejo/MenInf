@@ -4,6 +4,9 @@ import jakarta.servlet.http.*;
 import jakarta.servlet.*;
 import java.io.*;
 import java.util.ArrayList;
+
+import com.uva.meninf.modelo.dao.AsignaturaDAO;
+import com.uva.meninf.modelo.dao.PeriodoDAO;
 import com.uva.meninf.modelo.entidades.Asignatura;
 import com.uva.meninf.modelo.entidades.Periodo;
 
@@ -24,8 +27,8 @@ public class ObtenerPeriodos extends HttpServlet {
 
             int cod = Integer.parseInt(idStr);
             
-            ArrayList<Periodo> lista =
-                    Periodo.obtenerPorAsignatura(cod);
+            PeriodoDAO periodoDao = new PeriodoDAO();
+            ArrayList<Periodo> lista = periodoDao.obtenerPorAsignatura(cod);
 
             StringBuilder json = new StringBuilder();
 
@@ -35,7 +38,8 @@ public class ObtenerPeriodos extends HttpServlet {
 
                 Periodo p = lista.get(i);
                 
-                Asignatura a = Asignatura.obtenerPorId(p.getCodA());
+                AsignaturaDAO asignaturaDAO = new AsignaturaDAO();
+                Asignatura a = asignaturaDAO.obtenerPorId(p.getCodA());
 
                 json.append("{");
 

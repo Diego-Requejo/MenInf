@@ -87,7 +87,7 @@
                 <h2>ASIGNATURAS DISPONIBLES</h2>
 
                 <div class="tabs">
-                    <button id="btn-cuatri-1" class="activo">1º CUATRI</button>
+                    <button id="btn-cuatri-1" class="inactivo">1º CUATRI</button>
                     <button id="btn-cuatri-2" class="inactivo">2º CUATRI</button>
                 </div>
 

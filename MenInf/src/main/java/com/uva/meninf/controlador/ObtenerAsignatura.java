@@ -8,6 +8,8 @@ import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+
+import com.uva.meninf.modelo.dao.AsignaturaDAO;
 import com.uva.meninf.modelo.entidades.Asignatura;
 
 public class ObtenerAsignatura extends HttpServlet {
@@ -28,8 +30,8 @@ public class ObtenerAsignatura extends HttpServlet {
 
         try {
             int cod = Integer.parseInt(idStr);
-            Asignatura asig = Asignatura.obtenerPorId(cod);
-
+            AsignaturaDAO dao = new AsignaturaDAO();
+            Asignatura asig = dao.obtenerPorId(cod);
             if (asig != null) {
                 // Construcción manual de JSON
                 StringBuilder json = new StringBuilder();
@@ -100,6 +102,9 @@ public class ObtenerAsignatura extends HttpServlet {
         } catch (NumberFormatException e) {
             response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
             out.print("{\"error\": \"Código inválido\"}");
+        } catch (Exception e) {
+            response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
+            out.print("{\"error\": \"" + e.getMessage() + "\"}");
         } finally {
             out.close();
         }

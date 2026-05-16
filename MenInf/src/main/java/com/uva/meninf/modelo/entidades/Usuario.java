@@ -8,6 +8,7 @@ import javax.naming.Context;
 import javax.naming.InitialContext;
 import javax.sql.DataSource;
 
+import com.uva.meninf.modelo.dao.AsignaturaDAO;
 import com.uva.meninf.modelo.enums.EstadoAsignatura;
 import com.uva.meninf.modelo.relaciones.Cursada;
 
@@ -152,7 +153,8 @@ public class Usuario {
 
             while (rsCursadas.next()) {
                 int codAsig = rsCursadas.getInt("codAsignatura");
-                Asignatura asig = Asignatura.obtenerPorId(codAsig);
+                AsignaturaDAO asignaturaDAO = new AsignaturaDAO();
+                Asignatura asig = asignaturaDAO.obtenerPorId(codAsig);
                 
                 if( asig != null ){
                     String estadoStr = rsCursadas.getString("estado");

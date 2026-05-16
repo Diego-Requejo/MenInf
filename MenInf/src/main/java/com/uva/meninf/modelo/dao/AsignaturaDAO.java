@@ -3,6 +3,7 @@ package com.uva.meninf.modelo.dao;
 import com.uva.meninf.modelo.entidades.Asignatura;
 import com.uva.meninf.modelo.entidades.Lenguaje;
 import com.uva.meninf.modelo.entidades.Mencion;
+import com.uva.meninf.modelo.entidades.Profesor;
 import com.uva.meninf.modelo.enums.MencionTipo;
 import com.uva.meninf.modelo.relaciones.AsignaturaMencion;
 
@@ -66,6 +67,62 @@ public class AsignaturaDAO {
         return lista;
     }
 
+    public List<Asignatura> listarTodas() throws Exception {
+        List<Asignatura> lista = new ArrayList<>();
+        Connection conn = null;
+        try {
+            conn = getConnection();
+            PreparedStatement ps = conn.prepareStatement("SELECT * FROM Asignatura ORDER BY nombre ASC");
+            ResultSet rs = ps.executeQuery();     
+
+            while (rs.next()) {
+                Asignatura asig = new Asignatura();
+                asig.setCod(rs.getInt("cod"));
+                asig.setNombre(rs.getString("nombre"));
+                asig.setAbreviatura(rs.getString("abreviatura"));
+                asig.setCuatri(rs.getInt("cuatri"));            
+                
+                cargarMenciones(conn, asig); 
+                lista.add(asig);
+            }
+            rs.close(); 
+            ps.close();
+        } finally {
+            if (conn != null) conn.close();
+        }
+        return lista;
+    }
+
+    public Asignatura obtenerPorId(int cod) throws Exception {
+        Asignatura asig = null;
+        Connection conn = null;
+        try {
+            conn = getConnection();
+            String sql = "SELECT * FROM Asignatura WHERE cod = ?";
+            PreparedStatement ps = conn.prepareStatement(sql);
+            ps.setInt(1, cod);
+            ResultSet rs = ps.executeQuery();
+
+            if (rs.next()) {
+                asig = new Asignatura();
+                asig.setCod(rs.getInt("cod"));
+                asig.setNombre(rs.getString("nombre"));
+                asig.setAbreviatura(rs.getString("abreviatura"));
+                asig.setCuatri(rs.getInt("cuatri"));
+                
+                cargarMenciones(conn, asig);
+                cargarLenguajes(conn, asig);
+                cargarPrerrequisitos(conn, asig);
+                cargarProfesores(conn, asig);
+            }
+            rs.close();
+            ps.close();
+        } finally {
+            if (conn != null) conn.close();
+        }
+        return asig;
+    }
+
     private void cargarMenciones(Connection conn, Asignatura asig) throws Exception {
         PreparedStatement ps = conn.prepareStatement(
             "SELECT mencion, cursoAcademico, obligatoriedad " +
@@ -103,17 +160,36 @@ public class AsignaturaDAO {
 
     private void cargarPrerrequisitos(Connection conn, Asignatura asig) throws Exception {
         PreparedStatement ps = conn.prepareStatement(
-            "SELECT a2.cod FROM Asignatura a2 " +
-            "JOIN AsignaturaPrerrequisito ap ON a2.cod = ap.codAPre WHERE ap.codA = ?"
+            "SELECT a2.cod, a2.nombre, a2.abreviatura "+
+            "FROM Asignatura a2 JOIN AsignaturaPrerrequisito ap ON a2.cod = ap.codAPre " +
+            "WHERE ap.codA = ?"
         );
         ps.setInt(1, asig.getCod());
         ResultSet rs = ps.executeQuery();
         while (rs.next()) {
             Asignatura req = new Asignatura();
             req.setCod(rs.getInt("cod"));
-            asig.addRequisito(req);
+            req.setNombre(rs.getString("nombre"));
+            req.setAbreviatura(rs.getString("abreviatura"));
+            if (req.getCod() != asig.getCod()) 
+                asig.addRequisito(req);
         }
         rs.close();
+        ps.close();
+    }
+
+    private void cargarProfesores(Connection conn, Asignatura asig) throws Exception {
+        PreparedStatement ps = conn.prepareStatement(
+            "SELECT p.nombre, p.correo FROM Profesor p " +
+            "JOIN ProfesorAsignatura pa ON p.correo = pa.correoP WHERE pa.codA = ?"
+        );
+        ps.setInt(1, asig.getCod());
+        ResultSet rs = ps.executeQuery();
+        while(rs.next()){
+            Profesor prof = new Profesor(rs.getString("nombre"), rs.getString("correo"));
+            asig.addProfesor(prof);
+        } 
+        rs.close(); 
         ps.close();
     }
 }

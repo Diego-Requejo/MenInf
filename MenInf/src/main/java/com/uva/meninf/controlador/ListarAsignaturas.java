@@ -7,6 +7,8 @@ import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+
+import com.uva.meninf.modelo.dao.AsignaturaDAO;
 import com.uva.meninf.modelo.entidades.Asignatura;
 
 public class ListarAsignaturas extends HttpServlet {
@@ -19,7 +21,8 @@ public class ListarAsignaturas extends HttpServlet {
         PrintWriter out = response.getWriter();
         
         try {
-            List<Asignatura> lista = Asignatura.listarTodas();
+            AsignaturaDAO dao = new AsignaturaDAO();
+            List<Asignatura> lista = dao.listarTodas();
             
             // Construcción manual de Array JSON
             StringBuilder json = new StringBuilder();
