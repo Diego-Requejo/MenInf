@@ -34,6 +34,8 @@ public class MostrarProgreso extends HttpServlet {
             Context ctx = new InitialContext();
             DataSource ds = (DataSource) ctx.lookup("java:comp/env/jdbc/meninf");
             Connection conn = ds.getConnection();
+            
+            boolean tfg=false, practicas=false;
 
             // ── Datos básicos del usuario ──────────────────────────────────
             PreparedStatement psU = conn.prepareStatement(
@@ -42,6 +44,8 @@ public class MostrarProgreso extends HttpServlet {
             psU.setString(1, nomU);
             ResultSet rsU = psU.executeQuery();
             if (rsU.next()) {
+                tfg = rsU.getBoolean("tfg");
+                practicas = rsU.getBoolean("practicas");
                 String bio = rsU.getString("biografia");
                 request.setAttribute("biografia",  bio != null ? bio : "");
                 request.setAttribute("mencion",    rsU.getString("mencion"));
@@ -52,13 +56,7 @@ public class MostrarProgreso extends HttpServlet {
             psU.close();
 
             // ── Total de asignaturas ───────────────────────────────────────
-            PreparedStatement psTotal = conn.prepareStatement(
-                "SELECT COUNT(*) FROM Asignatura"
-            );
-            ResultSet rsTotal = psTotal.executeQuery();
-            int totalAsignaturas = rsTotal.next() ? rsTotal.getInt(1) : 0;
-            rsTotal.close();
-            psTotal.close();
+            int totalAsignaturas = 40;
 
             // ── Cursadas del usuario (cod -> nombre) ───────────────────────
             Map<Integer, String> superadas = new LinkedHashMap<>();
@@ -90,8 +88,14 @@ public class MostrarProgreso extends HttpServlet {
             conn.close();
 
             // ── Calcular progreso ──────────────────────────────────────────
-            int porcentaje = totalAsignaturas > 0
-                ? (superadas.size() * 100 / totalAsignaturas) : 0;
+            // Calcular progreso
+            int progreso = superadas.size();
+            if(tfg)
+                progreso+=2;
+            if(practicas)
+                progreso+=2;
+            int porcentaje = (int) Math.round((progreso * 100.0) / totalAsignaturas);
+
             double circunferencia = 2 * Math.PI * 54;
             double dashoffset = circunferencia * (1.0 - porcentaje / 100.0);
 
