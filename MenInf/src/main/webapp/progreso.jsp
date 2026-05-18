@@ -81,7 +81,7 @@
                 </div>
 
                 <!-- Formulario de edición de perfil -->
-                <form action="ActualizarPerfil" method="POST" style="margin: 0;">
+                <form action="ActualizarPerfil" method="POST" style="margin: 0;" class="form-perfil">
 
                     <div class="campo">
                         <label>Nombre de usuario: <b><%= nomU %></b></label>
@@ -106,13 +106,13 @@
                         <label class="titulo-secundario">TFG y prácticas en empresa</label>
                         <div class="fila-controles">
                             <label class="etiqueta-checkbox">
-                                <input type="checkbox" name="practicas" value="true" <%= tienePracticas ? "checked" : "" %>>
-                                Prácticas en empresa
-                            </label>
-                            <label class="etiqueta-checkbox">
-                                <input type="checkbox" name="tfg" value="true" <%= tieneTfg ? "checked" : "" %>>
-                                TFG defendido
-                            </label>
+                            <input type="checkbox" name="practicas" value="true" <%= tienePracticas ? "checked" : "" %>>
+                            <span>Prácticas en empresa</span>
+                        </label>
+                        <label class="etiqueta-checkbox">
+                            <input type="checkbox" name="tfg" value="true" <%= tieneTfg ? "checked" : "" %>>
+                            <span>TFG defendido</span>
+                        </label>
                         </div>
                     </div>
 
