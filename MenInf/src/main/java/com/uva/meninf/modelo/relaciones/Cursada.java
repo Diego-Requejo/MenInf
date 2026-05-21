@@ -1,10 +1,5 @@
 package com.uva.meninf.modelo.relaciones;
 
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import javax.naming.Context;
-import javax.naming.InitialContext;
-import javax.sql.DataSource;
 
 import com.uva.meninf.modelo.entidades.Asignatura;
 import com.uva.meninf.modelo.entidades.Usuario;
@@ -49,27 +44,5 @@ public class Cursada {
     public Asignatura getAsignatura() { return asignatura; }
     public void setAsignatura(Asignatura asignatura) { this.asignatura = asignatura; }
 
-    public void guardarBD(){
-        try{
-            Context ctx = new InitialContext();
-            DataSource ds = (DataSource) ctx.lookup("java:comp/env/jdbc/meninf");   
-            Connection conn = ds.getConnection();
-
-            PreparedStatement ps = conn.prepareStatement("INSERT INTO Cursada (nomU, codA, estado, año, favorita, odiada) VALUES (?, ?, ?, ?, ?, ?)");
-
-            ps.setString(1, usuario.getNombre());
-            ps.setInt(2, asignatura.getCod());
-            ps.setString(3, estado.name());
-            ps.setInt(4, año);
-            ps.setBoolean(5, favorita);
-            ps.setBoolean(6, odiada);
-
-            ps.executeUpdate();
-            ps.close();
-            conn.close();
-        } catch (Exception e) { 
-            System.err.println("Error al guardar cursada: " + e.getMessage());
-        }
-    }
     
 }
