@@ -8,6 +8,7 @@ import javax.naming.Context;
 import javax.naming.InitialContext;
 import javax.sql.DataSource;
 
+import com.uva.meninf.modelo.dto.DatosProgreso;
 import com.uva.meninf.modelo.entidades.Asignatura;
 import com.uva.meninf.modelo.entidades.Usuario;
 import com.uva.meninf.modelo.enums.EstadoAsignatura;
@@ -176,4 +177,45 @@ public class UsuarioDAO {
         }
         return loginCorrecto;
     }
+
+    public DatosProgreso obtenerDatosProgreso(String nomU) throws Exception {
+    DatosProgreso datos = new DatosProgreso();
+    Connection conn = getConnection();
+    try {
+        PreparedStatement psU = conn.prepareStatement(
+            "SELECT biografia, mencion, tfg, practicas FROM Usuario WHERE nombre = ?"
+        );
+        psU.setString(1, nomU);
+        ResultSet rsU = psU.executeQuery();
+        if (rsU.next()) {
+            String bio = rsU.getString("biografia");
+            datos.biografia = bio != null ? bio : "";
+            datos.mencion   = rsU.getString("mencion");
+            datos.tfg       = rsU.getBoolean("tfg");
+            datos.practicas = rsU.getBoolean("practicas");
+        }
+        rsU.close(); psU.close();
+
+        PreparedStatement psC = conn.prepareStatement(
+            "SELECT a.cod, a.nombre, c.estado, c.favorita, c.odiada " +
+            "FROM Cursada c JOIN Asignatura a ON c.codA = a.cod " +
+            "WHERE c.nomU = ? ORDER BY a.nombre"
+        );
+        psC.setString(1, nomU);
+        ResultSet rsC = psC.executeQuery();
+        while (rsC.next()) {
+            int    cod    = rsC.getInt("cod");
+            String nombre = rsC.getString("nombre");
+            String estado = rsC.getString("estado");
+            if ("superada".equals(estado))    datos.superadas.put(cod, nombre);
+            if ("suspensa".equals(estado))    datos.suspensas.put(cod, nombre);
+            if (rsC.getBoolean("favorita"))   datos.favoritas.put(cod, nombre);
+            if (rsC.getBoolean("odiada"))     datos.odiadas.put(cod, nombre);
+        }
+        rsC.close(); psC.close();
+    } finally {
+        conn.close();
+    }
+    return datos;
+}
 }
