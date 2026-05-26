@@ -50,15 +50,17 @@ public class UsuarioDAO {
      * Llamado desde ActualizarPerfil.
      */
     public void actualizarPerfil(String nomU, String biografia,
-                                  String mencion) throws Exception {
+                                  String mencion, boolean tfg, boolean practicas) throws Exception {
         Connection conn = null;
         try {
             conn = getConnection();
-            String sql = "UPDATE Usuario SET biografia = ?, mencion = ? WHERE nombre = ?";
+            String sql = "UPDATE Usuario SET biografia = ?, mencion = ?, tfg = ?, practicas = ? WHERE nombre = ?";
             PreparedStatement ps = conn.prepareStatement(sql);
             ps.setString(1, biografia);
             ps.setString(2, mencion);
-            ps.setString(3, nomU);
+            ps.setBoolean(3, tfg);
+            ps.setBoolean(4, practicas);
+            ps.setString(5, nomU);
             ps.executeUpdate();
 
             ps.close();

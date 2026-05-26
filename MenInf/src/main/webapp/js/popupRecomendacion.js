@@ -1,7 +1,7 @@
 document.addEventListener("DOMContentLoaded", function() {
     // Referencias a los elementos del DOM
-    const popup = document.getElementById("popup");
-    const btnCerrar = document.getElementById("btn-cerrar-popup");
+    const popup = document.getElementById("popupRecomendacion");
+    const btnCerrar = document.getElementById("btn-cerrar-recomendacion");
     const btnVerProgreso = document.getElementById("btn-ver-progreso");
     const btnVerHorario = document.getElementById("btn-ver-horario");
 

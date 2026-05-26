@@ -2,7 +2,11 @@ package com.uva.meninf.modelo.dao;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.time.Year;
+import java.util.HashMap;
+import java.util.Map;
+
 import javax.naming.Context;
 import javax.naming.InitialContext;
 import javax.sql.DataSource;
@@ -112,5 +116,26 @@ public class FormularioDAO {
         ps.setString(1, nomU);
         ps.executeUpdate();
         ps.close();
+    }
+
+    public Map<String, Integer> obtenerPreferenciasLenguaje(String nomU) throws Exception {
+        Map<String, Integer> prefLenguaje = new HashMap<>();
+        Connection conn = null;
+        try {
+            conn = getConnection();
+            PreparedStatement ps = conn.prepareStatement(
+                "SELECT nomL, nota FROM PreferenciaLenguaje WHERE nomU = ?"
+            );
+            ps.setString(1, nomU);
+            ResultSet rs = ps.executeQuery();
+            while (rs.next()) {
+                prefLenguaje.put(rs.getString("nomL"), rs.getInt("nota"));
+            }
+            rs.close();
+            ps.close();
+        } finally {
+            if (conn != null) conn.close();
+        }
+        return prefLenguaje;
     }
 }

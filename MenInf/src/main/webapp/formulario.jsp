@@ -1,32 +1,22 @@
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
-<%@ page import="java.sql.*, javax.sql.DataSource, javax.naming.*, java.util.*" %>
-<%
-    List<String[]> asignaturas = new ArrayList<>();
-    try {
-        Context ctx = new InitialContext();
-        DataSource ds = (DataSource) ctx.lookup("java:comp/env/jdbc/meninf");
-        Connection conn = ds.getConnection();
+<%@ page import="java.util.*" %>
+<%@ page import="com.uva.meninf.modelo.dao.AsignaturaDAO" %>
+<%@ page import="com.uva.meninf.modelo.dao.UsuarioDAO" %>
+<%@ page import="com.uva.meninf.modelo.dao.FormularioDAO" %>
+<%@ page import="com.uva.meninf.modelo.entidades.Asignatura" %>
+<%@ page import="com.uva.meninf.modelo.dto.DatosProgreso" %>
 
-        PreparedStatement ps = conn.prepareStatement(
-            "SELECT cod, nombre FROM Asignatura ORDER BY nombre"
-        );
-        ResultSet rs = ps.executeQuery();
-        while (rs.next()) {
-            asignaturas.add(new String[]{
-                rs.getString("cod"),
-                rs.getString("nombre")
-            });
-        }
-        rs.close();
-        ps.close();
-        conn.close();
+<%
+    List<Asignatura> asignaturas = new ArrayList<>();
+    try {
+        AsignaturaDAO asigDAO = new AsignaturaDAO();
+        asignaturas = asigDAO.listarTodas();
     } catch (Exception e) {
         out.println("<p>Error cargando asignaturas: " + e.getMessage() + "</p>");
     }
 %>
 
 <%
-    // Datos previos del usuario
     String[] codsFavoritas = new String[0];
     String[] codsOdiadas   = new String[0];
     String[] codssuperadas = new String[0];
@@ -36,49 +26,16 @@
     String nomU = (String) session.getAttribute("usuario");
     if (nomU != null) {
         try {
-            Context ctx2 = new InitialContext();
-            DataSource ds2 = (DataSource) ctx2.lookup("java:comp/env/jdbc/meninf");
-            Connection conn2 = ds2.getConnection();
+            UsuarioDAO usuarioDAO = new UsuarioDAO();
+            DatosProgreso progreso = usuarioDAO.obtenerDatosProgreso(nomU);
 
-            // Cargar cursadas
-            PreparedStatement psCursadas = conn2.prepareStatement(
-                "SELECT codA, estado, favorita, odiada FROM Cursada WHERE nomU = ?"
-            );
-            psCursadas.setString(1, nomU);
-            ResultSet rsCursadas = psCursadas.executeQuery();
+            codsFavoritas = progreso.favoritas.keySet().stream().map(String::valueOf).toArray(String[]::new);
+            codsOdiadas   = progreso.odiadas.keySet().stream().map(String::valueOf).toArray(String[]::new);
+            codssuperadas = progreso.superadas.keySet().stream().map(String::valueOf).toArray(String[]::new);
+            codsSuspensas = progreso.suspensas.keySet().stream().map(String::valueOf).toArray(String[]::new);
 
-            List<String> favList  = new ArrayList<>();
-            List<String> odiaList = new ArrayList<>();
-            List<String> supList  = new ArrayList<>();
-            List<String> susList  = new ArrayList<>();
-            while (rsCursadas.next()) {
-                String cod    = rsCursadas.getString("codA");
-                String estado = rsCursadas.getString("estado");
-                if (rsCursadas.getBoolean("favorita")) favList.add(cod);
-                if (rsCursadas.getBoolean("odiada"))   odiaList.add(cod);
-                if ("superada".equals(estado)) supList.add(cod);
-                if ("suspensa".equals(estado)) susList.add(cod);
-            }
-            rsCursadas.close();
-            psCursadas.close();
-
-            codsFavoritas = favList.toArray(new String[0]);
-            codsOdiadas   = odiaList.toArray(new String[0]);
-            codssuperadas  = supList.toArray(new String[0]);
-            codsSuspensas = susList.toArray(new String[0]);
-
-            // Cargar preferencias de lenguajes
-            PreparedStatement psLenguajes = conn2.prepareStatement(
-                "SELECT nomL, nota FROM PreferenciaLenguaje WHERE nomU = ?"
-            );
-            psLenguajes.setString(1, nomU);
-            ResultSet rsLenguajes = psLenguajes.executeQuery();
-            while (rsLenguajes.next()) {
-                notasLenguajes.put(rsLenguajes.getString("nomL"), rsLenguajes.getInt("nota"));
-            }
-            rsLenguajes.close();
-            psLenguajes.close();
-            conn2.close();
+            FormularioDAO formDAO = new FormularioDAO();
+            notasLenguajes = formDAO.obtenerPreferenciasLenguaje(nomU);
         } catch (Exception e) {
             out.println("<p>Error cargando datos previos: " + e.getMessage() + "</p>");
         }
@@ -87,6 +44,7 @@
 
 <%!
     boolean contiene(String[] array, String valor) {
+        if (array == null) return false;
         for (String s : array)
             if (s.equals(valor)) return true;
         return false;
@@ -207,10 +165,9 @@
                 <div class="columna-asignaturas">
                     <label for="favoritas">Asignaturas favoritas<span style="color: red;">*</span></label>
                     <select id="favoritas" name="favoritas" multiple required>
-                        <% for (String[] a : asignaturas) { %>
-                            <option value="<%= a[0] %>"
-                                <%= contiene(codsFavoritas, a[0]) ? "selected" : "" %>>
-                                <%= a[1] %>
+                        <% for (Asignatura a : asignaturas) { %>
+                            <option value="<%= a.getCod() %>" <%= contiene(codsFavoritas, String.valueOf(a.getCod())) ? "selected" : "" %>>
+                                <%= a.getNombre() %>
                             </option>
                         <% } %>
                     </select>
@@ -219,10 +176,9 @@
                 <div class="columna-asignaturas">
                     <label for="odiadas">Asignaturas más odiadas<span style="color: red;">*</span></label>
                     <select id="odiadas" name="odiadas" multiple required>
-                        <% for (String[] a : asignaturas) { %>
-                            <option value="<%= a[0] %>"
-                                <%= contiene(codsOdiadas, a[0]) ? "selected" : "" %>>
-                                <%= a[1] %>
+                        <% for (Asignatura a : asignaturas) { %>
+                            <option value="<%= a.getCod() %>" <%= contiene(codsOdiadas, String.valueOf(a.getCod())) ? "selected" : "" %>>
+                                <%= a.getNombre() %>
                             </option>
                         <% } %>
                     </select>
@@ -231,10 +187,9 @@
                 <div class="columna-asignaturas">
                     <label for="superadas">Asignaturas superadas</label>
                     <select id="superadas" name="superadas" multiple>
-                        <% for (String[] a : asignaturas) { %>
-                            <option value="<%= a[0] %>"
-                                <%= contiene(codssuperadas, a[0]) ? "selected" : "" %>>
-                                <%= a[1] %>
+                        <% for (Asignatura a : asignaturas) { %>
+                            <option value="<%= a.getCod() %>" <%= contiene(codssuperadas, String.valueOf(a.getCod())) ? "selected" : "" %>>
+                                <%= a.getNombre() %>
                             </option>
                         <% } %>
                     </select>
@@ -243,10 +198,9 @@
                 <div class="columna-asignaturas">
                     <label for="suspensas">Asignaturas suspensas</label>
                     <select id="suspensas" name="suspensas" multiple>
-                        <% for (String[] a : asignaturas) { %>
-                            <option value="<%= a[0] %>"
-                                <%= contiene(codsSuspensas, a[0]) ? "selected" : "" %>>
-                                <%= a[1] %>
+                        <% for (Asignatura a : asignaturas) { %>
+                            <option value="<%= a.getCod() %>" <%= contiene(codsSuspensas, String.valueOf(a.getCod())) ? "selected" : "" %>>
+                                <%= a.getNombre() %>
                             </option>
                         <% } %>
                     </select>
