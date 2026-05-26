@@ -7,7 +7,6 @@ import javax.naming.Context;
 import javax.naming.InitialContext;
 import javax.sql.DataSource;
 
-
 /**
  * DAO responsable exclusivamente de persistir los datos
  * del formulario de afinidad académica en la base de datos.
