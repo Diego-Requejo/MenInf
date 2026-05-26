@@ -25,14 +25,14 @@ public class DatosFormulario extends HttpServlet {
         response.setContentType("text/html;charset=UTF-8");
         request.setCharacterEncoding("UTF-8");
 
-        // ── 1. COMPROBAR SESIÓN ───────────────────────────────────────────
+        // 1. COMPROBAR SESIÓN 
         String nomU = (String) request.getSession().getAttribute("usuario");
         if (nomU == null) {
             response.sendRedirect("index.html");
             return;
         }
 
-        // ── 2. RECOGER DATOS DEL FORMULARIO ───────────────────────────────
+        // 2. RECOGER DATOS DEL FORMULARIO
         String[] favoritas = request.getParameterValues("favoritas");
         String[] odiadas   = request.getParameterValues("odiadas");
         String[] superadas = request.getParameterValues("superadas");
@@ -42,26 +42,39 @@ public class DatosFormulario extends HttpServlet {
         String mips      = request.getParameter("mips");
         String nivelJava = request.getParameter("nivelJava");
         String c         = request.getParameter("c");
+        
+        // 3. VALIDACIÓN de datos 
+        if (hayInterseccion(favoritas, odiadas)) {
+            request.setAttribute("errorValidacion", "Error: No puedes seleccionar la misma asignatura como favorita y odiada a la vez.");
+            request.getRequestDispatcher("formulario.jsp").forward(request, response);
+            return;
+        }
+        
+        if (hayInterseccion(superadas, suspensas)) {
+            request.setAttribute("errorValidacion", "Error: No puedes seleccionar la misma asignatura como superada y suspensa a la vez.");
+            request.getRequestDispatcher("formulario.jsp").forward(request, response);
+            return;
+        }
 
         try {
-            // ── 3. PERSISTIR EN BD ────────────────────────────────────────
+            // 4. PERSISTIR EN BD
             FormularioDAO formularioDAO = new FormularioDAO();
             formularioDAO.guardarFormulario(nomU, favoritas, odiadas, superadas, suspensas,
                                             python, mips, nivelJava, c);
 
-            // ── 4. OBTENER ASIGNATURAS DE 3º Y 4º ────────────────────────
+            // 5. OBTENER ASIGNATURAS DE 3º Y 4º 
             AsignaturaDAO asignaturaDAO = new AsignaturaDAO();
             List<Asignatura> asignaturas = asignaturaDAO.listarTerceroYCuarto();
             
 
-            // ── 5. CALCULAR RECOMENDACIÓN ─────────────────────────────────
+            // 6. CALCULAR RECOMENDACIÓN 
             RecomendadorMencion recomendador = new RecomendadorMencion();
             ResultadoFormulario resultado = recomendador.calcularResultado(
                 asignaturas, favoritas, odiadas, superadas, suspensas,
                 python, mips, nivelJava, c
             );
 
-            // ── 6. GUARDAR EN SESIÓN Y REDIRIGIR ─────────────────────────
+            // 7. GUARDAR EN SESIÓN Y REDIRIGIR 
             // El array se guarda en sesión para que el JS del horario pueda leerlo
             // via un servlet GetResultadoJson que lo serializa a JSON
             request.getSession().setAttribute("resultadoFormulario", resultado);
@@ -70,5 +83,20 @@ public class DatosFormulario extends HttpServlet {
         } catch (Exception e) {
             response.getWriter().println("<p>Error: " + e.getMessage() + "</p>");
         }
+    }
+    
+    // Función auxiliar para comprobar si un elemento se repite en ambos arrays
+    private boolean hayInterseccion(String[] array1, String[] array2) {
+        if (array1 == null || array2 == null) {
+            return false;
+        }
+        for (String val1 : array1) {
+            for (String val2 : array2) {
+                if (val1.equals(val2)) {
+                    return true;
+                }
+            }
+        }
+        return false;
     }
 }

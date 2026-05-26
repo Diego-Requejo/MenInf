@@ -124,6 +124,16 @@
         <form action="DatosFormulario" method="POST">
 
             <h1>Formulario de afinidad académica</h1>
+            
+            <%-- Bloque para mostrar errores provenientes del Servlet --%>
+            <% 
+                String errorValidacion = (String) request.getAttribute("errorValidacion");
+                if (errorValidacion != null) { 
+            %>
+                <div style="color: white; background-color: #d9534f; padding: 15px; margin-bottom: 20px; border-radius: 4px; text-align: center; font-weight: bold; border: 1px solid #d43f3a;">
+                    <%= errorValidacion %>
+                </div>
+            <% } %>
 
             <div class="grid-asignaturas">
 
