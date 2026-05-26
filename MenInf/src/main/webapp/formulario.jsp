@@ -26,7 +26,6 @@
 %>
 
 <%
-    //
     // Datos previos del usuario
     String[] codsFavoritas = new String[0];
     String[] codsOdiadas   = new String[0];
@@ -35,7 +34,6 @@
     Map<String, Integer> notasLenguajes = new HashMap<>();
 
     String nomU = (String) session.getAttribute("usuario");
-
     if (nomU != null) {
         try {
             Context ctx2 = new InitialContext();
@@ -53,7 +51,6 @@
             List<String> odiaList = new ArrayList<>();
             List<String> supList  = new ArrayList<>();
             List<String> susList  = new ArrayList<>();
-
             while (rsCursadas.next()) {
                 String cod    = rsCursadas.getString("codA");
                 String estado = rsCursadas.getString("estado");
@@ -82,7 +79,6 @@
             rsLenguajes.close();
             psLenguajes.close();
             conn2.close();
-
         } catch (Exception e) {
             out.println("<p>Error cargando datos previos: " + e.getMessage() + "</p>");
         }
@@ -109,6 +105,77 @@
         <div class="popup" id="popup">
             <div id="contenido-popup"></div>
         </div>
+
+        <% Boolean mostrarPopup = (Boolean) request.getAttribute("mostrarPopup"); %>
+        <div class="popup <%= (mostrarPopup != null && mostrarPopup) ? "activo" : "" %>" id="popupRecomendacion">
+            <div id="contenido-popup-recomendacion">
+                <% if (mostrarPopup != null && mostrarPopup) { 
+                    String mencionRec = (String) request.getAttribute("mencionRecomendada");
+                    List<String> nombresC1 = (List<String>) request.getAttribute("nombresCuatri1");
+                    List<String> nombresC2 = (List<String>) request.getAttribute("nombresCuatri2");
+                %>
+                    <div class="contenedor-detalle-asignatura">
+                        <div class="header-asignatura">
+                            <h1 class="titulo0">RECOMENDACIÓN ACADÉMICA</h1>
+                            <div class="cerrar-asignatura" id="btn-cerrar-recomendacion">X</div>
+                        </div>
+                        
+                        <div style="margin-bottom: 20px; text-align: center;">
+                            <h2 class="titulo2" style="font-size: 1.6rem;">
+                                Mención recomendada: <span style="color: #feebba; font-weight: bold;"><%= mencionRec %></span>
+                            </h2>
+                            <h2 class="titulo2" style="font-size: 1.6rem;">
+                                Asignaturas recomendadas:
+                            </h2>
+                        </div>
+
+                        <%-- Usamos tu clase nativa "especificaciones" que crea el grid de 3 columnas --%>
+                        <div class="especificaciones">
+                            
+                            <div class="caja-izquierda-asignaturas">
+                                <div>
+                                    <div class="titulo2" style="margin-bottom: 10px;">1er Cuatrimestre</div>
+                                    <%-- Usamos tu clase nativa "lista-asignaturas" para crear el recuadro con scroll --%>
+                                    <div class="lista-asignaturas">
+                                        <% if (nombresC1 == null || nombresC1.isEmpty()) { %>
+                                            <div class="elemento-lista">No hay asignaturas recomendadas para este periodo</div>
+                                        <% } else { 
+                                            for (String n : nombresC1) { %>
+                                                <div class="elemento-lista">• <%= n %></div>
+                                        <%  } 
+                                           } %>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="divisor"></div>
+
+                            <div class="caja-derecha-asignaturas">
+                                <div>
+                                    <div class="titulo2" style="margin-bottom: 10px;">2º Cuatrimestre</div>
+                                    <div class="lista-asignaturas">
+                                        <% if (nombresC2 == null || nombresC2.isEmpty()) { %>
+                                            <div class="elemento-lista">No hay asignaturas recomendadas para este periodo</div>
+                                        <% } else { 
+                                            for (String n : nombresC2) { %>
+                                                <div class="elemento-lista">• <%= n %></div>
+                                        <%  } 
+                                           } %>
+                                    </div>
+                                </div>
+                            </div>
+
+                        </div>
+
+                        <div style="display: flex; gap: 20px; justify-content: center; margin-top: 35px; padding-bottom: 10px;">
+                            <button type="button" id="btn-ver-progreso" class="boton-enviar" style="width: auto; padding: 10px 30px; cursor: pointer;">Ver mi progreso</button>
+                            <button type="button" id="btn-ver-horario" class="boton-enviar" style="width: auto; padding: 10px 30px; background-color: #28a745; border-color: #28a745; cursor: pointer;">Ver mi horario</button>
+                        </div>
+                    </div>
+                <% } %>
+            </div>
+        </div>
+
         <header>
             <div class="icono">
                 <a href="./index.html">
@@ -187,7 +254,6 @@
 
             </div>
 
-            <!-- Valoraciones de lenguajes -->
             <div class="grid-lenguajes">
 
                 <div class="valoracion">
@@ -241,5 +307,7 @@
         </form>
 
         <script src="./js/popup.js"></script>
+        <%-- NUEVO: Script de control independiente para el popup de recomendación --%>
+        <script src="./js/popupRecomendacion.js"></script>
     </body>
 </html>

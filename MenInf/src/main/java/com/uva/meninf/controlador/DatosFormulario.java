@@ -1,6 +1,7 @@
 package com.uva.meninf.controlador;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 
 import jakarta.servlet.ServletException;
@@ -74,11 +75,33 @@ public class DatosFormulario extends HttpServlet {
                 python, mips, nivelJava, c
             );
 
-            // 7. GUARDAR EN SESIÓN Y REDIRIGIR 
+            // 7. GUARDAR EN SESIÓN 
             // El array se guarda en sesión para que el JS del horario pueda leerlo
             // via un servlet GetResultadoJson que lo serializa a JSON
             request.getSession().setAttribute("resultadoFormulario", resultado);
-            response.sendRedirect("horario.jsp");
+            // ── 8. PREPARAR DATOS PARA EL POPUP EN EL JSP ─────────────────
+            Object[] resArray = resultado.comoArray();
+            String mencion = (String) resArray[0];
+            List<Integer> idsC1 = (List<Integer>) resArray[1];
+            List<Integer> idsC2 = (List<Integer>) resArray[2];
+
+            List<String> nombresC1 = new ArrayList<>();
+            for (Integer id : idsC1) {
+                nombresC1.add(buscarNombreAsignatura(id, asignaturas));
+            }
+
+            List<String> nombresC2 = new ArrayList<>();
+            for (Integer id : idsC2) {
+                nombresC2.add(buscarNombreAsignatura(id, asignaturas));
+            }
+
+            // Enviamos los datos directamente al request para el JSP
+            request.setAttribute("mencionRecomendada", mencion);
+            request.setAttribute("nombresCuatri1", nombresC1);
+            request.setAttribute("nombresCuatri2", nombresC2);
+            request.setAttribute("mostrarPopup", true); // Bandera para abrir el popup
+
+            request.getRequestDispatcher("formulario.jsp").forward(request, response);
 
         } catch (Exception e) {
             response.getWriter().println("<p>Error: " + e.getMessage() + "</p>");
@@ -98,5 +121,14 @@ public class DatosFormulario extends HttpServlet {
             }
         }
         return false;
+    }
+    
+    private String buscarNombreAsignatura(int cod, List<Asignatura> asignaturas) {
+        for (Asignatura a : asignaturas) {
+            if (a.getCod() == cod) {
+                return a.getNombre();
+            }
+        }
+        return "Asignatura (" + cod + ")";
     }
 }

@@ -864,6 +864,28 @@ input {
     cursor:pointer;
 }
 
+/**********************************************/
+/***** POP-UP DE RECOMENDACIÓN DE MENCIÓN *****/
+/**********************************************/
+#popupRecomendacion {
+    top: 50%;
+    left: 50%;
+    right: auto;
+    
+    width: 60%;
+    min-width: 600px;
+    max-width: 900px;
+    height: auto;
+    max-height: 85vh; 
+    overflow-y: auto;
+    
+    transform: translate(-50%, -45%);
+}
+
+#popupRecomendacion.activo {
+    transform: translate(-50%, -50%);
+}
+
 /******************************/
 /***** Estilo del horario *****/
 /******************************/
