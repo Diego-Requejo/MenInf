@@ -1,0 +1,25 @@
+# Build (Maven)
+target/
+*.war
+*.class
+
+# IntelliJ IDEA
+.idea/
+*.iml
+
+# NetBeans
+nbproject/
+nb-configuration.xml
+nbactions.xml
+
+# Eclipse
+.project
+.classpath
+.settings/
+
+# VS Code
+.vscode/
+
+# Sistema operativo
+.DS_Store
+Thumbs.db
