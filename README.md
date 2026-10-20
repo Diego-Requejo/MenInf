@@ -51,8 +51,6 @@ Proyecto desarrollado en equipo para la asignatura **Servicios y Sistemas Web (S
 
 ## Capturas de pantalla
 
-> Guarda las capturas en `docs/screenshots/` con estos nombres.
-
 | Inicio | Formulario de afinidad |
 |:---:|:---:|
 | ![Página de inicio](docs/screenshots/inicio.png) | ![Formulario](docs/screenshots/formulario.png) |
